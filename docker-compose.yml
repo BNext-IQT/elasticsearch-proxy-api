@@ -1,0 +1,26 @@
+version: '3.7'
+
+x-build-args: &build_args
+  INSTALL_PYTHON_VERSION: 3.7
+
+services:
+  elasticsearch-proxy-api-dev:
+    build:
+      context: .
+      target: development-server
+      args:
+        <<: *build_args
+    image: chembl/elasticsearch-proxy-api:dev
+    environment:
+      - CONFIG_FILE_PATH=/app/config.yml
+    ports:
+    - "5000:5000"
+  elasticsearch-proxy-api-prod:
+    build:
+      context: .
+      target: production-server
+      args:
+        <<: *build_args
+    image: "${SERVER_IMAGE_TAG:-chembl/elasticsearch-proxy-api:prod}"
+    ports:
+    - "5000:5000"
