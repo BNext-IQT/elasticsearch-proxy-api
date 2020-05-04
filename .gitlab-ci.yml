@@ -2,7 +2,7 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   GIT_STRATEGY: clone
   REGISTRY_USER: chembl/chembl
-  SERVER_APPLICATION: /main-web-interface/elasticsearch-proxy-api
+  SERVER_APPLICATION: main-web-interface/elasticsearch-proxy-api
   SERVER_IMAGE_TAG: ${CI_REGISTRY}/${REGISTRY_USER}/${SERVER_APPLICATION}:${CI_COMMIT_SHORT_SHA}
   DOCKER_DRIVER: overlay
   CONFIGS_FOLDER: run_config
