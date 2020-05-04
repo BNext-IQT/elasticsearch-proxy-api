@@ -22,4 +22,10 @@ ENV PATH="/home/glados/.local/bin:${PATH}"
 RUN pip install --user -r requirements.txt
 COPY . .
 
+FROM base AS development-server
+ENTRYPOINT FLASK_APP=app flask run --host=0.0.0.0
+
+FROM base AS production-server
+# Take into account that the app will get the configuration from the variable DELAYED_JOBS_RAW_CONFIG if the config.yml
+# file is not found.
 ENTRYPOINT gunicorn wsgi:FLASK_APP -c ${GUNICORN_CONFIG_FILE_PATH}
