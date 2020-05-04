@@ -47,8 +47,6 @@ build_docker_image:
     - schedules
   script:
     - set -x
-    - exho 'Building!'
-    - exit 0
     - docker version # verify docker cli is there. Also prints server info
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - echo building $SERVER_IMAGE_TAG
