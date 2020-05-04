@@ -1,0 +1,371 @@
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  GIT_STRATEGY: clone
+  REGISTRY_USER: chembl/chembl
+  SERVER_APPLICATION: delayed-jobs/delayed-jobs-api/delayed-jobs-server
+  SERVER_IMAGE_TAG: ${CI_REGISTRY}/${REGISTRY_USER}/${SERVER_APPLICATION}:${CI_COMMIT_SHORT_SHA}
+  JOB_STATUS_APPLICATION: delayed-jobs/delayed-jobs-api/delayed-jobs-status-daemon
+  STATUS_DAEMON_IMAGE_TAG: ${CI_REGISTRY}/${REGISTRY_USER}/${JOB_STATUS_APPLICATION}:${CI_COMMIT_SHORT_SHA}
+  DOCKER_DRIVER: overlay
+  CONFIGS_FOLDER: run_config
+  CONFIG_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.yml
+  CONFIG_GUNICORN_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.gunicorn.config.py
+  CONFIG_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.yml
+  CONFIG_GUNICORN_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.gunicorn.config.py
+  CONFIG_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/prod_hh.yml
+  CONFIG_GUNICORN_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/prod_hh.gunicorn.config.py
+
+image: docker:latest
+
+services:
+  - docker:dind
+
+stages:
+  - build
+#  - test_and_qa
+#  - prepare_config_staging
+#  - deploy_to_staging
+#  - test_staging
+#  - prepare_config_hx
+#  - deploy_to_prod_hx
+#  - test_prod_hx
+#  - prepare_config_hh
+#  - deploy_to_prod_hh
+#  - test_prod_hh
+#  - functional_tests_prod_public
+#  - schedules
+
+# ----------------------------------------------------------------------------------------------------------------------
+# build
+# ----------------------------------------------------------------------------------------------------------------------
+build_docker_image_server:
+  image:
+    name: docker/compose:1.24.1
+    entrypoint: ["/bin/sh", "-c"]
+  stage: build
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  except:
+    - schedules
+  script:
+    - set -x
+    - exho 'Building!'
+    - exit 0
+    - docker version # verify docker cli is there. Also prints server info
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - echo building $SERVER_IMAGE_TAG
+    - docker-compose build delayed-jobs-server-prod
+    - echo Deploying $SERVER_IMAGE_TAG
+    - docker push $SERVER_IMAGE_TAG
+
+build_docker_image_status_daemon:
+  image:
+    name: docker/compose:1.24.1
+    entrypoint: ["/bin/sh", "-c"]
+  stage: build
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+  except:
+    - schedules
+  script:
+    - set -x
+    - docker version # verify docker cli is there. Also prints server info
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - echo building $STATUS_DAEMON_IMAGE_TAG
+    - docker-compose build delayed-job-status-daemon-prod
+    - echo Deploying $STATUS_DAEMON_IMAGE_TAG
+    - docker push $STATUS_DAEMON_IMAGE_TAG
+
+# ----------------------------------------------------------------------------------------------------------------------
+# QA
+# ----------------------------------------------------------------------------------------------------------------------
+pylint:
+  stage: test_and_qa
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  except:
+    - schedules
+  script:
+  - pwd
+  - ls
+  - echo 'disabled temporarily'
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Tests
+# ----------------------------------------------------------------------------------------------------------------------
+unit_tests:
+  stage: test_and_qa
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  except:
+    - schedules
+  script:
+  - env
+  - CONFIG_FILE_PATH='./configurations/ci_unit_tests_config.yml' python -m unittest
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Deployment to staging
+# ----------------------------------------------------------------------------------------------------------------------
+prepare_config_staging:
+  stage: prepare_config_staging
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - staging
+  except:
+    - schedules
+  script:
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_STAGING_FILE_PATH}
+      - ${CONFIG_GUNICORN_STAGING_FILE_PATH}
+
+deploy_to_staging:
+  stage: deploy_to_staging
+  image:
+    name: lachlanevenson/k8s-kubectl:latest
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - staging
+  except:
+    - schedules
+  environment:
+    name: staging
+    url: ${SERVER_URL_STAGING}
+  script:
+  - set -x
+  - echo "$KUBE_CA_PEM_HX" > "$(pwd)/kube.ca.pem"
+  - kubectl config set-cluster ${KUBE_CLUS_NAME_HX} --server="${KUBE_URL_HX}" --certificate-authority="$(pwd)/kube.ca.pem"
+  - kubectl config set-credentials ${KUBE_USER_HX} --token="${KUBE_TOKEN_HX}"
+  - kubectl config set-context ${CHEMBL_NS_STAGING} --cluster=${KUBE_CLUS_NAME_HX} --user=${KUBE_USER_HX}
+  - kubectl config use-context ${CHEMBL_NS_STAGING}
+  - echo ${CHEMBL_NS_STAGING} ${KUBE_URL_HX} ${KUBE_CLUS_NAME_HX} ${KUBE_USER_HX}
+  - kubectl get pods -n ${CHEMBL_NS_STAGING}
+  - kubectl create secret generic ${ID_RSA_SECRET_NAME_STAGING} --from-file=ID_RSA_LSF=${ID_RSA_LSF_HX} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
+  - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_STAGING} --from-file=RUN_CONFIG.yml=${CONFIG_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
+  - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_STAGING} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
+  - cat ${CONFIG_STAGING_FILE_PATH}
+  - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
+  - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
+  - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
+  - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
+  - sed -i "s~<STATUS_DAEMON_IMAGE_TAG>~${STATUS_DAEMON_IMAGE_TAG}~" k8s-deployment.yaml
+  - sed -i "s~<NFS_MOUNT_PATH>~${NFS_MOUNT_PATH_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<NFS_FQDN>~${NFS_FQDN_HX}~" k8s-deployment.yaml
+  - sed -i "s~<NFS_PATH>~${NFS_PATH_HX}~" k8s-deployment.yaml
+  - sed -i "s~<ID_RSA_SECRET_NAME>~${ID_RSA_SECRET_NAME_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
+  - cat k8s-deployment.yaml
+  - kubectl apply -n ${CHEMBL_NS_STAGING} -f k8s-deployment.yaml
+  - kubectl get pods -n ${CHEMBL_NS_STAGING}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Test staging
+# ----------------------------------------------------------------------------------------------------------------------
+functional_tests:
+  stage: test_staging
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+  - staging
+  except:
+    - schedules
+  environment:
+    name: staging
+    url: ${SERVER_URL_STAGING}
+  script:
+  - set -x
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Deployment to prod hx
+# ----------------------------------------------------------------------------------------------------------------------
+prepare_config_prod_hx:
+  stage: prepare_config_hx
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  except:
+    - schedules
+  script:
+    - rm -rf ${CONFIGS_FOLDER} || true
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_PROD_HX_FILE_PATH}
+      - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
+
+deploy_to_prod_hx:
+  stage: deploy_to_prod_hx
+  image:
+    name: lachlanevenson/k8s-kubectl:latest
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  except:
+    - schedules
+  environment:
+    name: prod_hx
+  script:
+    - set -x
+    - echo "$KUBE_CA_PEM_HX" > "$(pwd)/kube.ca.pem"
+    - kubectl config set-cluster ${KUBE_CLUS_NAME_HX} --server="${KUBE_URL_HX}" --certificate-authority="$(pwd)/kube.ca.pem"
+    - kubectl config set-credentials ${KUBE_USER_HX} --token="${KUBE_TOKEN_HX}"
+    - kubectl config set-context ${CHEMBL_NS_PROD} --cluster=${KUBE_CLUS_NAME_HX} --user=${KUBE_USER_HX}
+    - kubectl config use-context ${CHEMBL_NS_PROD}
+    - echo ${CHEMBL_NS_PROD} ${KUBE_URL_HX} ${KUBE_CLUS_NAME_HX} ${KUBE_USER_HX}
+    - kubectl get pods -n ${CHEMBL_NS_PROD}
+    - kubectl create secret generic ${ID_RSA_SECRET_NAME_PROD_HX} --from-file=ID_RSA_LSF=${ID_RSA_LSF_HX} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl replace -f -
+    - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_PROD_HX} --from-file=RUN_CONFIG.yml=${CONFIG_PROD_HX_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl replace -f -
+    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HX} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HX_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl replace -f -
+    - cat ${CONFIG_PROD_HX_FILE_PATH}
+    - cat ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
+    - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
+    - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
+    - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
+    - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
+    - sed -i "s~<STATUS_DAEMON_IMAGE_TAG>~${STATUS_DAEMON_IMAGE_TAG}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_MOUNT_PATH>~${NFS_MOUNT_PATH_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_FQDN>~${NFS_FQDN_HX}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_PATH>~${NFS_PATH_HX}~" k8s-deployment.yaml
+    - sed -i "s~<ID_RSA_SECRET_NAME>~${ID_RSA_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
+    - cat k8s-deployment.yaml
+    - kubectl apply -n ${CHEMBL_NS_PROD} -f k8s-deployment.yaml
+    - kubectl get pods -n ${CHEMBL_NS_PROD}
+
+functional_tests_prod_hx:
+  stage: test_prod_hx
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+  - master
+  except:
+    - schedules
+  script:
+  - set -x
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HX}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Deployment to prod hh
+# ----------------------------------------------------------------------------------------------------------------------
+prepare_config_prod_hh:
+  stage: prepare_config_hh
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  except:
+    - schedules
+  script:
+    - rm -rf ${CONFIGS_FOLDER} || true
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_PROD_HH_FILE_PATH}
+      - ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
+
+deploy_to_prod_hh:
+  stage: deploy_to_prod_hh
+  image:
+    name: lachlanevenson/k8s-kubectl:latest
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  except:
+    - schedules
+  environment:
+    name: prod_hh
+  script:
+    - set -x
+    - echo "$KUBE_CA_PEM_HH" > "$(pwd)/kube.ca.pem"
+    - kubectl config set-cluster ${KUBE_CLUS_NAME_HH} --server="${KUBE_URL_HH}" --certificate-authority="$(pwd)/kube.ca.pem"
+    - kubectl config set-credentials ${KUBE_USER_HH} --token="${KUBE_TOKEN_HH}"
+    - kubectl config set-context ${CHEMBL_NS_PROD} --cluster=${KUBE_CLUS_NAME_HH} --user=${KUBE_USER_HH}
+    - kubectl config use-context ${CHEMBL_NS_PROD}
+    - echo ${CHEMBL_NS_PROD} ${KUBE_URL_HH} ${KUBE_CLUS_NAME_HH} ${KUBE_USER_HH}
+    - kubectl get pods -n ${CHEMBL_NS_PROD}
+    - kubectl create secret generic ${ID_RSA_SECRET_NAME_PROD_HH} --from-file=ID_RSA_LSF=${ID_RSA_LSF_HH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
+    - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_PROD_HH} --from-file=RUN_CONFIG.yml=${CONFIG_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
+    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HH} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
+    - cat ${CONFIG_PROD_HH_FILE_PATH}
+    - cat ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
+    - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
+    - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_PROD_HH}~" k8s-deployment.yaml
+    - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
+    - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
+    - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
+    - sed -i "s~<STATUS_DAEMON_IMAGE_TAG>~${STATUS_DAEMON_IMAGE_TAG}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_MOUNT_PATH>~${NFS_MOUNT_PATH_PROD_HH}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_FQDN>~${NFS_FQDN_HH}~" k8s-deployment.yaml
+    - sed -i "s~<NFS_PATH>~${NFS_PATH_HH}~" k8s-deployment.yaml
+    - sed -i "s~<ID_RSA_SECRET_NAME>~${ID_RSA_SECRET_NAME_PROD_HH}~" k8s-deployment.yaml
+    - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HH}~" k8s-deployment.yaml
+    - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HH}~" k8s-deployment.yaml
+    - cat k8s-deployment.yaml
+    - kubectl apply -n ${CHEMBL_NS_PROD} -f k8s-deployment.yaml
+    - kubectl get pods -n ${CHEMBL_NS_PROD}
+
+functional_tests_prod_hh:
+  stage: test_prod_hh
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+  - master
+  except:
+    - schedules
+  script:
+  - set -x
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH} ${DJ_SERVER_ADMIN_USERNAME_PROD_HH} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HH}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Test prod public url
+# ----------------------------------------------------------------------------------------------------------------------
+functional_tests_prod_public:
+  stage: functional_tests_prod_public
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+  - master
+  except:
+    - schedules
+  script:
+  - set -x
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_PUBLIC}
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Schedules
+# ----------------------------------------------------------------------------------------------------------------------
+delete_expired_jobs:
+  stage: schedules
+  image: 'python:3.7'
+  only:
+    - schedules
+  script:
+    - set -x
+    - pip install requests
+    - admin_tasks/delete_expired_jobs.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
+    - admin_tasks/delete_expired_jobs.py ${SERVER_URL_PROD_PUBLIC} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_PUBLIC}
