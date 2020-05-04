@@ -50,7 +50,7 @@ build_docker_image:
     - docker version # verify docker cli is there. Also prints server info
     - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
     - echo building $SERVER_IMAGE_TAG
-    - docker-compose build delayed-jobs-server-prod
+    - docker-compose build elasticsearch-proxy-api-prod
     - echo Deploying $SERVER_IMAGE_TAG
     - docker push $SERVER_IMAGE_TAG
 #
