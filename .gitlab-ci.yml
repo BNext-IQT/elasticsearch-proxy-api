@@ -60,8 +60,6 @@ pylint:
   image:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
-  except:
-    - schedules
   script:
     - source /app/python_env/bin/activate
     - find . -iname "*.py" | xargs pylint
