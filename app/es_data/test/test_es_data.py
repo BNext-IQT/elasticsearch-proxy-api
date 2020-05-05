@@ -12,4 +12,4 @@ class TestESData(unittest.TestCase):
         Tests that it returns the es data correctly
         """
         print('TEST')
-        self.assertEqual(0,0, msg='Mock test')
+        self.assertEqual(0, 0, msg='Mock test')
