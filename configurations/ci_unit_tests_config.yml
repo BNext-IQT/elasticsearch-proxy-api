@@ -1,0 +1,4 @@
+run_env: DEV # DEV, TEST, STAGING or PROD
+server_secret_key: 'ServerKey'
+elasticsearch:
+  host: 'https://www.ebi.ac.uk/chembl/glados-es'

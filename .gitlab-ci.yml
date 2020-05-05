@@ -75,7 +75,7 @@ unit_tests:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
   script:
-  - CONFIG_FILE_PATH='./configurations/ci_unit_tests_config.yml' python -m unittest
+    - CONFIG_FILE_PATH='./configurations/ci_unit_tests_config.yml' python -m unittest
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to staging
