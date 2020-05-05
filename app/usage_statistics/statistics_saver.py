@@ -1,6 +1,8 @@
 """
 Module that saves statistics in elasticsearch
 """
+import json
+
 def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type):
     """
     :param es_index: index used in the request
@@ -12,7 +14,11 @@ def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_c
     :return: a dict to be used to save the cache statistics in the elasticsearch index
     """
 
-    es_query = es_full_query.get('query', None)
-    es_aggs = es_full_query.get('aggs', None)
+    es_query = json.dumps(es_full_query.get('query', None))
+    es_aggs = json.dumps(es_full_query.get('aggs', None))
 
-    return {}
+    return {
+        'es_index': es_index,
+        'es_query': es_query,
+        'es_aggs': es_aggs
+    }
