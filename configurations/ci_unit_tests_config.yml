@@ -2,3 +2,7 @@ run_env: DEV # DEV, TEST, STAGING or PROD
 server_secret_key: 'ServerKey'
 elasticsearch:
   host: 'https://www.ebi.ac.uk/chembl/glados-es'
+cache_config:
+  CACHE_TYPE: simple
+base_path: ''
+es_proxy_cache_seconds: 604800 # 7 days

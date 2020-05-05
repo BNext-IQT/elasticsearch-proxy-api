@@ -6,6 +6,8 @@ import hashlib
 import base64
 
 from app.es_connection import ES
+from app.cache import CACHE
+from app.config import RUN_CONFIG
 
 
 def get_es_response(index_name, es_query):
@@ -15,7 +17,16 @@ def get_es_response(index_name, es_query):
     :return: the dict with the response from es
     """
 
+    cache_key = get_es_query_cache_key(index_name, es_query)
+    cache_response = CACHE.get(key=cache_key)
+    if cache_response is not None:
+        return cache_response
+
     response = ES.search(index=index_name, body=es_query)
+
+    seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+    CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
+
     return response
 
 

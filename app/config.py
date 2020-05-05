@@ -84,5 +84,17 @@ RUN_CONFIG['elasticsearch'] = {
     **ES_CONFIG,
 }
 
-if not RUN_CONFIG.get('server_public_host'):
-    RUN_CONFIG['server_public_host'] = '0.0.0.0:5000'
+CACHE_CONFIG = RUN_CONFIG.get('cache_config')
+DEFAULT_CACHE_CONFIG = {
+    'CACHE_TYPE': 'simple'
+}
+RUN_CONFIG['cache_config'] = {
+    **CACHE_CONFIG,
+    **DEFAULT_CACHE_CONFIG
+}
+
+if RUN_CONFIG.get('base_path') is None:
+    RUN_CONFIG['base_path'] = ''
+
+if RUN_CONFIG.get('es_proxy_cache_seconds') is None:
+    RUN_CONFIG['es_proxy_cache_seconds'] = 604800
