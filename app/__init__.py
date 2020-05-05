@@ -1,6 +1,7 @@
 """
 Entry file for the elasticsearch proxy app
 """
+# pylint: disable=redefined-outer-name,invalid-name
 from flask import Flask
 
 from app.config import RUN_CONFIG
