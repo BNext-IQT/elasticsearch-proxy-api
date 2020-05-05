@@ -17,6 +17,11 @@ def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_c
     es_query = json.dumps(es_full_query.get('query', None))
     es_aggs = json.dumps(es_full_query.get('aggs', None))
 
+    print(es_request_digest)
+    print(is_cached)
+    print(request_date)
+    print(run_env_type)
+
     return {
         'es_index': es_index,
         'es_query': es_query,
