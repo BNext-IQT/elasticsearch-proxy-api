@@ -1,7 +1,7 @@
 run_env: DEV # DEV, TEST, STAGING or PROD
 server_secret_key: 'ServerKey'
 elasticsearch:
-  host: 'https://www.ebi.ac.uk/chembl/glados-es'
+  host: 'http://wp-p2m-50.ebi.ac.uk:9200'
 cache_config:
   CACHE_TYPE: simple
 base_path: ''
