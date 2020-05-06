@@ -1,6 +1,7 @@
 """
 This Module tests the statistics saver
 """
+# pylint: disable=R0914
 import unittest
 import json
 

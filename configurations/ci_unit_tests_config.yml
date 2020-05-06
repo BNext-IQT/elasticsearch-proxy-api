@@ -6,3 +6,5 @@ cache_config:
   CACHE_TYPE: simple
 base_path: ''
 es_proxy_cache_seconds: 604800 # 7 days
+usage_statistics:
+  cache_statistics_index: 'cache_statistics_index'
