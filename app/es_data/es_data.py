@@ -8,6 +8,7 @@ import base64
 from app.es_connection import ES
 from app.cache import CACHE
 from app.config import RUN_CONFIG
+from app import app_logging
 
 
 def get_es_response(index_name, es_query):
@@ -18,10 +19,14 @@ def get_es_response(index_name, es_query):
     """
 
     cache_key = get_es_query_cache_key(index_name, es_query)
+    app_logging.debug(f'cache_key: {cache_key}')
+
     cache_response = CACHE.get(key=cache_key)
     if cache_response is not None:
+        app_logging.debug(f'results were cached')
         return cache_response
 
+    app_logging.debug(f'results were not cached')
     response = ES.search(index=index_name, body=es_query)
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
