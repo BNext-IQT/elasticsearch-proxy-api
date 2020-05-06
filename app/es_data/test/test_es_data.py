@@ -47,7 +47,7 @@ class TestESData(unittest.TestCase):
         es_index = 'chembl_26_molecule'
         response_got = es_data.get_es_response(es_index, es_query)
 
-        total_hits_must_be = 4
+        total_hits_must_be = {'value': 4, 'relation': 'eq'}
         total_hits_got = response_got['hits']['total']
 
         self.assertEqual(total_hits_got, total_hits_must_be, msg='The response from elasticsearch was not correct')
@@ -94,7 +94,6 @@ class TestESData(unittest.TestCase):
         Tests that it saves a response in the cache after receiving it.
         """
         with self.flask_app.app_context():
-
             es_query = {
                 'size': 24,
                 'from': 0,
