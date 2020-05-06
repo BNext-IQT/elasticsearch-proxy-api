@@ -6,6 +6,7 @@ variables:
   SERVER_IMAGE_TAG: ${CI_REGISTRY}/${REGISTRY_USER}/${SERVER_APPLICATION}:${CI_COMMIT_SHORT_SHA}
   DOCKER_DRIVER: overlay
   CONFIGS_FOLDER: run_config
+  CONFIG_UNIT_TESTS_FILE_PATH: ${CONFIGS_FOLDER}/unit_tests.yml
   CONFIG_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.yml
   CONFIG_GUNICORN_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.gunicorn.config.py
   CONFIG_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.yml
@@ -20,6 +21,7 @@ services:
 
 stages:
   - build
+  - prepare_config_tests
   - test_and_qa
 #  - prepare_config_staging
 #  - deploy_to_staging
@@ -64,9 +66,21 @@ pylint:
     - set -x
     - find . -iname "*.py" | xargs pylint
 
-## ----------------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
 ## Tests
-## ----------------------------------------------------------------------------------------------------------------------
+## ---------------------------------------------------------------------------------------------------------------------
+prepare_config_tests:
+  stage: prepare_config_tests
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  script:
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_UNIT_TESTS_FILE_PATH}
+
 unit_tests:
   stage: test_and_qa
   image:
@@ -74,7 +88,7 @@ unit_tests:
     entrypoint: [""]
   script:
     - set -x
-    - CONFIG_FILE_PATH='./configurations/ci_unit_tests_config.yml' python -m unittest
+    - CONFIG_FILE_PATH=${CONFIG_UNIT_TESTS_FILE_PATH} python -m unittest
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to staging
