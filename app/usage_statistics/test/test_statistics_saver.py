@@ -59,3 +59,19 @@ class TestStatisticsSaver(unittest.TestCase):
         es_aggs_got = usage_record_dict_got.get('es_aggs')
         es_aggs_must_be = json.dumps(full_es_query.get('aggs'))
         self.assertEqual(es_aggs_got, es_aggs_must_be, msg='The es_aggs was not calculated correctly')
+
+        es_request_digest_got = usage_record_dict_got.get('es_request_digest')
+        self.assertEqual(es_request_digest_got, es_request_digest,
+                         msg='The es_request_digest was not calculated correctly')
+
+        is_cached_got = usage_record_dict_got.get('is_cached')
+        self.assertEqual(is_cached_got, is_cached,
+                         msg='The is_cached was not calculated correctly')
+
+        request_date_got = usage_record_dict_got.get('request_date')
+        self.assertEqual(request_date_got, request_date,
+                         msg='The request_date was not calculated correctly')
+
+        run_env_type_got = usage_record_dict_got.get('run_env_type')
+        self.assertEqual(run_env_type_got, run_env_type,
+                         msg='The run_env_type was not calculated correctly')
