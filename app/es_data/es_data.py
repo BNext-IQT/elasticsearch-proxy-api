@@ -9,6 +9,7 @@ from app.es_connection import ES
 from app.cache import CACHE
 from app.config import RUN_CONFIG
 from app import app_logging
+from app.usage_statistics import statistics_saver
 
 
 def get_es_response(index_name, es_query):
@@ -24,15 +25,18 @@ def get_es_response(index_name, es_query):
     cache_response = CACHE.get(key=cache_key)
     if cache_response is not None:
         app_logging.debug(f'results were cached')
+        record_that_response_was_cached(index_name, es_query)
         return cache_response
 
     app_logging.debug(f'results were not cached')
+    record_that_response_not_cached(index_name, es_query)
     response = ES.search(index=index_name, body=es_query)
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
     CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
 
     return response
+
 
 def get_es_query_cache_key(index_name, es_query):
     """
@@ -45,6 +49,7 @@ def get_es_query_cache_key(index_name, es_query):
 
     return f'{index_name}-{es_request_digest}'
 
+
 def get_es_request_digest(es_query):
     """
     :param es_query: query sent to elasticsearch
@@ -55,3 +60,25 @@ def get_es_request_digest(es_query):
     base64_search_data_hash = base64.b64encode(search_data_digest).decode('utf-8')
 
     return base64_search_data_hash
+
+
+def record_that_response_was_cached(index_name, es_query):
+    """
+    Records that a response was already cached
+    :param index_name: name of the index queried
+    :param es_query: the query sent
+    """
+    es_request_digest = get_es_request_digest(es_query)
+    is_cached = True
+    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached)
+
+
+def record_that_response_not_cached(index_name, es_query):
+    """
+    Records that a response was not cached
+    :param index_name: name of the index queried
+    :param es_query: the query sent
+    """
+    es_request_digest = get_es_request_digest(es_query)
+    is_cached = False
+    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached)
