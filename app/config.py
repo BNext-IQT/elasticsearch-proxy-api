@@ -110,3 +110,6 @@ RUN_CONFIG['delayed_jobs'] = {
     **DEFAULT_CACHE_CONFIG,
     **DELAYED_JOBS_CONFIG,
 }
+
+if not RUN_CONFIG.get('server_public_host'):
+    RUN_CONFIG['server_public_host'] = '0.0.0.0:5000'

@@ -1,0 +1,67 @@
+---
+swagger: '2.0'
+info:
+  description: 'API that serves as a proxy to access elasticsearch'
+  version: '1.0.0'
+  title: 'Elasticsearch Proxy API'
+  contact:
+    email: 'chembl-help@ebi.ac.uk'
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+#host: Will be set dynamically by Swagger Description Blueprint
+#basePath: Will be set dynamically by Swagger Description Blueprint
+tags:
+- name: 'ES proxy'
+  description: 'Endpoints related to proxying elasticsearch'
+schemes:
+- "https"
+- "http"
+tags:
+- name: Get ES Data
+  description: Endpoint to get data from ES
+paths:
+  /get_es_data:
+    post:
+      tags:
+        - 'ES proxy'
+      summary: 'Get data from elasticsearch'
+      description: 'Returns data from elasticsearch'
+      operationId: 'get_es_data'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'index_name'
+          in: 'formData'
+          description: 'name of the index to query'
+          required: true
+          type: 'string'
+        - name: 'search_data'
+          in: 'formData'
+          description: 'stringifyied version of the query to send to elasticsearch'
+          required: true
+          type: 'string'
+        - name: 'context_obj'
+          in: 'formData'
+          description: 'stringifyied version of a JSON object describing the context of the query'
+          type: 'string'
+        - name: 'id_property'
+          in: 'formData'
+          description: 'property that identifies every item. Required when context provided'
+          type: 'string'
+        - name: contextual_sort_data
+          in: 'formData'
+          description: 'description of sorting if sorting by contextual properties'
+          type: 'string'
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ESProxyResponse'
+
+definitions:
+  ESProxyResponse:
+    type: 'object'
+    properties:
+      es_response:
+        type: 'object'
