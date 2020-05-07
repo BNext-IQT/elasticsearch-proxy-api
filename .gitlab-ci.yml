@@ -130,9 +130,9 @@ deploy_to_staging:
   - kubectl config use-context ${CHEMBL_NS_STAGING}
   - echo ${CHEMBL_NS_STAGING} ${KUBE_URL_HX} ${KUBE_CLUS_NAME_HX} ${KUBE_USER_HX}
   - kubectl get pods -n ${CHEMBL_NS_STAGING}
-  - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_STAGING} --from-file=RUN_CONFIG.yml=${CONFIG_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl apply -f -
+  - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_STAGING} --from-file=RUN_CONFIG.yml=${CONFIG_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
+  - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_STAGING} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl apply -f -
   - exit 0
-  - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_STAGING} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
   - cat ${CONFIG_STAGING_FILE_PATH}
   - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
   - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
