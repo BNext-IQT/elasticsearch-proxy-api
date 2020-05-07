@@ -3,6 +3,7 @@ Entry file for the elasticsearch proxy app
 """
 
 from flask import Flask
+from flask_cors import CORS
 
 from app.config import RUN_CONFIG
 from app.cache import CACHE
@@ -16,6 +17,11 @@ def create_app():
     """
     base_path = RUN_CONFIG.get('base_path')
     flask_app = Flask(__name__)
+
+    enable_cors = RUN_CONFIG.get('enable_cors', False)
+
+    if enable_cors:
+        CORS(flask_app)
 
     with flask_app.app_context():
         CACHE.init_app(flask_app)
