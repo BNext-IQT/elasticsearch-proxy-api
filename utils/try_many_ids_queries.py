@@ -2,6 +2,7 @@
 """
 Script that tests queries with many ids and generates csv file with the result
 """
+# pylint: disable=too-many-locals
 import argparse
 import json
 import time
