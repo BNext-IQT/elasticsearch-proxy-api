@@ -99,6 +99,8 @@ prepare_config_staging:
   image:
     name: alpine/git
     entrypoint: ["/bin/sh", "-c"]
+  only:
+    - staging
   script:
     - set -x
     - mkdir -p ${CONFIGS_FOLDER}
