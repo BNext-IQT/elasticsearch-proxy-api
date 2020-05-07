@@ -25,7 +25,7 @@ stages:
   - test_and_qa
   - prepare_config_staging
   - deploy_to_staging
-#  - test_staging
+  - test_staging
 #  - prepare_config_hx
 #  - deploy_to_prod_hx
 #  - test_prod_hx
