@@ -167,23 +167,21 @@ functional_tests:
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hx
 ## ----------------------------------------------------------------------------------------------------------------------
-#prepare_config_prod_hx:
-#  stage: prepare_config_hx
-#  image:
-#    name: alpine/git
-#    entrypoint: ["/bin/sh", "-c"]
-#  only:
-#    - master
-#  except:
-#    - schedules
-#  script:
-#    - rm -rf ${CONFIGS_FOLDER} || true
-#    - mkdir -p ${CONFIGS_FOLDER}
-#    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
-#  artifacts:
-#    paths:
-#      - ${CONFIG_PROD_HX_FILE_PATH}
-#      - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
+prepare_config_prod_hx:
+  stage: prepare_config_hx
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  script:
+    - rm -rf ${CONFIGS_FOLDER} || true
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_PROD_HX_FILE_PATH}
+      - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
 #
 #deploy_to_prod_hx:
 #  stage: deploy_to_prod_hx
