@@ -26,7 +26,7 @@ stages:
   - prepare_config_staging
   - deploy_to_staging
   - test_staging
-#  - prepare_config_hx
+  - prepare_config_hx
 #  - deploy_to_prod_hx
 #  - test_prod_hx
 #  - prepare_config_hh
