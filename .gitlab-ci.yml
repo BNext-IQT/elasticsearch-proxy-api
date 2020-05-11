@@ -29,7 +29,7 @@ stages:
   - prepare_config_hx
   - deploy_to_prod_hx
   - test_prod_hx
-#  - prepare_config_hh
+  - prepare_config_hh
 #  - deploy_to_prod_hh
 #  - test_prod_hh
 #  - functional_tests_prod_public
@@ -228,23 +228,21 @@ functional_tests_prod_hx:
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hh
 ## ----------------------------------------------------------------------------------------------------------------------
-#prepare_config_prod_hh:
-#  stage: prepare_config_hh
-#  image:
-#    name: alpine/git
-#    entrypoint: ["/bin/sh", "-c"]
-#  only:
-#    - master
-#  except:
-#    - schedules
-#  script:
-#    - rm -rf ${CONFIGS_FOLDER} || true
-#    - mkdir -p ${CONFIGS_FOLDER}
-#    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
-#  artifacts:
-#    paths:
-#      - ${CONFIG_PROD_HH_FILE_PATH}
-#      - ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
+prepare_config_prod_hh:
+  stage: prepare_config_hh
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  script:
+    - rm -rf ${CONFIGS_FOLDER} || true
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_PROD_HH_FILE_PATH}
+      - ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
 #
 #deploy_to_prod_hh:
 #  stage: deploy_to_prod_hh
