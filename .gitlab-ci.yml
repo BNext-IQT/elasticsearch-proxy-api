@@ -239,11 +239,12 @@ prepare_config_prod_hh:
     - rm -rf ${CONFIGS_FOLDER} || true
     - mkdir -p ${CONFIGS_FOLDER}
     - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+    - ls ${CONFIGS_FOLDER}
   artifacts:
     paths:
       - ${CONFIG_PROD_HH_FILE_PATH}
       - ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
-#
+
 #deploy_to_prod_hh:
 #  stage: deploy_to_prod_hh
 #  image:
@@ -251,8 +252,6 @@ prepare_config_prod_hh:
 #    entrypoint: ["/bin/sh", "-c"]
 #  only:
 #    - master
-#  except:
-#    - schedules
 #  environment:
 #    name: prod_hh
 #  script:
@@ -264,9 +263,9 @@ prepare_config_prod_hh:
 #    - kubectl config use-context ${CHEMBL_NS_PROD}
 #    - echo ${CHEMBL_NS_PROD} ${KUBE_URL_HH} ${KUBE_CLUS_NAME_HH} ${KUBE_USER_HH}
 #    - kubectl get pods -n ${CHEMBL_NS_PROD}
-#    - kubectl create secret generic ${ID_RSA_SECRET_NAME_PROD_HH} --from-file=ID_RSA_LSF=${ID_RSA_LSF_HH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
-#    - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_PROD_HH} --from-file=RUN_CONFIG.yml=${CONFIG_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
-#    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HH} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl apply -f -
+#    - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_PROD_HH} --from-file=RUN_CONFIG.yml=${CONFIG_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl replace -f -
+#    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HH} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HH_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl replace -f -
+#    - exit 0
 #    - cat ${CONFIG_PROD_HH_FILE_PATH}
 #    - cat ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
 #    - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
