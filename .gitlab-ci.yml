@@ -31,8 +31,8 @@ stages:
   - test_prod_hx
   - prepare_config_hh
   - deploy_to_prod_hh
-#  - test_prod_hh
-#  - functional_tests_prod_public
+  - test_prod_hh
+  - functional_tests_prod_public
 
 
 # ----------------------------------------------------------------------------------------------------------------------
