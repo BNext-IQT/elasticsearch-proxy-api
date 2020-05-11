@@ -13,9 +13,6 @@ spec:
       labels:
         app: elasticsearch-proxy-api
     spec:
-      securityContext:
-        runAsUser: <UID>
-        runAsGroup: <GID>
       containers:
       - name: elasticsearch-proxy-api
         image: <SERVER_IMAGE_TAG>

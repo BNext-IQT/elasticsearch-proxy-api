@@ -136,8 +136,6 @@ deploy_to_staging:
   - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
   - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
-  - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
-  - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
   - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
   - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
@@ -202,23 +200,16 @@ deploy_to_prod_hx:
     - echo ${CHEMBL_NS_PROD} ${KUBE_URL_HX} ${KUBE_CLUS_NAME_HX} ${KUBE_USER_HX}
     - kubectl get pods -n ${CHEMBL_NS_PROD}
     - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_PROD_HX} --from-file=RUN_CONFIG.yml=${CONFIG_PROD_HX_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run=client | kubectl replace -f -
-    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HX} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HX_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run | kubectl create -f -
-    - cat ${CONFIG_PROD_HX_FILE_PATH}
-    - cat ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
+    - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_PROD_HX} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_PROD_HX_FILE_PATH} -o yaml -n ${CHEMBL_NS_PROD} --dry-run=client | kubectl replace -f -
     - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
     - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_PROD_HX}~" k8s-deployment.yaml
-    - exit 0
     - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
     - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
     - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
-    - sed -i "s~<STATUS_DAEMON_IMAGE_TAG>~${STATUS_DAEMON_IMAGE_TAG}~" k8s-deployment.yaml
-    - sed -i "s~<NFS_MOUNT_PATH>~${NFS_MOUNT_PATH_PROD_HX}~" k8s-deployment.yaml
-    - sed -i "s~<NFS_FQDN>~${NFS_FQDN_HX}~" k8s-deployment.yaml
-    - sed -i "s~<NFS_PATH>~${NFS_PATH_HX}~" k8s-deployment.yaml
-    - sed -i "s~<ID_RSA_SECRET_NAME>~${ID_RSA_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - cat k8s-deployment.yaml
+    - exit 0
     - kubectl apply -n ${CHEMBL_NS_PROD} -f k8s-deployment.yaml
     - kubectl get pods -n ${CHEMBL_NS_PROD}
 
