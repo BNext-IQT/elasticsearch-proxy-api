@@ -28,7 +28,7 @@ stages:
   - test_staging
   - prepare_config_hx
   - deploy_to_prod_hx
-#  - test_prod_hx
+  - test_prod_hx
 #  - prepare_config_hh
 #  - deploy_to_prod_hh
 #  - test_prod_hh
@@ -209,24 +209,22 @@ deploy_to_prod_hx:
     - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - cat k8s-deployment.yaml
-    - exit 0
     - kubectl apply -n ${CHEMBL_NS_PROD} -f k8s-deployment.yaml
     - kubectl get pods -n ${CHEMBL_NS_PROD}
 
-#functional_tests_prod_hx:
-#  stage: test_prod_hx
-#  image:
-#    name: $SERVER_IMAGE_TAG
-#    entrypoint: [""]
-#  only:
-#  - master
-#  except:
-#    - schedules
-#  script:
-#  - set -x
-#  - sleep 30 # Give some time for the deployment to take effect.
-#  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HX}
-#
+functional_tests_prod_hx:
+  stage: test_prod_hx
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+  - master
+  script:
+  - set -x
+  - exit 0 # disabled temporarily
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HX}
+
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hh
 ## ----------------------------------------------------------------------------------------------------------------------
