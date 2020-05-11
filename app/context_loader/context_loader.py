@@ -10,6 +10,7 @@ from app.cache import CACHE
 class ContextLoaderError(Exception):
     """Base class for exceptions in this module."""
 
+
 WEB_RESULTS_SIZE_LIMIT = RUN_CONFIG.get('filter_query_max_clauses')
 
 
@@ -65,4 +66,3 @@ def load_context_index(context_id, id_property, context):
         CACHE.set(context_index_key, context_index, 3600)
 
     return context_index
-

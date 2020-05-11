@@ -25,8 +25,8 @@ stages:
   - test_and_qa
   - prepare_config_staging
   - deploy_to_staging
-#  - test_staging
-#  - prepare_config_hx
+  - test_staging
+  - prepare_config_hx
 #  - deploy_to_prod_hx
 #  - test_prod_hx
 #  - prepare_config_hh
@@ -99,8 +99,11 @@ prepare_config_staging:
   image:
     name: alpine/git
     entrypoint: ["/bin/sh", "-c"]
+  only:
+    - staging
   script:
     - set -x
+    - rm -rf ${CONFIGS_FOLDER} || true
     - mkdir -p ${CONFIGS_FOLDER}
     - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
   artifacts:
@@ -127,9 +130,8 @@ deploy_to_staging:
   - kubectl config use-context ${CHEMBL_NS_STAGING}
   - echo ${CHEMBL_NS_STAGING} ${KUBE_URL_HX} ${KUBE_CLUS_NAME_HX} ${KUBE_USER_HX}
   - kubectl get pods -n ${CHEMBL_NS_STAGING}
-  - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_STAGING} --from-file=RUN_CONFIG.yml=${CONFIG_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl apply -f -
-  - exit 0
-  - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_STAGING} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run | kubectl replace -f -
+  - kubectl create secret generic ${RUN_CONFIG_SECRET_NAME_STAGING} --from-file=RUN_CONFIG.yml=${CONFIG_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run=client | kubectl replace -f -
+  - kubectl create secret generic ${GUNICORN_CONFIG_SECRET_NAME_STAGING} --from-file=GUNICORN_CONFIG.py=${CONFIG_GUNICORN_STAGING_FILE_PATH} -o yaml -n ${CHEMBL_NS_STAGING} --dry-run=client | kubectl replace -f -
   - cat ${CONFIG_STAGING_FILE_PATH}
   - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
   - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
@@ -137,11 +139,6 @@ deploy_to_staging:
   - sed -i "s~<UID>~${CBL_ADM_UID}~" k8s-deployment.yaml
   - sed -i "s~<GID>~${CBL_PUB_GID}~" k8s-deployment.yaml
   - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
-  - sed -i "s~<STATUS_DAEMON_IMAGE_TAG>~${STATUS_DAEMON_IMAGE_TAG}~" k8s-deployment.yaml
-  - sed -i "s~<NFS_MOUNT_PATH>~${NFS_MOUNT_PATH_STAGING}~" k8s-deployment.yaml
-  - sed -i "s~<NFS_FQDN>~${NFS_FQDN_HX}~" k8s-deployment.yaml
-  - sed -i "s~<NFS_PATH>~${NFS_PATH_HX}~" k8s-deployment.yaml
-  - sed -i "s~<ID_RSA_SECRET_NAME>~${ID_RSA_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - cat k8s-deployment.yaml
@@ -151,43 +148,40 @@ deploy_to_staging:
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Test staging
 ## ----------------------------------------------------------------------------------------------------------------------
-#functional_tests:
-#  stage: test_staging
-#  image:
-#    name: $SERVER_IMAGE_TAG
-#    entrypoint: [""]
-#  only:
-#  - staging
-#  except:
-#    - schedules
-#  environment:
-#    name: staging
-#    url: ${SERVER_URL_STAGING}
-#  script:
-#  - set -x
-#  - sleep 30 # Give some time for the deployment to take effect.
-#  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
+functional_tests:
+  stage: test_staging
+  image:
+    name: $SERVER_IMAGE_TAG
+    entrypoint: [""]
+  only:
+    - staging
+  environment:
+    name: staging
+    url: ${SERVER_URL_STAGING}
+  script:
+  - set -x
+  - exit 0 # disabled temporarily
+  - sleep 30 # Give some time for the deployment to take effect.
+  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
 #
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hx
 ## ----------------------------------------------------------------------------------------------------------------------
-#prepare_config_prod_hx:
-#  stage: prepare_config_hx
-#  image:
-#    name: alpine/git
-#    entrypoint: ["/bin/sh", "-c"]
-#  only:
-#    - master
-#  except:
-#    - schedules
-#  script:
-#    - rm -rf ${CONFIGS_FOLDER} || true
-#    - mkdir -p ${CONFIGS_FOLDER}
-#    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
-#  artifacts:
-#    paths:
-#      - ${CONFIG_PROD_HX_FILE_PATH}
-#      - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
+prepare_config_prod_hx:
+  stage: prepare_config_hx
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh", "-c"]
+  only:
+    - master
+  script:
+    - rm -rf ${CONFIGS_FOLDER} || true
+    - mkdir -p ${CONFIGS_FOLDER}
+    - git clone https://${CONFIG_DEPLOY_GITLAB_USERNAME}:${CONFIG_DEPLOY_GITLAB_TOKEN}@${CONFIGURATIONS_REPO} ${CONFIGS_FOLDER}
+  artifacts:
+    paths:
+      - ${CONFIG_PROD_HX_FILE_PATH}
+      - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
 #
 #deploy_to_prod_hx:
 #  stage: deploy_to_prod_hx

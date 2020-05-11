@@ -13,6 +13,10 @@ SWAGGER_BLUEPRINT = Blueprint('swagger', __name__)
 
 @SWAGGER_BLUEPRINT.route('/swagger.json')
 def get_json():
+    """
+    :return: Responds to the request with the json version of the swagger description
+    """
+
     yaml_file_path = Path(Path().absolute()).joinpath('app', 'swagger', 'swagger.yaml')
 
     with open(yaml_file_path, 'r') as stream:
