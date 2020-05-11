@@ -7,7 +7,6 @@ from flask import Blueprint, jsonify
 import yaml
 
 from app.config import RUN_CONFIG
-from app import app_logging
 
 SWAGGER_BLUEPRINT = Blueprint('swagger', __name__)
 
@@ -19,7 +18,6 @@ def get_json():
     """
 
     yaml_file_path = Path(Path().absolute()).joinpath('app', 'swagger', 'swagger.yaml')
-    app_logging.debug('READING SWAGGER DESCRIPTION')
 
     with open(yaml_file_path, 'r') as stream:
         swagger_desc = yaml.safe_load(stream)
