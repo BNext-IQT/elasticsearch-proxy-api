@@ -44,7 +44,7 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: delayed-jobs
+    app: elasticsearch-proxy-api
   ports:
   - port: 5000
     targetPort: 5000
