@@ -152,7 +152,7 @@ deploy_to_staging:
   - kubectl get pods -n ${CHEMBL_NS_STAGING}
   - cat ${INGRESS_STAGING_FILE_PATH}
   - kubectl apply -n ${CHEMBL_NS_STAGING} -f ${INGRESS_STAGING_FILE_PATH}
-  - kubectl get describe -n ${CHEMBL_NS_STAGING}
+  - kubectl describe ingress -n ${CHEMBL_NS_STAGING}
 #
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Test staging
