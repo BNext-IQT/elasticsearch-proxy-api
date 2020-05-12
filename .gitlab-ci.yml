@@ -169,10 +169,8 @@ functional_tests:
     url: ${SERVER_URL_STAGING}
   script:
   - set -x
-  - exit 0 # disabled temporarily
-  - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
-#
+  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING}
+
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hx
 ## ----------------------------------------------------------------------------------------------------------------------
@@ -234,9 +232,8 @@ functional_tests_prod_hx:
   - master
   script:
   - set -x
-  - exit 0 # disabled temporarily
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HX}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX}
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hh
@@ -302,9 +299,8 @@ functional_tests_prod_hh:
   - master
   script:
   - set -x
-  - exit 0
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH} ${DJ_SERVER_ADMIN_USERNAME_PROD_HH} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HH}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH}
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Test prod public url
@@ -318,6 +314,5 @@ functional_tests_prod_public:
   - master
   script:
   - set -x
-  - exit 0
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_PUBLIC}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC}
