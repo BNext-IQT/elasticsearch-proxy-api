@@ -8,6 +8,7 @@ variables:
   CONFIGS_FOLDER: run_config
   CONFIG_UNIT_TESTS_FILE_PATH: ${CONFIGS_FOLDER}/unit_tests.yml
   CONFIG_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.yml
+  INGRESS_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/ingress-staging.yml
   CONFIG_GUNICORN_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.gunicorn.config.py
   CONFIG_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.yml
   CONFIG_GUNICORN_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.gunicorn.config.py
@@ -110,6 +111,7 @@ prepare_config_staging:
     paths:
       - ${CONFIG_STAGING_FILE_PATH}
       - ${CONFIG_GUNICORN_STAGING_FILE_PATH}
+      - ${INGRESS_STAGING_FILE_PATH}
 
 deploy_to_staging:
   stage: deploy_to_staging
@@ -142,6 +144,8 @@ deploy_to_staging:
   - cat k8s-deployment.yaml
   - kubectl apply -n ${CHEMBL_NS_STAGING} -f k8s-deployment.yaml
   - kubectl get pods -n ${CHEMBL_NS_STAGING}
+  - cat ${INGRESS_STAGING_FILE_PATH}
+  - kubectl apply -n ${CHEMBL_NS_STAGING} -f ${INGRESS_STAGING_FILE_PATH}
 #
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Test staging
