@@ -36,7 +36,7 @@ paths:
           description: 'name of the index to query'
           required: true
           type: 'string'
-        - name: 'search_data'
+        - name: 'es_query'
           in: 'formData'
           description: 'stringifyied version of the query to send to elasticsearch'
           required: true
@@ -64,4 +64,6 @@ definitions:
     type: 'object'
     properties:
       es_response:
+        type: 'object'
+      metadata:
         type: 'object'
