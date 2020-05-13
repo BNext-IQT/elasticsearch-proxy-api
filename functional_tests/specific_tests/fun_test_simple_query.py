@@ -9,10 +9,11 @@ import requests
 from specific_tests import utils
 
 
-def run_test(server_base_url):
+def run_test(server_base_url, delayed_jobs_server_base_path):
     """
     Tests that a simple query to elasticsearch
     :param server_base_url: base url of the running server. E.g. http://127.0.0.1:5000
+    :param delayed_jobs_server_base_path: base path for the delayed_jobs
     """
 
     print('-------------------------------------------')
