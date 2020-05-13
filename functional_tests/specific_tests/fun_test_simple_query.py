@@ -52,6 +52,6 @@ def run_test(server_base_url):
     assert status_code == 200, 'The request failed!'
 
     response_json = request.json()
-    hits = response_json['hits']['hits']
+    hits = response_json['es_response']['hits']['hits']
 
     assert len(hits) > 0, 'I should have gotten hits!'
