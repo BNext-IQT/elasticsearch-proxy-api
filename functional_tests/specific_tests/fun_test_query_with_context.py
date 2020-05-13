@@ -68,6 +68,11 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
 
     assert len(hits) > 0, 'I should have gotten hits!'
 
+    metadata = response_json['metadata']
+    print('metadata: ', metadata)
+
+    assert metadata['total_results'] > 0, 'There should be more than 0 results!'
+
 
 def submit_similarity_search_job(delayed_jobs_server_base_path):
     """

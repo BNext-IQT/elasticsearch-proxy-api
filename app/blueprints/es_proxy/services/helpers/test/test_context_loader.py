@@ -3,7 +3,7 @@ Module to test the context loader
 """
 import unittest
 
-from app.blueprints.es_proxy.controllers.helpers import context_loader
+from app.blueprints.es_proxy.services.helpers import context_loader
 
 
 class TestContextLoader(unittest.TestCase):
