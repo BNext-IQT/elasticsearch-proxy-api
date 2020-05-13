@@ -17,13 +17,17 @@ def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextu
     :param raw_context: stringifyied version of a JSON object describing the context of the query
     :param id_property: property that identifies every item. Required when context provided
     :param raw_contextual_sort_data: description of sorting if sorting by contextual properties
-    :return: Returns the json response from elasticsearch
+    :return: Returns the json response from elasticsearch and some metadata if necessary
     """
     if raw_context is None:
 
         app_logging.debug('No context detected')
         es_query = json.loads(raw_es_query)
-        return es_data.get_es_response(index_name, es_query)
+        es_response = es_data.get_es_response(index_name, es_query)
+        response = {
+            'es_response': es_response,
+        }
+        return response
 
     else:
 
