@@ -34,17 +34,15 @@ def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextu
         }
         return response
 
-    else:
+    app_logging.debug(f'Using context: {raw_context}')
+    es_response, metadata = get_items_with_context(index_name, raw_es_query, raw_context, id_property,
+                                                   raw_contextual_sort_data)
 
-        app_logging.debug(f'Using context: {raw_context}')
-        es_response, metadata = get_items_with_context(index_name, raw_es_query, raw_context, id_property,
-                                                       raw_contextual_sort_data)
-
-        response = {
-            'es_response': es_response,
-            'metadata': metadata
-        }
-        return response
+    response = {
+        'es_response': es_response,
+        'metadata': metadata
+    }
+    return response
 
 
 def get_items_with_context(index_name, raw_es_query, raw_context, id_property, raw_contextual_sort_data='{}'):
@@ -108,9 +106,8 @@ def get_scores_query(contextual_sort_data, id_property, total_results, context_i
         # if nothing is specified use the default scoring script, which is to score them according to their original
         # position in the results
         score_property = 'index'
-        score_script = "String id=doc['" + id_property + "'].value; " \
-                                                         "return " + str(
-            total_results) + " - params.scores[id]['" + score_property + "'];"
+        score_script = f'String id=doc["{id_property}"].value; ' \
+                       f'return {str(total_results)} - params.scores[id]["{score_property}"];'
     else:
 
         raw_score_property = list(contextual_sort_data_keys)[0]

@@ -13,7 +13,8 @@ def get_url_for_get_es_data(server_base_url):
 
 def get_url_for_job_status(delayed_jobs_base_url, job_id):
     """
-    :param delayed_jobs_base_url: base url for the delayed jobs. E.g. https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
+    :param delayed_jobs_base_url: base url for the delayed jobs.
+    E.g. https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
     :param job_id: job_id
     :return: url for getting a job status
     """
@@ -22,7 +23,8 @@ def get_url_for_job_status(delayed_jobs_base_url, job_id):
 
 def get_url_for_similarity_job_submission(delayed_jobs_base_url):
     """
-    :param delayed_jobs_base_url: base url for the delayed jobs. E.g. https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
+    :param delayed_jobs_base_url: base url for the delayed jobs.
+    E.g. https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
     :return: url for submitting a similarity search job
     """
     return f'{delayed_jobs_base_url}/submit/structure_search_job'

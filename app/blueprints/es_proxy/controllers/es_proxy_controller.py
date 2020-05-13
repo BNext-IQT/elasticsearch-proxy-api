@@ -1,16 +1,17 @@
 """
     The blueprint used for handling requests to get generic es_data
 """
-from flask import Blueprint, jsonify, abort, request, send_file
+from flask import Blueprint, jsonify, abort, request
 
 from app.request_validation.decorators import validate_form_with
 from app.blueprints.es_proxy.controllers import marshmallow_schemas
-from app.blueprints.es_proxy.services import  es_proxy_service
+from app.blueprints.es_proxy.services import es_proxy_service
 from app import app_logging
 
 ES_PROXY_BLUEPRINT = Blueprint('es_proxy', __name__)
 
-@ES_PROXY_BLUEPRINT.route('/get_es_data', methods = ['POST'])
+
+@ES_PROXY_BLUEPRINT.route('/get_es_data', methods=['POST'])
 @validate_form_with(marshmallow_schemas.ESProxyQuery)
 def get_es_data():
     """
@@ -45,12 +46,13 @@ def get_es_data():
 
         abort(500, msg=f'Internal server error: {str(error)}')
 
+
 def sanitise_parameter(param_value):
     """
     Makes the parameter null if it is 'null' or 'undefined', in some cases javascript produces those values
     :param param_value: value of the parameter
-    :return: null if 'null' or 'undefined' the actual value otherwise
+    :return: null if param_value in ('null', 'undefined'), the actual value otherwise
     """
-    if param_value == 'null' or param_value == 'undefined':
+    if param_value in ('null', 'undefined'):
         return None
     return param_value

@@ -19,6 +19,7 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('-------------------------------------------')
     print('Testing a simple query')
     print('-------------------------------------------')
+    print('delayed_jobs_server_base_path: ', delayed_jobs_server_base_path)
 
     url = utils.get_url_for_get_es_data(server_base_url)
     print('url: ', url)
