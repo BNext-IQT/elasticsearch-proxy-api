@@ -8,6 +8,7 @@ from flask_cors import CORS
 from app.config import RUN_CONFIG
 from app.cache import CACHE
 from app.blueprints.swagger_description.swagger_description_blueprint import SWAGGER_BLUEPRINT
+from app.blueprints.es_proxy.controllers.es_proxy_controller import ES_PROXY_BLUEPRINT
 
 
 def create_app():
@@ -27,6 +28,7 @@ def create_app():
         CACHE.init_app(flask_app)
 
     flask_app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=f'{base_path}/swagger')
+    flask_app.register_blueprint(ES_PROXY_BLUEPRINT, url_prefix=f'{base_path}/es_data')
 
     return flask_app
 

@@ -21,7 +21,7 @@ tags:
 - name: Get ES Data
   description: Endpoint to get data from ES
 paths:
-  /get_es_data:
+  /es_data/get_es_data:
     post:
       tags:
         - 'ES proxy'
@@ -49,7 +49,7 @@ paths:
           in: 'formData'
           description: 'property that identifies every item. Required when context provided'
           type: 'string'
-        - name: contextual_sort_data
+        - name: 'contextual_sort_data'
           in: 'formData'
           description: 'description of sorting if sorting by contextual properties'
           type: 'string'

@@ -47,4 +47,11 @@ def run_test(server_base_url):
 
     status_code = request.status_code
     print(f'status_code: {status_code}')
+    response_text = request.text
+    utils.print_es_response(response_text)
     assert status_code == 200, 'The request failed!'
+
+    response_json = request.json()
+    hits = response_json['hits']['hits']
+
+    assert len(hits) > 0, 'I should have gotten hits!'
