@@ -3,6 +3,7 @@
 Module that tests an es_query with context
 """
 import json
+import time
 
 import requests
 
@@ -126,3 +127,4 @@ def wait_until_job_finished(delayed_jobs_server_base_path, job_id):
 
         print('job_status: ', job_status)
         print('job_progress: ', job_progress)
+        time.sleep(1)
