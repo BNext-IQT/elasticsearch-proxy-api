@@ -36,11 +36,13 @@ paths:
           description: 'name of the index to query'
           required: true
           type: 'string'
+          default: 'chembl_26_molecule'
         - name: 'es_query'
           in: 'formData'
           description: 'stringifyied version of the query to send to elasticsearch'
           required: true
           type: 'string'
+          default: "{'size': 24, 'from': 0, 'query': {'bool': {'must': [{'query_string': {'analyze_wildcard': True, 'query': '*'}}], 'filter': []}}, 'sort': []}"
         - name: 'context_obj'
           in: 'formData'
           description: 'stringifyied version of a JSON object describing the context of the query'
