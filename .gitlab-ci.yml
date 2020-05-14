@@ -169,7 +169,7 @@ functional_tests:
     url: ${SERVER_URL_STAGING}
   script:
   - set -x
-  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} https://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hx
@@ -233,7 +233,7 @@ functional_tests_prod_hx:
   script:
   - set -x
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} https://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hh
@@ -300,7 +300,7 @@ functional_tests_prod_hh:
   script:
   - set -x
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH} https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Test prod public url
@@ -315,4 +315,4 @@ functional_tests_prod_public:
   script:
   - set -x
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC} https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs

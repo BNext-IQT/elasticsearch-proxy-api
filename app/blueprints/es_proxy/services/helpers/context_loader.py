@@ -27,6 +27,13 @@ def get_context_url(context_dict):
     mapped_host = host_mappings.get(host)
     mapped_base_url = context_dict['delayed_jobs_base_url'].replace(host, mapped_host)
 
+    # Make sure to always use http because connection is internal
+    scheme = re.search(r'^http(s)?://', mapped_base_url).group(0)
+    if scheme is None:
+        mapped_base_url = f'http://{mapped_base_url}'
+    else:
+        mapped_base_url = mapped_base_url.replace(scheme, 'http://')
+
     return f'{mapped_base_url}/outputs/{context_dict["context_id"]}/results.json'
 
 
