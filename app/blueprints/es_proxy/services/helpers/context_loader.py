@@ -1,6 +1,8 @@
 """
 Module that loads contexts from results
 """
+import re
+
 import requests
 
 from app.config import RUN_CONFIG
@@ -19,7 +21,12 @@ def get_context_url(context_dict):
     returns the url for loading the context
     :param context_dict: dict describing the context
     """
-    return f'{context_dict["delayed_jobs_base_url"]}/outputs/{context_dict["context_id"]}/results.json'
+    host = re.search(r'[^/]+\.ebi\.ac\.uk(:\d+)?', context_dict["delayed_jobs_base_url"]).group(0)
+    host_mappings = RUN_CONFIG.get('delayed_jobs', {}).get('server_mapping', {})
+    mapped_host = host_mappings.get(host)
+    mapped_base_url = context_dict['delayed_jobs_base_url'].replace(host, mapped_host)
+
+    return f'{mapped_base_url}/outputs/{context_dict["context_id"]}/results.json'
 
 
 def get_context(context_dict):
