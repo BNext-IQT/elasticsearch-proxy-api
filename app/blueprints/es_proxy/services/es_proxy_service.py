@@ -25,7 +25,6 @@ def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextu
     :return: Returns the json response from elasticsearch and some metadata if necessary
     """
     if raw_context is None:
-
         app_logging.debug('No context detected')
         es_query = json.loads(raw_es_query)
         es_response = es_data.get_es_response(index_name, es_query)
@@ -62,13 +61,35 @@ def get_items_with_context(index_name, raw_es_query, raw_context, id_property, r
     context_id = context_dict['context_id']
     context_index = context_loader.load_context_index(context_id, id_property, context)
 
-    parsed_search_data = json.loads(raw_es_query)
-
     if raw_contextual_sort_data is not None:
         contextual_sort_data = json.loads(raw_contextual_sort_data)
     else:
         contextual_sort_data = {}
 
+    search_data_with_injections = get_search_data_with_injections(raw_es_query, contextual_sort_data, id_property,
+                                                                  total_results, context_index)
+    raw_search_data_with_injections = json.dumps(search_data_with_injections)
+    es_response = es_data.get_es_response(index_name, json.loads(raw_search_data_with_injections))
+    add_context_values_to_response(es_response, context_index)
+
+    metadata = {
+        'total_results': len(context_index),
+        'max_results_injected': RUN_CONFIG.get('filter_query_max_clauses')
+    }
+    return es_response, metadata
+
+
+def get_search_data_with_injections(raw_es_query, contextual_sort_data, id_property, total_results, context_index):
+    """
+    :param raw_es_query: stringifyed version of the es query
+    :param contextual_sort_data: dict describing the sorting by contextual properties
+    :param id_property: property used to identity each item
+    :param total_results: total number of results
+    :param context_index: index with the context
+    :return: the query to send to elasticsearch
+    """
+
+    parsed_search_data = json.loads(raw_es_query)
     scores_query = get_scores_query(contextual_sort_data, id_property, total_results, context_index)
     parsed_search_data['query']['bool']['must'].append(scores_query)
 
@@ -76,20 +97,21 @@ def get_items_with_context(index_name, raw_es_query, raw_context, id_property, r
     ids_query = get_request_for_chembl_ids(id_property, ids_list)
     parsed_search_data['query']['bool']['filter'].append(ids_query)
 
-    raw_search_data_with_injections = json.dumps(parsed_search_data)
+    return parsed_search_data
 
-    es_response = es_data.get_es_response(index_name, json.loads(raw_search_data_with_injections))
+
+def add_context_values_to_response(es_response, context_index):
+    """
+    adds the values of the context to the response of es
+    :param es_response: response without the context values
+    :param context_index: index of the context values
+    """
+
     hits = es_response['hits']['hits']
     for hit in hits:
         hit_id = hit['_id']
         context_obj = context_index[hit_id]
         hit['_source'][CONTEXT_PREFIX] = context_obj
-
-    metadata = {
-        'total_results': len(context_index),
-        'max_results_injected': RUN_CONFIG.get('filter_query_max_clauses')
-    }
-    return es_response, metadata
 
 
 def get_scores_query(contextual_sort_data, id_property, total_results, context_index):
