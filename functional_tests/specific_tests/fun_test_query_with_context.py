@@ -115,12 +115,13 @@ def wait_until_job_finished(delayed_jobs_server_base_path, job_id):
     status_url = utils.get_url_for_job_status(delayed_jobs_server_base_path, job_id)
     print('status_url: ', status_url)
 
-    status_request = requests.get(status_url)
-    print('Status request response code: ', status_request.status_code)
-
     job_status = None
 
     while job_status != 'FINISHED':
+
+        status_request = requests.get(status_url)
+        print('Status request response code: ', status_request.status_code)
+
         status_response = status_request.json()
         job_status = status_response.get('status')
         job_progress = status_response.get('progress')
