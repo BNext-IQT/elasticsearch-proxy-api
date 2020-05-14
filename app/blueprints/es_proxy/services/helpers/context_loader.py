@@ -7,6 +7,7 @@ import requests
 
 from app.config import RUN_CONFIG
 from app.cache import CACHE
+from app import app_logging
 
 
 class ContextLoaderError(Exception):
@@ -36,6 +37,7 @@ def get_context(context_dict):
     :return: the context loaded as an object
     """
     context_url = get_context_url(context_dict)
+    app_logging.debug(f'Loading context from url: {context_url}')
     context_request = requests.get(context_url)
 
     if context_request.status_code != 200:
