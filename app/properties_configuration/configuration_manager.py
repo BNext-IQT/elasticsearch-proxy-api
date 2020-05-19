@@ -1,13 +1,12 @@
+"""
+    Module tht handles the configuration of the properties for the interface
+"""
 import yaml
 import warnings
 
 import os.path
 
-
-# CONFIG_TEST_FILE = os.path.join(settings.GLADOS_ROOT, 'es/es_properties_configuration/tests/data/test_override.yml')
-# GROUPS_TEST_FILE = os.path.join(settings.GLADOS_ROOT, 'es/es_properties_configuration/tests/data/test_groups.yml')
-# SORTING_TEST_FILE = os.path.join(settings.GLADOS_ROOT,
-#                                  'es/es_properties_configuration/tests/data/test_default_sorting.yml')
+from app.es_data import es_data
 
 class PropertiesConfigurationManager:
     """
@@ -47,6 +46,7 @@ class PropertiesConfigurationManager:
         :param prop_id:
         :return: a dict describing the configuration of a property
         """
+        es_data.get_field_simplified_property_mapping(index_name, prop_id)
         return {}
 
 

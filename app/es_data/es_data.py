@@ -38,6 +38,18 @@ def get_es_response(index_name, es_query):
     return response
 
 
+def get_field_simplified_property_mapping(index_name, property_id):
+    """
+    :param index_name: index name where the property belongs
+    :param property_id: id of the property to check
+    :return: a dict with the mappings of the property in the index given as parameter
+    """
+    print('getting mapping')
+    full_mapping = ES.indices.get_field_mapping(index=index_name, fields=property_id)
+    print('full_mapping: ')
+    print(full_mapping)
+
+
 def get_es_query_cache_key(index_name, es_query):
     """
     Produces a key to save the data in the cache based on the parameters given
