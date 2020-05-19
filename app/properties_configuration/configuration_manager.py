@@ -3,10 +3,12 @@
 """
 import yaml
 import warnings
-
 import os.path
 
+from elasticsearch.exceptions import AuthorizationException
+
 from app.es_data import es_data
+
 
 class PropertiesConfigurationManager:
     """
@@ -39,15 +41,17 @@ class PropertiesConfigurationManager:
 
         return f'{self.override_file_path}-{self.groups_file_path}-{self.sorting_file_path}'
 
-
     def get_config_for_prop(self, index_name, prop_id):
         """
         :param index_name:
         :param prop_id:
         :return: a dict describing the configuration of a property
         """
-        es_data.get_field_simplified_property_mapping(index_name, prop_id)
-        return {}
+        try:
+            es_data.get_field_simplified_property_mapping(index_name, prop_id)
+            return {}
+        except AuthorizationException as error:
+            raise self.PropertiesConfigurationManagerError(f'There was an error while getting the config for prop {prop_id}, {index_name}: {str(error)}')
 
 
 def get_config_for_prop(index_name, prop_id):

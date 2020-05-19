@@ -5,6 +5,7 @@ import json
 import hashlib
 import base64
 
+
 from app.es_connection import ES
 from app.cache import CACHE
 from app.config import RUN_CONFIG
@@ -44,10 +45,10 @@ def get_field_simplified_property_mapping(index_name, property_id):
     :param property_id: id of the property to check
     :return: a dict with the mappings of the property in the index given as parameter
     """
-    print('getting mapping')
+    app_logging.debug(f'Getting mapping of {property_id} in {index_name}')
     full_mapping = ES.indices.get_field_mapping(index=index_name, fields=property_id)
-    print('full_mapping: ')
-    print(full_mapping)
+
+    return {}
 
 
 def get_es_query_cache_key(index_name, es_query):
