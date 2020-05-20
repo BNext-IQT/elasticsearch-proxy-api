@@ -1,10 +1,9 @@
 """
 Module that returns mapping data from elascticsearch
 """
-
 from app.es_connection import ES
 from app import app_logging
-from app.config import RUN_CONFIG
+from app.es_data import utils
 
 SIMPLE_MAPPINGS = {
     'keyword': 'string',
@@ -44,8 +43,7 @@ def get_simplified_property_mapping(index_name, property_id):
     if property_mapping is None:
         return None
 
-    resource_name = get_resource_name(index_name)
-    label, label_mini = get_labels_from_property_name('res_name', 'prop_id')
+    label, label_mini = utils.get_labels_from_property_name(index_name, property_id)
 
     simplified_mapping = {
         'type': get_simplified_property_type(property_mapping),
@@ -92,30 +90,6 @@ def get_simplified_property_aggregatability(property_mapping):
     es_type = get_es_property_type(property_mapping)
     return es_type in AGGREGATABLE_TYPES
 
-def get_resource_name(index_name):
-    """
-    :param index_name: index name for which to get the resource name
-    :return: the resouce name based on the index name
-    """
-    es_index_prefix = RUN_CONFIG.get('es_index_prefix')
-    print('index_name: ', index_name)
-    # cls.INDEX_PREFIX, CURRENT_INDEX_VERSION
-    return 'hola'
 
 
-def get_labels_from_property_name(entity_name, prop_name):
 
-    return 'hello', 'world'
-    prop_parts = prop_name.split('.')
-    label = ''
-    if len(prop_parts) > 1:
-        if not prop_parts[-2] in ['_metadata', 'drug_data']:
-            if not prop_parts[-2] in ['molecule_properties', 'drug']:
-                label += standardize_label(prop_parts[-2], entity_name) + ' '
-    label += standardize_label(prop_parts[-1], entity_name)
-    if len(label) == 0:
-        label = standardize_label(prop_parts[-1])
-    label = remove_duplicate_words(label)
-    label = label.strip()
-    label_mini = abbreviate_label(label)
-    return label, label_mini
