@@ -3,6 +3,8 @@ Module to test configuration manager
 """
 import unittest
 
+import yaml
+
 from app.properties_configuration.configuration_manager import PropertiesConfigurationManager
 from app.config import RUN_CONFIG
 
@@ -69,11 +71,30 @@ class ConfigurationManagerTester(unittest.TestCase):
         prop_id = '_metadata.assay_data.assay_subcellular_fraction'
         config_got = configuration_manager.get_config_for_prop(index_name, prop_id)
 
-        print('config_got: ', config_got)
-
         self.assertEqual(config_got['index_name'], index_name)
         self.assertEqual(config_got['prop_id'], prop_id)
         self.assertEqual(config_got['type'], 'string')
         self.assertTrue(config_got['aggregatable'])
         self.assertEqual(config_got['label'], 'Assay Data Subcellular Fraction')
         self.assertEqual(config_got['label_mini'], 'As. Data Subc. Frct.')
+
+    def test_gets_config_for_one_property_with_override(self):
+        """
+        Tests gets the correct config dor a property with override
+        """
+        configuration_manager = get_config_manager_instance()
+
+        with open(configuration_manager.override_file_path) as override_file:
+
+            override_config_must_be = yaml.load(override_file, Loader=yaml.FullLoader)
+
+            es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+            index_name = f'{es_index_prefix}activity'
+            prop_id = '_metadata.activity_generated.short_data_validity_comment'
+            config_got = configuration_manager.get_config_for_prop(index_name, prop_id)
+
+            property_config_must_be = override_config_must_be[index_name][prop_id]
+            self.assertEqual(config_got['label'], property_config_must_be['label'],
+                             'The label was not overridden properly!')
+            self.assertEqual(config_got['label_mini'], property_config_must_be['label_mini'],
+                             'The label mini was not overridden properly!')

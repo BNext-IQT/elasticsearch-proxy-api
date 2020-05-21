@@ -106,12 +106,15 @@ def get_merged_prop_config(index_name, prop_id, es_property_description, propert
     found_in_es = es_property_description is not None
     found_in_override = property_override_description is not None
 
-    if found_in_es and not found_in_override:
-        # this is a normal property WITHOUT override
+    is_virtual = not found_in_es and found_in_override
+
+    if not is_virtual:
+
         return {
             'index_name': index_name,
             'prop_id': prop_id,
-            **es_property_description
+            **es_property_description,
+            **(property_override_description if property_override_description is not None else {})
         }
 
     return {}
