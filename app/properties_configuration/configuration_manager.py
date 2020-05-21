@@ -50,21 +50,9 @@ class PropertiesConfigurationManager:
         """
         app_logging.debug(f'getting property config for {prop_id} of index {index_name}')
         es_property_description = self.get_property_base_es_description(index_name, prop_id)
-
-        found_in_es = es_property_description is not None
-        app_logging.debug(f'found_in_es: {found_in_es}')
-        if not found_in_es:
-            es_property_description = {}
-
         property_override_description = self.get_property_base_override_description(index_name, prop_id)
-        found_in_override = property_override_description is not None
-        app_logging.debug(f'found_in_override: {found_in_override}')
-
-        if not found_in_es and not found_in_override:
-            raise self.PropertiesConfigurationManagerError(
-                f'The property {prop_id} does not exist in elasticsearch or as virtual property')
-
-        config = get_merged_prop_config(index_name, prop_id, es_property_description, property_override_description)
+        config = self.get_merged_prop_config(index_name, prop_id, es_property_description,
+                                             property_override_description)
         return config
 
     def get_property_base_es_description(self, index_name, prop_id):
@@ -95,29 +83,72 @@ class PropertiesConfigurationManager:
                     return index_override.get(prop_id)
             return None
 
-def get_merged_prop_config(index_name, prop_id, es_property_description, property_override_description):
-    """
-    :param index_name: name of the index to which the property belongs
-    :param prop_id: full path of the property, such as  '_metadata.assay_data.assay_subcellular_fraction'
-    :param es_property_description: dict describing the property taken from es
-    :param property_override_description: dict describing the property taken from the override
-    :return: the merged configuration between what was found in es and the override config
-    """
-    found_in_es = es_property_description is not None
-    found_in_override = property_override_description is not None
+    def get_merged_prop_config(self, index_name, prop_id, es_property_description, property_override_description):
+        """
+        :param index_name: name of the index to which the property belongs
+        :param prop_id: full path of the property, such as  '_metadata.assay_data.assay_subcellular_fraction'
+        :param es_property_description: dict describing the property taken from es
+        :param property_override_description: dict describing the property taken from the override
+        :return: the merged configuration between what was found in es and the override config
+        """
+        found_in_es = es_property_description is not None
+        app_logging.debug(f'Property {prop_id} of index {index_name} found_in_es: {found_in_es}')
+        found_in_override = property_override_description is not None
+        app_logging.debug(f'Property {prop_id} of index {index_name} found_in_override: {found_in_override}')
 
-    is_virtual = not found_in_es and found_in_override
+        if not found_in_es and not found_in_override:
+            raise self.PropertiesConfigurationManagerError(
+                f'The property {prop_id} does not exist in elasticsearch or as virtual property')
 
-    if not is_virtual:
+        is_virtual = not found_in_es and found_in_override
+        app_logging.debug(f'Property {prop_id} of index {index_name} is_virtual: {is_virtual}')
 
-        return {
+        if not is_virtual:
+            return {
+                'index_name': index_name,
+                'prop_id': prop_id,
+                **es_property_description,
+                **(property_override_description if property_override_description is not None else {})
+            }
+
+        base_config = {
             'index_name': index_name,
             'prop_id': prop_id,
-            **es_property_description,
-            **(property_override_description if property_override_description is not None else {})
+            'is_virtual': True
         }
 
-    return {}
+        based_on = property_override_description.get('based_on')
+        print('prop_id: ', prop_id)
+        print('based_on: ', based_on)
+        is_contextual = based_on is None
+        app_logging.debug(f'Property {prop_id} of index {index_name} is_contextual: {is_contextual}')
+
+        if not is_contextual:
+            app_logging.debug(f'Property {prop_id} of index {index_name} based_on: {based_on}')
+            return self.get_virtual_non_contextual_property_config(base_config, based_on)
+
+        return {}
+
+    def get_virtual_non_contextual_property_config(self, base_config, based_on):
+        """
+        A virtual property is such that does not have definition in es, a virtual - non contextual property is such that
+        is based on an existing property in es. E.g. trade_names which does not exist in elasticsearch
+        but is based on molecule_synonyms
+        :param base_config: the basic configuration of the property with index name and prop id
+        :param based_on: the id of the property on which it is based, it must be from the same index
+        :return: the configuration of the property
+        """
+        index_name = base_config['index_name']
+        config_of_based_on_property = self.get_config_for_prop(index_name, based_on)
+        print('config_of_based_on_property: ', config_of_based_on_property)
+
+        return {
+            **config_of_based_on_property,
+            **base_config,
+            'is_contextual': False,
+
+        }
+
 
 def get_config_for_prop(index_name, prop_id):
     cache_key = 'property_config-{index_name}-{prop_id}'.format(index_name=index_name, prop_id=prop_id)

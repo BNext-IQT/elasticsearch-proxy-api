@@ -80,12 +80,11 @@ class ConfigurationManagerTester(unittest.TestCase):
 
     def test_gets_config_for_one_property_with_override(self):
         """
-        Tests gets the correct config dor a property with override
+        Tests gets the correct config for a property with override
         """
         configuration_manager = get_config_manager_instance()
 
         with open(configuration_manager.override_file_path) as override_file:
-
             override_config_must_be = yaml.load(override_file, Loader=yaml.FullLoader)
 
             es_index_prefix = RUN_CONFIG.get('es_index_prefix')
@@ -98,3 +97,33 @@ class ConfigurationManagerTester(unittest.TestCase):
                              'The label was not overridden properly!')
             self.assertEqual(config_got['label_mini'], property_config_must_be['label_mini'],
                              'The label mini was not overridden properly!')
+
+    def test_gets_config_for_a_virtual_property(self):
+        """
+        Tests gets the correct config for a virtual property
+        """
+
+        configuration_manager = get_config_manager_instance()
+
+        with open(configuration_manager.override_file_path) as override_file:
+            override_config_must_be = yaml.load(override_file, Loader=yaml.FullLoader)
+
+            es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+            index_name = f'{es_index_prefix}molecule'
+
+            prop_id = 'trade_names'
+            config_got = configuration_manager.get_config_for_prop(index_name, prop_id)
+
+            property_config_must_be = override_config_must_be[index_name][prop_id]
+            self.assertEqual(config_got['prop_id'], prop_id,
+                             'The prop_id was not set up properly!')
+            self.assertEqual(config_got['based_on'], property_config_must_be['based_on'],
+                             'The based_on was not set up properly!')
+            self.assertEqual(config_got['label'], property_config_must_be['label'],
+                             'The label was not set up properly!')
+            self.assertFalse(config_got['aggregatable'], 'This property should not be aggregatable')
+
+            self.assertEqual(config_got['is_virtual'], True,
+                             'This is a virtual property!')
+            self.assertEqual(config_got['is_contextual'], False,
+                             'This is not a contextual property!')
