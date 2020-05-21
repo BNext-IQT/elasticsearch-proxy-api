@@ -5,7 +5,7 @@ import yaml
 import warnings
 import os.path
 
-from elasticsearch.exceptions import AuthorizationException
+from elasticsearch.exceptions import NotFoundError
 
 from app.es_data import es_mappings
 from app import app_logging
@@ -76,7 +76,7 @@ class PropertiesConfigurationManager:
         try:
             base_property_description = es_mappings.get_simplified_property_mapping(index_name, prop_id)
             return base_property_description
-        except AuthorizationException as error:
+        except NotFoundError as error:
             raise self.PropertiesConfigurationManagerError(f'There was an error while getting the config for '
                                                            f'prop {prop_id}, {index_name}: {str(error)}')
 
