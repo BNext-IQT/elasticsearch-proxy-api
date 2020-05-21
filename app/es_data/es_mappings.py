@@ -24,7 +24,6 @@ AGGREGATABLE_TYPES = {'boolean', 'byte', 'short', 'integer', 'long', 'float', 'd
 
 class EsMappingsError(Exception):
     """Base class for exceptions in the ES Mappings"""
-    pass
 
 
 def get_simplified_property_mapping(index_name, property_id):
@@ -89,7 +88,3 @@ def get_simplified_property_aggregatability(property_mapping):
     """
     es_type = get_es_property_type(property_mapping)
     return es_type in AGGREGATABLE_TYPES
-
-
-
-

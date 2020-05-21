@@ -12,6 +12,7 @@ VOWELS_REGEX = re.compile('[aeiouy]', flags=re.IGNORECASE)
 SPACE_REGEX = re.compile(r'\s')
 REPEATED_CHARACTERS_REGEX = re.compile(r'(.)\1+')
 
+
 def get_resource_name(index_name):
     """
     :param index_name: index name for which to get the resource name
@@ -21,6 +22,7 @@ def get_resource_name(index_name):
     resource_name = re.sub(fr'{es_index_prefix}(\d*_)?', '', index_name)
 
     return resource_name
+
 
 def get_labels_from_property_name(index_name, prop_id):
     """
@@ -43,6 +45,7 @@ def get_labels_from_property_name(index_name, prop_id):
     label = label.strip()
     label_mini = abbreviate_label(label)
     return label, label_mini
+
 
 def standardize_label(prop_part, entity_name=None):
     """
@@ -76,6 +79,7 @@ def standardize_label(prop_part, entity_name=None):
 
     return std_label.strip()
 
+
 def remove_duplicate_words(sentence):
     """
     :param sentence: sentence for which remove the duplicate words
@@ -99,10 +103,11 @@ def remove_duplicate_words(sentence):
                 words_set.add(word)
     return clean_sentence
 
+
 def abbreviate_label(std_label):
     """
-    :param std_label:
-    :return: a
+    :param std_label: the original text of the label
+    :return: an abbreviated version of the label
     """
 
     words = SPACE_REGEX.split(std_label)
@@ -117,7 +122,13 @@ def abbreviate_label(std_label):
         abbreviated_words.append(abbreviate_word(word, max_word_length))
     return ' '.join(abbreviated_words)
 
+
 def abbreviate_word(word, max_word_length):
+    """
+    :param word: original version of the word
+    :param max_word_length: max length of the word
+    :return: and abbreviated version of the word
+    """
     if len(word) <= max_word_length:
         return word
     total_caps = len(CAPS_REGEX.findall(word))
