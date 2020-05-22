@@ -5,6 +5,8 @@ from app.es_connection import ES
 from app import app_logging
 from app.es_data import utils
 from utils import dict_property_access
+from app.config import RUN_CONFIG
+from app.cache import CACHE
 
 SIMPLE_MAPPINGS = {
     'keyword': 'string',
@@ -28,6 +30,7 @@ class EsMappingsError(Exception):
     """Base class for exceptions in the ES Mappings"""
 
 
+@CACHE.memoize(timeout=RUN_CONFIG.get('es_mappings_cache_seconds'))
 def get_simplified_property_mapping(index_name, property_id):
     """
     :param index_name: index name where the property belongs
@@ -53,6 +56,8 @@ def get_simplified_property_mapping(index_name, property_id):
 
     return simplified_mapping
 
+
+@CACHE.memoize(timeout=RUN_CONFIG.get('es_mappings_cache_seconds'))
 def get_index_mapping(index_name):
     """
     :param index_name: name of the index to check
@@ -61,6 +66,7 @@ def get_index_mapping(index_name):
     raw_index_mapping = ES.indices.get_mapping(index=index_name)
     index_mapping = raw_index_mapping.get(list(raw_index_mapping.keys())[0])['mappings']['properties']
     return index_mapping
+
 
 def get_simplified_property_type(property_mapping):
     """

@@ -99,6 +99,9 @@ if RUN_CONFIG.get('base_path') is None:
 if RUN_CONFIG.get('es_proxy_cache_seconds') is None:
     RUN_CONFIG['es_proxy_cache_seconds'] = 604800
 
+if RUN_CONFIG.get('es_mappings_cache_seconds') is None:
+    RUN_CONFIG['es_mappings_cache_seconds'] = 86400
+
 if RUN_CONFIG.get('filter_query_max_clauses') is None:
     RUN_CONFIG['filter_query_max_clauses'] = 30000
 
