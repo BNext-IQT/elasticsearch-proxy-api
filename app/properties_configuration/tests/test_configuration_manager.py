@@ -127,3 +127,55 @@ class ConfigurationManagerTester(unittest.TestCase):
                              'This is a virtual property!')
             self.assertEqual(config_got['is_contextual'], False,
                              'This is not a contextual property!')
+
+    def test_gets_config_fails_for_a_virtual_property_based_on_non_existing_prop(self):
+        """
+        Tests that when a virtual non contextual property is based on a no existing property it fails
+        """
+        configuration_manager = get_config_manager_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}molecule'
+        prop_id = 'trade_names_wrong'
+
+        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+                               msg='An exception must have been raised!'):
+            configuration_manager.get_config_for_prop(index_name, prop_id)
+
+    def test_makes_sure_config_for_a_contextual_property_is_correct(self):
+        """
+        Makes sure it fails when a virtual contextual proeprty does not define type and aggregatability
+        """
+        configuration_manager = get_config_manager_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}molecule'
+        prop_id = '_context.similarity_wrong'
+
+        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+                               msg='This should have thrown an exception for a bad configuration!'):
+            configuration_manager.get_config_for_prop(index_name, prop_id)
+
+    def test_gets_config_for_a_contextual_property(self):
+        """
+        tests gets the config for a virtual contextual property
+        """
+        configuration_manager = get_config_manager_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}molecule'
+
+        prop_id = '_context.similarity'
+        config_got = configuration_manager.get_config_for_prop(index_name, prop_id)
+
+        self.assertEqual(config_got['prop_id'], prop_id,
+                         'The prop_id was not set up properly!')
+
+        self.assertFalse(config_got['aggregatable'])
+        self.assertTrue(config_got['sortable'])
+        self.assertEqual(config_got['type'], 'double')
+        self.assertEqual(config_got['label'], 'Similarity')
+        self.assertEqual(config_got['label_mini'], 'Similarity')
+
+        self.assertEqual(config_got['is_virtual'], True, 'This is a virtual property!')
+        self.assertEqual(config_got['is_contextual'], True, 'This is a contextual property!')

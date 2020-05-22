@@ -126,7 +126,7 @@ class PropertiesConfigurationManager:
             app_logging.debug(f'Property {prop_id} of index {index_name} based_on: {based_on}')
             return self.get_virtual_non_contextual_property_config(base_config, based_on, property_override_description)
 
-        return {}
+        return self.get_virtual_contextual_property_config(base_config, property_override_description)
 
     def get_virtual_non_contextual_property_config(self, base_config, based_on, property_override_description):
         """
@@ -149,87 +149,29 @@ class PropertiesConfigurationManager:
             'based_on': based_on
         }
 
+    def get_virtual_contextual_property_config(self, base_config, property_override_description):
+        """
+        A virtual property is such that does not have definition in es, a virtual - contextual property is such that
+        is NOT based on an existing property in es. E.g. similarity
+        :param base_config: the basic configuration of the property with index name and prop id
+        :param property_override_description: override config of the property
+        :return: the configuration of the property
+        """
 
-def get_config_for_prop(index_name, prop_id):
-    cache_key = 'property_config-{index_name}-{prop_id}'.format(index_name=index_name, prop_id=prop_id)
-    cache_response = cache.get(cache_key)
-    if cache_response is not None:
-        return cache_response
+        if property_override_description.get('aggregatable') is None or \
+                        property_override_description.get('type') is None or \
+                        property_override_description.get('sortable') is None:
 
-    index_mapping = resources_description.RESOURCES_BY_IDX_NAME.get(index_name)
-    if index_mapping is None:
-        raise ESPropsConfigurationManagerError("The index {} does not exist!".format(index_name))
+            raise self.PropertiesConfigurationManagerError(
+                f'A virtual contextual property must define the type and if it is '
+                'aggregatable and sortable. index => {index_name} : prop => {prop_id}'
+                )
 
-    simplified_mapping = index_mapping.get_simplified_mapping_from_es()
-    es_property_description = simplified_mapping.get(prop_id)
-
-    found_in_es = es_property_description is not None
-    if not found_in_es:
-        es_property_description = {}
-
-    # Search for description in override
-    config_override = yaml.load(open(settings.PROPERTIES_CONFIG_OVERRIDE_FILE, 'r'), Loader=yaml.FullLoader)
-    found_in_override = False
-    if config_override is not None:
-        index_override = config_override.get(index_name)
-        if index_override is not None:
-            property_override_description = index_override.get(prop_id)
-            found_in_override = property_override_description is not None
-
-    config = {}
-    if not found_in_es and not found_in_override:
-        raise ESPropsConfigurationManagerError("The property {} does not exist in elasticsearch or as virtual property"
-                                               .format(prop_id))
-
-    elif found_in_es and not found_in_override:
-        # this is a normal property WITHOUT override
-
-        config = SummableDict({
-            'index_name': index_name,
-            'prop_id': prop_id,
-        })
-        config += SummableDict(es_property_description)
-
-    elif not found_in_es and found_in_override:
-        # this is a virtual property
-        config = SummableDict({
-            'index_name': index_name,
-            'prop_id': prop_id,
-            'is_virtual': True
-        })
-
-        based_on = property_override_description.get('based_on')
-        if based_on is not None:
-            config['is_contextual'] = False
-            base_description = simplified_mapping.get(based_on)
-            if base_description is None:
-                raise ESPropsConfigurationManagerError(
-                    'The virtual property {prop_id} is based on {based_on} which does not exist in elasticsearch '
-                    'index {index_name}'.format(prop_id=prop_id, based_on=based_on, index_name=index_name))
-            config += SummableDict(base_description)
-
-        else:
-            config['is_contextual'] = True
-            if property_override_description.get('aggregatable') is None or \
-                            property_override_description.get('type') is None or \
-                            property_override_description.get('sortable') is None:
-                raise ESPropsConfigurationManagerError('A contextual property must define the type and if it is '
-                                                       'aggregatable and sortable. index => {} : prop => {}'
-                                                       .format(index_name, prop_id))
-
-        config += property_override_description
-
-    elif found_in_es and found_in_override:
-        # this is a normal overridden property
-        config = SummableDict({
-            'index_name': index_name,
-            'prop_id': prop_id,
-        })
-        config += SummableDict(es_property_description)
-        config += property_override_description
-
-    cache.set(cache_key, config, CACHE_TIME)
-    return config
+        return {
+            **base_config,
+            **property_override_description,
+            'is_contextual': True,
+        }
 
 
 def get_config_for_props_list(index_name, prop_ids):
