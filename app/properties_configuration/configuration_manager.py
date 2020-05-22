@@ -98,7 +98,7 @@ class PropertiesConfigurationManager:
 
         if not found_in_es and not found_in_override:
             raise self.PropertiesConfigurationManagerError(
-                f'The property {prop_id} does not exist in elasticsearch or as virtual property')
+                f'The property {prop_id} of index {index_name} does not exist in elasticsearch or as virtual property')
 
         is_virtual = not found_in_es and found_in_override
         app_logging.debug(f'Property {prop_id} of index {index_name} is_virtual: {is_virtual}')
@@ -118,35 +118,35 @@ class PropertiesConfigurationManager:
         }
 
         based_on = property_override_description.get('based_on')
-        print('prop_id: ', prop_id)
-        print('based_on: ', based_on)
+
         is_contextual = based_on is None
         app_logging.debug(f'Property {prop_id} of index {index_name} is_contextual: {is_contextual}')
 
         if not is_contextual:
             app_logging.debug(f'Property {prop_id} of index {index_name} based_on: {based_on}')
-            return self.get_virtual_non_contextual_property_config(base_config, based_on)
+            return self.get_virtual_non_contextual_property_config(base_config, based_on, property_override_description)
 
         return {}
 
-    def get_virtual_non_contextual_property_config(self, base_config, based_on):
+    def get_virtual_non_contextual_property_config(self, base_config, based_on, property_override_description):
         """
         A virtual property is such that does not have definition in es, a virtual - non contextual property is such that
         is based on an existing property in es. E.g. trade_names which does not exist in elasticsearch
         but is based on molecule_synonyms
         :param base_config: the basic configuration of the property with index name and prop id
         :param based_on: the id of the property on which it is based, it must be from the same index
+        :param property_override_description: override config of the property
         :return: the configuration of the property
         """
         index_name = base_config['index_name']
         config_of_based_on_property = self.get_config_for_prop(index_name, based_on)
-        print('config_of_based_on_property: ', config_of_based_on_property)
 
         return {
             **config_of_based_on_property,
             **base_config,
+            **property_override_description,
             'is_contextual': False,
-
+            'based_on': based_on
         }
 
 

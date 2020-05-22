@@ -4,6 +4,7 @@ Module that returns mapping data from elascticsearch
 from app.es_connection import ES
 from app import app_logging
 from app.es_data import utils
+from utils import dict_property_access
 
 SIMPLE_MAPPINGS = {
     'keyword': 'string',
@@ -16,7 +17,8 @@ SIMPLE_MAPPINGS = {
     'integer': 'integer',
     'long': 'integer',
     'boolean': 'boolean',
-    'date': 'date'
+    'date': 'date',
+    'object': 'object'
 }
 
 AGGREGATABLE_TYPES = {'boolean', 'byte', 'short', 'integer', 'long', 'float', 'double', 'keyword', 'lower_case_keyword'}
@@ -33,28 +35,32 @@ def get_simplified_property_mapping(index_name, property_id):
     :return: a dict with the mappings of the property in the index given as parameter
     """
     app_logging.debug(f'Getting mapping of {property_id} in {index_name}')
-    full_mapping = ES.indices.get_field_mapping(index=index_name, fields=property_id)
-    mappings = full_mapping[list(full_mapping.keys())[0]]['mappings']
+    index_mapping = get_index_mapping(index_name)
+    property_accessor = property_id.replace('.', '.properties.')
+    property_raw_mapping = dict_property_access.get_property_value(index_mapping, property_accessor)
 
-    print('mappings: ')
-    print(mappings)
-    property_mapping = mappings.get(property_id)
-    if property_mapping is None:
+    if property_raw_mapping is None:
         return None
 
     label, label_mini = utils.get_labels_from_property_name(index_name, property_id)
 
     simplified_mapping = {
-        'type': get_simplified_property_type(property_mapping),
-        'aggregatable': get_simplified_property_aggregatability(property_mapping),
+        'type': get_simplified_property_type(property_raw_mapping),
+        'aggregatable': get_simplified_property_aggregatability(property_raw_mapping),
         'label': label,
         'label_mini': label_mini
     }
 
-    print('simplified_mapping: ')
-    print(simplified_mapping)
     return simplified_mapping
 
+def get_index_mapping(index_name):
+    """
+    :param index_name: name of the index to check
+    :return: full mapping of an index
+    """
+    raw_index_mapping = ES.indices.get_mapping(index=index_name)
+    index_mapping = raw_index_mapping.get(list(raw_index_mapping.keys())[0])['mappings']['properties']
+    return index_mapping
 
 def get_simplified_property_type(property_mapping):
     """
@@ -75,9 +81,10 @@ def get_es_property_type(property_mapping):
     :param property_mapping: mapping dict from the ES response
     :return: ES type of the property
     """
-    full_name = property_mapping.get('full_name')
-    simple_name = full_name.split('.')[-1]
-    es_type = property_mapping.get('mapping').get(simple_name).get('type')
+    es_type = property_mapping.get('type')
+    if es_type is None:
+        return 'object'
+
     return es_type
 
 
