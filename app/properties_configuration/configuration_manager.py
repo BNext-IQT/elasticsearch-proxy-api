@@ -196,8 +196,8 @@ class PropertiesConfigurationManager:
         """
         configs = []
 
-        # for prop_id in prop_ids:
-        #     configs.append(get_config_for_prop(index_name, prop_id))
+        for prop_id in prop_ids:
+            configs.append(self.get_config_for_prop(index_name, prop_id))
 
         return configs
 

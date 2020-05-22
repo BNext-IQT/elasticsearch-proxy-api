@@ -194,5 +194,21 @@ class ConfigurationManagerTester(unittest.TestCase):
 
         with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
                                msg='This should have thrown an exception for a non existing index!'):
-            configuration_manager.get_config_for_prop(index_name, props)
+            configuration_manager.get_config_for_props_list(index_name, props)
+
+
+    def test_fails_config_for_a_list_of_properties_when_property_does_not_exist(self):
+        """
+        test it fails to get config for a list of properties when a property does not exist
+        """
+        configuration_manager = get_config_manager_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}activity'
+        props = ['does_not_exist']
+
+        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+                               msg='This should have thrown an exception for a non existing property!'):
+            configuration_manager.get_config_for_props_list(index_name, props)
+
 
