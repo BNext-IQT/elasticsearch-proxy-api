@@ -179,3 +179,20 @@ class ConfigurationManagerTester(unittest.TestCase):
 
         self.assertEqual(config_got['is_virtual'], True, 'This is a virtual property!')
         self.assertEqual(config_got['is_contextual'], True, 'This is a contextual property!')
+
+    # ------------------------------------------------------------------------------------------------------------------
+    # Getting a custom list of properties
+    # ------------------------------------------------------------------------------------------------------------------
+    def test_fails_config_for_a_list_of_properties_when_index_does_not_exist(self):
+        """
+        test it fails to get config for a list of properties when index does not exist
+        """
+        configuration_manager = get_config_manager_instance()
+
+        index_name = 'does_not_exist'
+        props = ['_metadata.assay_data.assay_subcellular_fraction']
+
+        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+                               msg='This should have thrown an exception for a non existing index!'):
+            configuration_manager.get_config_for_prop(index_name, props)
+

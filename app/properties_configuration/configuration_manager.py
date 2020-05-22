@@ -9,6 +9,7 @@ from elasticsearch.exceptions import NotFoundError
 
 from app.es_data import es_mappings
 from app import app_logging
+from app.cache import CACHE
 
 
 class PropertiesConfigurationManager:
@@ -48,6 +49,17 @@ class PropertiesConfigurationManager:
         :param prop_id: full path of the property, such as  '_metadata.assay_data.assay_subcellular_fraction'
         :return: a dict describing the configuration of a property
         """
+        cache_key = f'config_for_{index_name}-{prop_id}'
+        app_logging.debug(f'cache_key: {cache_key}')
+
+        cache_response = CACHE.get(key=cache_key)
+        if cache_response is not None:
+            app_logging.debug(f'results were cached')
+            return cache_response
+
+        app_logging.debug(f'results were not cached')
+
+
         app_logging.debug(f'getting property config for {prop_id} of index {index_name}')
         es_property_description = self.get_property_base_es_description(index_name, prop_id)
         property_override_description = self.get_property_base_override_description(index_name, prop_id)
@@ -173,14 +185,21 @@ class PropertiesConfigurationManager:
             'is_contextual': True,
         }
 
+    # ------------------------------------------------------------------------------------------------------------------
+    # Getting a custom list of properties
+    # ------------------------------------------------------------------------------------------------------------------
+    def get_config_for_props_list(self, index_name, prop_ids):
+        """
+        :param index_name: name of the index
+        :param prop_ids: list of ids of the properties to check
+        :return: a list of configuration of the properties
+        """
+        configs = []
 
-def get_config_for_props_list(index_name, prop_ids):
-    configs = []
+        # for prop_id in prop_ids:
+        #     configs.append(get_config_for_prop(index_name, prop_id))
 
-    for prop_id in prop_ids:
-        configs.append(get_config_for_prop(index_name, prop_id))
-
-    return configs
+        return configs
 
 
 def get_config_for_group(index_name, group_name):
