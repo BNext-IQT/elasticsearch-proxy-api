@@ -36,7 +36,7 @@ paths:
           description: 'name of the index to query'
           required: true
           type: 'string'
-          default: 'chembl_26_molecule'
+          default: 'chembl_molecule'
         - name: 'es_query'
           in: 'formData'
           description: 'stringifyied version of the query to send to elasticsearch'

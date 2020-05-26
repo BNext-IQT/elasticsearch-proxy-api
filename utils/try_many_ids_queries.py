@@ -61,7 +61,7 @@ def run():
         print('With {} compounds'.format(num_compounds))
 
         start_time = time.time()
-        res = es_conn.search(index="chembl_26_activity", body={"query": terms_query})
+        res = es_conn.search(index="chembl_activity", body={"query": terms_query})
         end_time = time.time()
         time_taken_terms = end_time - start_time
 
@@ -71,7 +71,7 @@ def run():
         script_query = get_script_query(ids)
 
         start_time = time.time()
-        res = es_conn.search(index="chembl_26_activity", body={"query": script_query})
+        res = es_conn.search(index="chembl_activity", body={"query": script_query})
         end_time = time.time()
         time_taken_script = end_time - start_time
 

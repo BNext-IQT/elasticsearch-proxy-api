@@ -23,7 +23,7 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
 
     url = utils.get_url_for_get_es_data(server_base_url)
     print('url: ', url)
-    index_name = 'chembl_26_molecule'
+    index_name = 'chembl_molecule'
     print('index_name: ', index_name)
     es_query = {
         "size": 24,

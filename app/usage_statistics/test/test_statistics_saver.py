@@ -41,7 +41,7 @@ class TestStatisticsSaver(unittest.TestCase):
             }
         }
 
-        es_index = 'chembl_26_molecule'
+        es_index = 'chembl_molecule'
         es_request_digest = 'somedigest'
         is_cached = True
         request_date = datetime.now().timestamp() * 1000
