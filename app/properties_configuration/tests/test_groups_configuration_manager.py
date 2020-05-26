@@ -116,3 +116,47 @@ class GroupsConfigurationManagerTester(unittest.TestCase):
         with self.assertRaises(GroupConfiguration.GroupsConfigurationManagerError,
                                msg='This should have thrown an exception for a non existing property!'):
             groups_configuration_manager.get_config_for_group(index_name, group_name)
+
+    def test_gets_config_for_a_group_with_only_default_properties(self):
+        """
+        tests that gets config for a group with only default properties
+        """
+        groups_configuration_manager = get_group_configuration_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}activity'
+        group_name = 'download'
+
+        configs_got = groups_configuration_manager.get_config_for_group(index_name, group_name)['properties']
+
+        with open(groups_configuration_manager.groups_file_path, 'rt') as groups_config_file:
+
+            groups_must_be = yaml.load(groups_config_file, Loader=yaml.FullLoader)
+            group_must_be = groups_must_be[index_name][group_name]
+
+            for sub_group, props_list_must_be in group_must_be.items():
+                props_list_got = [conf['prop_id'] for conf in configs_got[sub_group]]
+                self.assertTrue(props_list_got == props_list_must_be)
+
+    def test_gets_config_for_a_group_with_default_and_additional_properties(self):
+        """
+        tests that gets config for a group with default and additional properties
+        """
+        groups_configuration_manager = get_group_configuration_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}activity'
+        group_name = 'table'
+
+        configs_got = groups_configuration_manager.get_config_for_group(index_name, group_name)['properties']
+
+        with open(groups_configuration_manager.groups_file_path, 'rt') as groups_config_file:
+
+            groups_must_be = yaml.load(groups_config_file, Loader=yaml.FullLoader)
+            group_must_be = groups_must_be[index_name][group_name]
+
+            for sub_group, props_list_must_be in group_must_be.items():
+                props_list_got = [conf['prop_id'] for conf in configs_got[sub_group]]
+                self.assertTrue(props_list_got == props_list_must_be)
+
+

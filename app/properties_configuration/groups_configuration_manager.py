@@ -70,7 +70,7 @@ class GroupConfiguration:
             props_configs = {}
 
             for sub_group, props_list in group_config.items():
-                props_configs[sub_group] = self.property_configuration_manager.get_config_for_props_list(index_name, props_list)
+                props_configs[sub_group] = self.get_config_for_props_list(index_name, props_list)
 
             config = {'properties': props_configs}
 
