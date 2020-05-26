@@ -1,9 +1,9 @@
 """
     Module tht handles the configuration of the properties for the interface
 """
-import yaml
 import os.path
 
+import yaml
 from elasticsearch.exceptions import NotFoundError
 
 from app.es_data import es_mappings

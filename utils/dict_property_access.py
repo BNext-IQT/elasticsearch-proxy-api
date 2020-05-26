@@ -20,8 +20,7 @@ def get_property_value(dictionary, str_property, default_null_value=None):
         current_obj = dictionary.get(current_prop)
         if current_obj is None:
             return default_null_value
-        else:
-            return get_property_value(current_obj, '.'.join(prop_parts[1::]))
+        return get_property_value(current_obj, '.'.join(prop_parts[1::]))
 
     value = dictionary.get(current_prop)
     value = default_null_value if value is None else value

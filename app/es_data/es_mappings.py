@@ -4,9 +4,9 @@ Module that returns mapping data from elascticsearch
 from app.es_connection import ES
 from app import app_logging
 from app.es_data import utils
-from utils import dict_property_access
 from app.config import RUN_CONFIG
 from app.cache import CACHE
+from utils import dict_property_access
 
 SIMPLE_MAPPINGS = {
     'keyword': 'string',

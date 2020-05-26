@@ -4,10 +4,12 @@
 import os
 import yaml
 
+
 class GroupConfiguration:
     """
     Class that handles the configuration of the groups of properties for the interface
     """
+
     class GroupsConfigurationManagerError(Exception):
         """Base class for exceptions in the groups configuration."""
 
@@ -19,12 +21,11 @@ class GroupConfiguration:
         """
         for path in [groups_file_path, sorting_file_path]:
             if not os.path.isfile(path):
-                raise self.PropertiesConfigurationManagerError(f'The path {path} does not exist!')
+                raise self.GroupsConfigurationManagerError(f'The path {path} does not exist!')
 
         self.groups_file_path = groups_file_path
         self.sorting_file_path = sorting_file_path
         self.property_configuration_manager = property_configuration_manager
-
 
     # ------------------------------------------------------------------------------------------------------------------
     # Getting a custom list of properties
@@ -65,7 +66,8 @@ class GroupConfiguration:
             index_groups = groups_config.get(index_name, {})
             group_config = index_groups.get(group_name)
             if group_config is None:
-                raise self.GroupsConfigurationManagerError(f'The group {group_name} does not exist in index {index_name}!')
+                raise self.GroupsConfigurationManagerError(
+                    f'The group {group_name} does not exist in index {index_name}!')
 
             props_configs = {}
 
