@@ -158,5 +158,3 @@ class GroupsConfigurationManagerTester(unittest.TestCase):
             for sub_group, props_list_must_be in group_must_be.items():
                 props_list_got = [conf['prop_id'] for conf in configs_got[sub_group]]
                 self.assertTrue(props_list_got == props_list_must_be)
-
-

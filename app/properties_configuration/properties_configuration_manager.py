@@ -2,7 +2,6 @@
     Module tht handles the configuration of the properties for the interface
 """
 import yaml
-import warnings
 import os.path
 
 from elasticsearch.exceptions import NotFoundError
@@ -51,7 +50,6 @@ class PropertyConfiguration:
             return cache_response
 
         app_logging.debug(f'results were not cached')
-
 
         app_logging.debug(f'getting property config for {prop_id} of index {index_name}')
         es_property_description = self.get_property_base_es_description(index_name, prop_id)
@@ -166,176 +164,13 @@ class PropertyConfiguration:
         if property_override_description.get('aggregatable') is None or \
                         property_override_description.get('type') is None or \
                         property_override_description.get('sortable') is None:
-
             raise self.PropertiesConfigurationManagerError(
                 f'A virtual contextual property must define the type and if it is '
                 'aggregatable and sortable. index => {index_name} : prop => {prop_id}'
-                )
+            )
 
         return {
             **base_config,
             **property_override_description,
             'is_contextual': True,
         }
-
-
-
-
-def get_config_for_group(index_name, group_name):
-    groups_config = yaml.load(open(settings.PROPERTIES_GROUPS_FILE, 'r'), Loader=yaml.FullLoader)
-    if groups_config is None:
-        raise ESPropsConfigurationManagerError("There is no configuration for groups. "
-                                               "There should be a configuration set up in {}"
-                                               .format(settings.PROPERTIES_GROUPS_FILE))
-
-    index_mapping = resources_description.RESOURCES_BY_IDX_NAME.get(index_name)
-    if index_mapping is None:
-        raise ESPropsConfigurationManagerError("The index {} does not exist!".format(index_name))
-
-    index_groups = groups_config.get(index_name, {})
-    group_config = index_groups.get(group_name)
-    if group_config is None:
-        raise ESPropsConfigurationManagerError("The group {} does not exist!".format(group_name))
-
-    props_configs = {}
-
-    for sub_group, props_list in group_config.items():
-        props_configs[sub_group] = get_config_for_props_list(index_name, props_list)
-
-    config = {'properties': props_configs}
-
-    sorting_config = yaml.load(open(settings.GROUPS_DEFAULT_SORTING_FILE, 'r'), Loader=yaml.FullLoader)
-    if sorting_config is not None:
-        index_sorting = sorting_config.get(index_name)
-        if index_sorting is not None:
-            group_sorting = index_sorting.get(group_name)
-            if group_sorting is not None:
-                config['default_sorting'] = group_sorting
-
-    return config
-
-
-def get_id_property_for_index(index_name):
-    resources_desc = resources_description.RESOURCES_BY_IDX_NAME
-    resource_desc = resources_desc.get(index_name)
-    if resource_desc is None:
-        raise ESPropsConfigurationManagerError('The index {} does not exist.'.format(index_name))
-
-    resource_ids = resource_desc.resource_ids
-    if len(resource_ids) > 1:
-        warnings.warn('The index {} has a compound id (domposed by more than one property). '
-                      'Which is not fully supported yet'.format(index_name), ESPropsConfigurationManagerWarning)
-
-    return resource_ids[0]
-
-
-# -----------------------------------------------------------------------------------
-# Properties counts
-# -----------------------------------------------------------------------------------
-
-def print_properties_counts():
-    es_util.setup_connection_from_full_url(settings.ELASTICSEARCH_HOST)
-    print()
-    print_groups_counts()
-    print()
-    print_props_counts()
-
-
-def print_props_counts():
-    print('Props Counts:')
-    groups_config = yaml.load(open(settings.PROPERTIES_GROUPS_FILE, 'r'), Loader=yaml.FullLoader)
-
-    groups_properties = []
-
-    index_name_label = 'Index Name'
-    total_properties_label = 'Total Properties'
-    num_used_properties_label = 'Used Properties'
-
-    all_labels = [index_name_label, total_properties_label, num_used_properties_label]
-
-    for index_name, index_mapping in resources_description.RESOURCES_BY_IDX_NAME.items():
-
-        mapping = index_mapping.get_resource_mapping_from_es()
-        current_index_description = {
-            index_name_label: index_name,
-            total_properties_label: get_num_properties_in_dict(mapping),
-            num_used_properties_label: 0
-        }
-        groups_properties.append(current_index_description)
-        index_groups = groups_config.get(index_name, {})
-
-        used_properties = set()
-        for group_name, group in index_groups.items():
-            for sub_group, props_list in group.items():
-                for prop in props_list:
-                    used_properties.add(prop)
-
-        current_index_description[num_used_properties_label] = len(used_properties)
-
-    print_table(groups_properties, all_labels)
-
-
-def print_groups_counts():
-    print('Groups Counts:')
-
-    groups_config = yaml.load(open(settings.PROPERTIES_GROUPS_FILE, 'r'), Loader=yaml.FullLoader)
-    groups_properties = []
-
-    index_name_label = 'Index Name'
-    groups_and_subgroups_label = 'Groups'
-    total_groups_label = 'Total Groups'
-    all_labels = [index_name_label, groups_and_subgroups_label, total_groups_label]
-
-    for index_name, index_mapping in resources_description.RESOURCES_BY_IDX_NAME.items():
-
-        current_index_description = {
-            index_name_label: index_name,
-            groups_and_subgroups_label: '',
-            total_groups_label: 0
-        }
-        groups_properties.append(current_index_description)
-
-        index_groups = groups_config.get(index_name, {})
-        all_groups_texts = []
-
-        for group_name, group in index_groups.items():
-
-            properties_in_group = 0
-            all_subgroups = []
-
-            for sub_group, props_list in group.items():
-                all_subgroups.append(sub_group)
-                num_properties_in_subgroup = len(props_list)
-
-                properties_in_group += num_properties_in_subgroup
-
-            current_group_text = '{group_name}({sub_groups})'.format(group_name=group_name,
-                                                                     sub_groups=', '.join(all_subgroups))
-            all_groups_texts.append(current_group_text)
-
-        current_index_description[groups_and_subgroups_label] = ' '.join(all_groups_texts)
-        current_index_description[total_groups_label] = len(all_groups_texts)
-
-    print_table(groups_properties, all_labels)
-
-
-def print_table(rows, labels):
-    header_line = '\t'.join(labels)
-    print(header_line)
-
-    for row in rows:
-        row_line = '\t'.join([str(row.get(label, '')) for label in labels])
-        print(row_line)
-
-
-# this counts the leaves of a dict
-def get_num_properties_in_dict(d):
-    # anything that is not dict is a leave
-    if not isinstance(d, dict):
-        return 1
-    # empty dicts are leaves
-    elif len(d.keys()) == 0:
-        return 1
-    # if I am not leave, the number of leaves is the sum of leaves of in my children
-    else:
-        return sum([get_num_properties_in_dict(sub_d) for sub_d in d.values()])

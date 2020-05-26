@@ -25,6 +25,39 @@ SIMPLE_MAPPINGS = {
 
 AGGREGATABLE_TYPES = {'boolean', 'byte', 'short', 'integer', 'long', 'float', 'double', 'keyword', 'lower_case_keyword'}
 
+ES_INDEX_PREFIX = RUN_CONFIG.get("es_index_prefix")
+
+ID_PROPERTIES = {
+    f'{ES_INDEX_PREFIX}activity': ['activity_id'],
+    f'{ES_INDEX_PREFIX}activity_supplementary_data_by_activity': ['activity_id'],
+    f'{ES_INDEX_PREFIX}assay': ['assay_chembl_id'],
+    f'{ES_INDEX_PREFIX}assay_class': ['assay_class_id'],
+    f'{ES_INDEX_PREFIX}atc_class': ['level5'],
+    f'{ES_INDEX_PREFIX}binding_site': ['site_id'],
+    f'{ES_INDEX_PREFIX}biotherapeutic': ['molecule_chembl_id'],
+    f'{ES_INDEX_PREFIX}cell_line': ['cell_chembl_id'],
+    f'{ES_INDEX_PREFIX}chembl_id_lookup': ['chembl_id'],
+    f'{ES_INDEX_PREFIX}compound_record': ['record_id'],
+    f'{ES_INDEX_PREFIX}document': ['document_chembl_id'],
+    f'{ES_INDEX_PREFIX}document_similarity': ['document_1_chembl_id', 'document_2_chembl_id',
+                                              'mol_tani', 'tid_tani'],
+    f'{ES_INDEX_PREFIX}drug': ['molecule_chembl_id'],
+    f'{ES_INDEX_PREFIX}mechanism': ['mec_id'],
+    f'{ES_INDEX_PREFIX}molecule': ['molecule_chembl_id'],
+    f'{ES_INDEX_PREFIX}molecule_form': ['molecule_chembl_id'],
+    f'{ES_INDEX_PREFIX}organism': ['tax_id'],
+    f'{ES_INDEX_PREFIX}protein_class': ['protein_class_id'],
+    f'{ES_INDEX_PREFIX}source': ['src_id'],
+    f'{ES_INDEX_PREFIX}target': ['target_chembl_id'],
+    f'{ES_INDEX_PREFIX}target_component': ['component_id'],
+    f'{ES_INDEX_PREFIX}target_relation': ['target_chembl_id', 'related_target_chembl_id'],
+    f'{ES_INDEX_PREFIX}tissue': ['tissue_chembl_id'],
+    f'{ES_INDEX_PREFIX}metabolism': ['met_id'],
+    f'{ES_INDEX_PREFIX}drug_indication': ['drugind_id'],
+    f'{ES_INDEX_PREFIX}go_slim': ['go_id']
+
+}
+
 
 class EsMappingsError(Exception):
     """Base class for exceptions in the ES Mappings"""
@@ -101,3 +134,14 @@ def get_simplified_property_aggregatability(property_mapping):
     """
     es_type = get_es_property_type(property_mapping)
     return es_type in AGGREGATABLE_TYPES
+
+
+def get_id_properties_for_index(index_name):
+    """
+    :param index_name: name of the index
+    :return: the id properties for an index
+    """
+    id_properties = ID_PROPERTIES.get(index_name)
+    if id_properties is None:
+        EsMappingsError(f'The index {index_name} does not exist or does not have an id property defined')
+    return id_properties

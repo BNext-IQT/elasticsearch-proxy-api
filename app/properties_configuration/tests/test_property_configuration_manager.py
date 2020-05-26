@@ -6,7 +6,6 @@ import unittest
 import yaml
 
 from app.properties_configuration.properties_configuration_manager import PropertyConfiguration
-from app.properties_configuration.groups_configuration_manager import GroupConfiguration
 from app.config import RUN_CONFIG
 
 
@@ -178,5 +177,3 @@ class ConfigurationManagerTester(unittest.TestCase):
 
         self.assertEqual(config_got['is_virtual'], True, 'This is a virtual property!')
         self.assertEqual(config_got['is_contextual'], True, 'This is a contextual property!')
-
-
