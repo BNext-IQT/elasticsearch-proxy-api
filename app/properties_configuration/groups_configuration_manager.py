@@ -2,11 +2,14 @@
     Module tht handles the configuration of the groups of properties for the interface
 """
 import os
+import yaml
 
 class GroupConfiguration:
     """
     Class that handles the configuration of the groups of properties for the interface
     """
+    class GroupsConfigurationManagerError(Exception):
+        """Base class for exceptions in the groups configuration."""
 
     def __init__(self, groups_file_path, sorting_file_path, property_configuration_manager):
         """
@@ -54,3 +57,21 @@ class GroupConfiguration:
             }
         }
         """
+
+        with open(self.groups_file_path, 'rt') as groups_file:
+
+            groups_config = yaml.load(groups_file, Loader=yaml.FullLoader)
+
+            index_groups = groups_config.get(index_name, {})
+            group_config = index_groups.get(group_name)
+            if group_config is None:
+                raise self.GroupsConfigurationManagerError(f'The group {group_name} does not exist in index {index_name}!')
+
+            props_configs = {}
+
+            for sub_group, props_list in group_config.items():
+                props_configs[sub_group] = self.property_configuration_manager.get_config_for_props_list(index_name, props_list)
+
+            config = {'properties': props_configs}
+
+        return config

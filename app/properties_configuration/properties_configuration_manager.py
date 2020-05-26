@@ -19,11 +19,9 @@ class PropertyConfiguration:
 
     class PropertiesConfigurationManagerError(Exception):
         """Base class for exceptions in the properties configuration."""
-        pass
 
     class PropertiesConfigurationManagerWarning(Warning):
         """Base class for warnings in the properties configuration."""
-        pass
 
     def __init__(self, override_file_path):
         """
