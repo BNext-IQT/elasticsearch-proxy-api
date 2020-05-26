@@ -5,24 +5,38 @@ import unittest
 
 import yaml
 
-from app.properties_configuration.configuration_manager import PropertiesConfigurationManager
+from app.properties_configuration.properties_configuration_manager import PropertyConfiguration
+from app.properties_configuration.groups_configuration_manager import GroupConfiguration
 from app.config import RUN_CONFIG
 
 
 # ------------------------------------------------------------------------------------------------------------------
 # Helper functions
 # ------------------------------------------------------------------------------------------------------------------
-def get_config_manager_instance():
+def get_property_configuration_instance():
     """
     :return: a test instance of the configuration manager
     """
-    configuration_manager = PropertiesConfigurationManager(
-        override_file_path='app/properties_configuration/tests/data/test_override.yml',
-        groups_file_path='app/properties_configuration/tests/data/test_groups.yml',
-        sorting_file_path='app/properties_configuration/tests/data/test_default_sorting.yml'
+    property_configuration_manager = PropertyConfiguration(
+        override_file_path='app/properties_configuration/tests/data/test_override.yml'
     )
 
-    return configuration_manager
+    return property_configuration_manager
+
+
+def get_group_configuration_instance():
+    """
+    :return: a test instance of the configuration manager
+    """
+    configuration_manager = get_property_configuration_instance()
+
+    group_configuration_manager = GroupConfiguration(
+        groups_file_path='app/properties_configuration/tests/data/test_groups.yml',
+        sorting_file_path='app/properties_configuration/tests/data/test_default_sorting.yml',
+        property_configuration_manager=configuration_manager
+    )
+
+    return group_configuration_manager
 
 
 class ConfigurationManagerTester(unittest.TestCase):
@@ -37,12 +51,12 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Tests that it raises an error when the index requested does not exist
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         index_name = 'does_not_exist'
         prop_id = '_metadata.assay_data.assay_subcellular_fraction'
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='An exception must have been raised!'):
             configuration_manager.get_config_for_prop(index_name, prop_id)
 
@@ -50,13 +64,13 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Tests that it raises an error when the property requested does not exist
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}activity'
         prop_id = 'does_not_exist'
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='An exception must have been raised!'):
             configuration_manager.get_config_for_prop(index_name, prop_id)
 
@@ -64,7 +78,7 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Tests that gets config for one property with no override
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}activity'
@@ -82,7 +96,7 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Tests gets the correct config for a property with override
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         with open(configuration_manager.override_file_path) as override_file:
             override_config_must_be = yaml.load(override_file, Loader=yaml.FullLoader)
@@ -103,7 +117,7 @@ class ConfigurationManagerTester(unittest.TestCase):
         Tests gets the correct config for a virtual property
         """
 
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         with open(configuration_manager.override_file_path) as override_file:
             override_config_must_be = yaml.load(override_file, Loader=yaml.FullLoader)
@@ -132,13 +146,13 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Tests that when a virtual non contextual property is based on a no existing property it fails
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}molecule'
         prop_id = 'trade_names_wrong'
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='An exception must have been raised!'):
             configuration_manager.get_config_for_prop(index_name, prop_id)
 
@@ -146,13 +160,13 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         Makes sure it fails when a virtual contextual proeprty does not define type and aggregatability
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}molecule'
         prop_id = '_context.similarity_wrong'
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='This should have thrown an exception for a bad configuration!'):
             configuration_manager.get_config_for_prop(index_name, prop_id)
 
@@ -160,7 +174,7 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         tests gets the config for a virtual contextual property
         """
-        configuration_manager = get_config_manager_instance()
+        configuration_manager = get_property_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}molecule'
@@ -187,40 +201,40 @@ class ConfigurationManagerTester(unittest.TestCase):
         """
         test it fails to get config for a list of properties when index does not exist
         """
-        configuration_manager = get_config_manager_instance()
+        groups_configuration_manager = get_group_configuration_instance()
 
         index_name = 'does_not_exist'
         props = ['_metadata.assay_data.assay_subcellular_fraction']
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='This should have thrown an exception for a non existing index!'):
-            configuration_manager.get_config_for_props_list(index_name, props)
+            groups_configuration_manager.get_config_for_props_list(index_name, props)
 
     def test_fails_config_for_a_list_of_properties_when_property_does_not_exist(self):
         """
         test it fails to get config for a list of properties when a property does not exist
         """
-        configuration_manager = get_config_manager_instance()
+        groups_configuration_manager = get_group_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}activity'
         props = ['does_not_exist']
 
-        with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
+        with self.assertRaises(PropertyConfiguration.PropertiesConfigurationManagerError,
                                msg='This should have thrown an exception for a non existing property!'):
-            configuration_manager.get_config_for_props_list(index_name, props)
+            groups_configuration_manager.get_config_for_props_list(index_name, props)
 
     def test_gets_config_for_a_list_of_properties(self):
         """
         Test it gets the configuration for a list of properties
         """
-        configuration_manager = get_config_manager_instance()
+        groups_configuration_manager = get_group_configuration_instance()
 
         es_index_prefix = RUN_CONFIG.get('es_index_prefix')
         index_name = f'{es_index_prefix}activity'
         props = ['_metadata.activity_generated.short_data_validity_comment', '_metadata.assay_data.assay_cell_type']
 
-        configs_got = configuration_manager.get_config_for_props_list(index_name, props)
+        configs_got = groups_configuration_manager.get_config_for_props_list(index_name, props)
         config = configs_got[0]
         self.assertEqual(config['index_name'], index_name)
         self.assertEqual(config['prop_id'], props[0])
@@ -236,5 +250,3 @@ class ConfigurationManagerTester(unittest.TestCase):
         self.assertEqual(config['type'], 'string')
         self.assertEqual(config['label'], 'Assay Data Cell Type')
         self.assertEqual(config['label_mini'], 'Assay Data Cell Type')
-
-

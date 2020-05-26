@@ -12,7 +12,7 @@ from app import app_logging
 from app.cache import CACHE
 
 
-class PropertiesConfigurationManager:
+class PropertyConfiguration:
     """
     Class that handles the configuration of the properties for the interface
     """
@@ -25,23 +25,18 @@ class PropertiesConfigurationManager:
         """Base class for warnings in the properties configuration."""
         pass
 
-    def __init__(self, override_file_path, groups_file_path, sorting_file_path):
+    def __init__(self, override_file_path):
         """
         :param override_file_path: path of the yaml file with the override config of the properties
-        :param groups_file_path: path of the yaml file with the groups config of the properties
-        :param sorting_file_path: path of the yaml file with the sorting config of the properties
         """
-        for path in [override_file_path, groups_file_path, sorting_file_path]:
-            if not os.path.isfile(path):
-                raise self.PropertiesConfigurationManagerError(f'The path {path} does not exist!')
+        if not os.path.isfile(override_file_path):
+            raise self.PropertiesConfigurationManagerError(f'The path {override_file_path} does not exist!')
 
         self.override_file_path = override_file_path
-        self.groups_file_path = groups_file_path
-        self.sorting_file_path = sorting_file_path
 
     def __repr__(self):
 
-        return f'{self.override_file_path}-{self.groups_file_path}-{self.sorting_file_path}'
+        return f'PropertyConfiguration-{self.override_file_path}'
 
     def get_config_for_prop(self, index_name, prop_id):
         """
@@ -185,21 +180,7 @@ class PropertiesConfigurationManager:
             'is_contextual': True,
         }
 
-    # ------------------------------------------------------------------------------------------------------------------
-    # Getting a custom list of properties
-    # ------------------------------------------------------------------------------------------------------------------
-    def get_config_for_props_list(self, index_name, prop_ids):
-        """
-        :param index_name: name of the index
-        :param prop_ids: list of ids of the properties to check
-        :return: a list of configuration of the properties
-        """
-        configs = []
 
-        for prop_id in prop_ids:
-            configs.append(self.get_config_for_prop(index_name, prop_id))
-
-        return configs
 
 
 def get_config_for_group(index_name, group_name):
