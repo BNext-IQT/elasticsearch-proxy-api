@@ -49,6 +49,8 @@ build_docker_image:
   image:
     name: docker/compose:1.24.1
     entrypoint: ["/bin/sh", "-c"]
+  except:
+    - schedules
   stage: build
   variables:
     DOCKER_HOST: tcp://docker:2375
@@ -69,6 +71,8 @@ pylint:
   image:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
+  except:
+    - schedules
   script:
     - set -x
     - find . -iname "*.py" | xargs pylint
@@ -81,6 +85,8 @@ prepare_config_tests:
   image:
     name: alpine/git
     entrypoint: ["/bin/sh", "-c"]
+  except:
+    - schedules
   script:
     - set -x
     - mkdir -p ${CONFIGS_FOLDER}
@@ -94,6 +100,8 @@ unit_tests:
   image:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
+  except:
+    - schedules
   script:
     - set -x
     - CONFIG_FILE_PATH=${CONFIG_UNIT_TESTS_FILE_PATH} python -m unittest
@@ -126,6 +134,8 @@ deploy_to_staging:
     entrypoint: ["/bin/sh", "-c"]
   only:
     - staging
+  except:
+    - schedules
   environment:
     name: staging
     url: ${SERVER_URL_STAGING}
@@ -164,6 +174,8 @@ functional_tests:
     entrypoint: [""]
   only:
     - staging
+  except:
+    - schedules
   environment:
     name: staging
     url: ${SERVER_URL_STAGING}
@@ -181,6 +193,8 @@ prepare_config_prod_hx:
     entrypoint: ["/bin/sh", "-c"]
   only:
     - master
+  except:
+    - schedules
   script:
     - rm -rf ${CONFIGS_FOLDER} || true
     - mkdir -p ${CONFIGS_FOLDER}
@@ -198,6 +212,8 @@ deploy_to_prod_hx:
     entrypoint: ["/bin/sh", "-c"]
   only:
     - master
+  except:
+    - schedules
   environment:
     name: prod_hx
   script:
@@ -229,7 +245,9 @@ functional_tests_prod_hx:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
   only:
-  - master
+    - master
+  except:
+    - schedules
   script:
   - set -x
   - sleep 30 # Give some time for the deployment to take effect.
@@ -245,6 +263,8 @@ prepare_config_prod_hh:
     entrypoint: ["/bin/sh", "-c"]
   only:
     - master
+  except:
+    - schedules
   script:
     - rm -rf ${CONFIGS_FOLDER} || true
     - mkdir -p ${CONFIGS_FOLDER}
@@ -263,6 +283,8 @@ deploy_to_prod_hh:
     entrypoint: ["/bin/sh", "-c"]
   only:
     - master
+  except:
+    - schedules
   environment:
     name: prod_hh
   script:
@@ -296,7 +318,9 @@ functional_tests_prod_hh:
     name: $SERVER_IMAGE_TAG
     entrypoint: [""]
   only:
-  - master
+    - master
+  except:
+    - schedules
   script:
   - set -x
   - sleep 30 # Give some time for the deployment to take effect.
