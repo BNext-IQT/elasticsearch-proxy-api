@@ -152,7 +152,7 @@ deploy_to_staging:
   - kubectl get pods -n ${CHEMBL_NS_STAGING}
   - cat ${INGRESS_STAGING_FILE_PATH}
   - kubectl apply -n ${CHEMBL_NS_STAGING} -f ${INGRESS_STAGING_FILE_PATH}
-  - kubectl get ingress -n ${CHEMBL_NS_STAGING}
+  - kubectl describe ingress -n ${CHEMBL_NS_STAGING}
 #
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Test staging
@@ -169,10 +169,8 @@ functional_tests:
     url: ${SERVER_URL_STAGING}
   script:
   - set -x
-  - exit 0 # disabled temporarily
-  - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} ${DJ_SERVER_ADMIN_USERNAME_STAGING} ${DJ_SERVER_ADMIN_PASSWORD_STAGING}
-#
+  - functional_tests/run_functional_tests.py ${SERVER_URL_STAGING} https://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs
+
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hx
 ## ----------------------------------------------------------------------------------------------------------------------
@@ -223,7 +221,7 @@ deploy_to_prod_hx:
     - kubectl get pods -n ${CHEMBL_NS_PROD}
     - cat ${INGRESS_PROD_HX_FILE_PATH}
     - kubectl apply -n ${CHEMBL_NS_PROD} -f ${INGRESS_PROD_HX_FILE_PATH}
-    - kubectl get ingress -n ${CHEMBL_NS_PROD}
+    - kubectl describe ingress -n ${CHEMBL_NS_PROD}
 
 functional_tests_prod_hx:
   stage: test_prod_hx
@@ -234,9 +232,8 @@ functional_tests_prod_hx:
   - master
   script:
   - set -x
-  - exit 0 # disabled temporarily
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HX}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HX} https://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs
 
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Deployment to prod hh
@@ -291,7 +288,7 @@ deploy_to_prod_hh:
     - kubectl get pods -n ${CHEMBL_NS_PROD}
     - cat ${INGRESS_PROD_HH_FILE_PATH}
     - kubectl apply -n ${CHEMBL_NS_PROD} -f ${INGRESS_PROD_HH_FILE_PATH}
-    - kubectl get ingress -n ${CHEMBL_NS_PROD}
+    - kubectl describe ingress -n ${CHEMBL_NS_PROD}
 
 functional_tests_prod_hh:
   stage: test_prod_hh
@@ -302,9 +299,8 @@ functional_tests_prod_hh:
   - master
   script:
   - set -x
-  - exit 0
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH} ${DJ_SERVER_ADMIN_USERNAME_PROD_HH} ${DJ_SERVER_ADMIN_PASSWORD_PROD_HH}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_HH} https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Test prod public url
@@ -318,6 +314,5 @@ functional_tests_prod_public:
   - master
   script:
   - set -x
-  - exit 0
   - sleep 30 # Give some time for the deployment to take effect.
-  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC} ${DJ_SERVER_ADMIN_USERNAME_PROD_HX} ${DJ_SERVER_ADMIN_PASSWORD_PROD_PUBLIC}
+  - functional_tests/run_functional_tests.py ${SERVER_URL_PROD_PUBLIC} https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs

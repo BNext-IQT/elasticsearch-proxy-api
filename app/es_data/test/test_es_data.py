@@ -44,7 +44,7 @@ class TestESData(unittest.TestCase):
             }
         }
 
-        es_index = 'chembl_26_molecule'
+        es_index = 'chembl_molecule'
         response_got = es_data.get_es_response(es_index, es_query)
 
         total_hits_must_be = {'value': 4, 'relation': 'eq'}
@@ -78,7 +78,7 @@ class TestESData(unittest.TestCase):
             }
         }
 
-        es_index = 'chembl_26_molecule'
+        es_index = 'chembl_molecule'
 
         stable_raw_search_data = json.dumps(es_query, sort_keys=True)
         search_data_digest = hashlib.sha256(stable_raw_search_data.encode('utf-8')).digest()
@@ -115,7 +115,7 @@ class TestESData(unittest.TestCase):
                 }
             }
 
-            es_index = 'chembl_26_molecule'
+            es_index = 'chembl_molecule'
 
             es_data.get_es_response(es_index, es_query)
 

@@ -99,12 +99,16 @@ if RUN_CONFIG.get('base_path') is None:
 if RUN_CONFIG.get('es_proxy_cache_seconds') is None:
     RUN_CONFIG['es_proxy_cache_seconds'] = 604800
 
+if RUN_CONFIG.get('es_mappings_cache_seconds') is None:
+    RUN_CONFIG['es_mappings_cache_seconds'] = 86400
+
 if RUN_CONFIG.get('filter_query_max_clauses') is None:
     RUN_CONFIG['filter_query_max_clauses'] = 30000
 
 DELAYED_JOBS_CONFIG = RUN_CONFIG.get('delayed_jobs', {})
 DEFAULT_DELAYED_JOBS_CONFIG = {
-    'base_url': 'https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs'
+    'wwwdev.ebi.ac.uk': 'wwwdev.ebi.ac.uk',
+    'www.ebi.ac.uk': 'www.ebi.ac.uk'
 }
 RUN_CONFIG['delayed_jobs'] = {
     **DEFAULT_CACHE_CONFIG,
