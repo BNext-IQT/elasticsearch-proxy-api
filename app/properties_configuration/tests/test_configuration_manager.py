@@ -196,7 +196,6 @@ class ConfigurationManagerTester(unittest.TestCase):
                                msg='This should have thrown an exception for a non existing index!'):
             configuration_manager.get_config_for_props_list(index_name, props)
 
-
     def test_fails_config_for_a_list_of_properties_when_property_does_not_exist(self):
         """
         test it fails to get config for a list of properties when a property does not exist
@@ -210,5 +209,32 @@ class ConfigurationManagerTester(unittest.TestCase):
         with self.assertRaises(PropertiesConfigurationManager.PropertiesConfigurationManagerError,
                                msg='This should have thrown an exception for a non existing property!'):
             configuration_manager.get_config_for_props_list(index_name, props)
+
+    def test_gets_config_for_a_list_of_properties(self):
+        """
+        Test it gets the configuration for a list of properties
+        """
+        configuration_manager = get_config_manager_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}activity'
+        props = ['_metadata.activity_generated.short_data_validity_comment', '_metadata.assay_data.assay_cell_type']
+
+        configs_got = configuration_manager.get_config_for_props_list(index_name, props)
+        config = configs_got[0]
+        self.assertEqual(config['index_name'], index_name)
+        self.assertEqual(config['prop_id'], props[0])
+        self.assertTrue(config['aggregatable'])
+        self.assertEqual(config['type'], 'string')
+        self.assertEqual(config['label'], 'My custom label')
+        self.assertEqual(config['label_mini'], 'My cstm lbl')
+
+        config = configs_got[1]
+        self.assertEqual(config['index_name'], index_name)
+        self.assertEqual(config['prop_id'], props[1])
+        self.assertTrue(config['aggregatable'])
+        self.assertEqual(config['type'], 'string')
+        self.assertEqual(config['label'], 'Assay Data Cell Type')
+        self.assertEqual(config['label_mini'], 'Assay Data Cell Type')
 
 
