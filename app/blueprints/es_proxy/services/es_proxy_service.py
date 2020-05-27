@@ -16,7 +16,7 @@ class ESProxyServiceError(Exception):
     """Base class for exceptions in this file."""
 
 
-def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextual_sort_data):
+def get_es_data(index_name, raw_es_query, raw_context, raw_contextual_sort_data):
     """
     :param index_name: name of the index to query
     :param raw_es_query: stringifyied version of the query to send to elasticsearch
@@ -35,8 +35,7 @@ def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextu
         return response
 
     app_logging.debug(f'Using context: {raw_context}')
-    es_response, metadata = get_items_with_context(index_name, raw_es_query, raw_context, id_property,
-                                                   raw_contextual_sort_data)
+    es_response, metadata = get_items_with_context(index_name, raw_es_query, raw_context, raw_contextual_sort_data)
 
     response = {
         'es_response': es_response,
@@ -67,7 +66,7 @@ def get_items_with_context(index_name, raw_es_query, raw_context, raw_contextual
     else:
         contextual_sort_data = {}
 
-    search_data_with_injections = get_search_data_with_injections(raw_es_query, contextual_sort_data, id_property,
+    search_data_with_injections = get_search_data_with_injections(raw_es_query, contextual_sort_data, id_properties,
                                                                   total_results, context_index)
     raw_search_data_with_injections = json.dumps(search_data_with_injections)
     es_response = es_data.get_es_response(index_name, json.loads(raw_search_data_with_injections))
@@ -80,22 +79,22 @@ def get_items_with_context(index_name, raw_es_query, raw_context, raw_contextual
     return es_response, metadata
 
 
-def get_search_data_with_injections(raw_es_query, contextual_sort_data, id_property, total_results, context_index):
+def get_search_data_with_injections(raw_es_query, contextual_sort_data, id_properties, total_results, context_index):
     """
     :param raw_es_query: stringifyed version of the es query
     :param contextual_sort_data: dict describing the sorting by contextual properties
-    :param id_property: property used to identity each item
+    :param id_properties: property used to identity each item
     :param total_results: total number of results
     :param context_index: index with the context
     :return: the query to send to elasticsearch
     """
 
     parsed_search_data = json.loads(raw_es_query)
-    scores_query = get_scores_query(contextual_sort_data, id_property, total_results, context_index)
+    scores_query = get_scores_query(contextual_sort_data, id_properties, total_results, context_index)
     parsed_search_data['query']['bool']['must'].append(scores_query)
 
     ids_list = list(context_index.keys())
-    ids_query = get_request_for_chembl_ids(id_property, ids_list)
+    ids_query = get_request_for_chembl_ids(id_properties, ids_list)
     parsed_search_data['query']['bool']['filter'].append(ids_query)
 
     return parsed_search_data
@@ -115,15 +114,16 @@ def add_context_values_to_response(es_response, context_index):
         hit['_source'][CONTEXT_PREFIX] = context_obj
 
 
-def get_scores_query(contextual_sort_data, id_property, total_results, context_index):
+def get_scores_query(contextual_sort_data, id_properties, total_results, context_index):
     """
     Returns the query with the scores for the data to sort it with the contextual properties.
+    IT DOES NOT SUPPORT MULTIPLE ID PROPERTIES
     :param contextual_sort_data: dict describing the sorting by contextual properties
-    :param id_property: property used to identity each item
+    :param id_properties: property used to identity each item
     :param total_results: total number of results
     :param context_index: index with the context
     """
-
+    id_property = id_properties[0]
     contextual_sort_data_keys = contextual_sort_data.keys()
     if len(contextual_sort_data_keys) == 0:
         # if nothing is specified use the default scoring script, which is to score them according to their original
@@ -163,13 +163,15 @@ def get_scores_query(contextual_sort_data, id_property, total_results, context_i
     return scores_query
 
 
-def get_request_for_chembl_ids(id_property, ids_list):
+def get_request_for_chembl_ids(id_properties, ids_list):
     """
     creates a terms query with the ids given as a parameter for the id_property given as parameter
-    :param id_property: property that identifies the items
+    IT DOES NOT SUPPORT MULTIPLE ID PROPERTIES
+    :param id_properties: property that identifies the items
     :param ids_list: list of ids to query
     :return: the terms query to use
     """
+    id_property = id_properties[0]
     query = {
         'terms': {
             id_property: ids_list

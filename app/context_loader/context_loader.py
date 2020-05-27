@@ -6,6 +6,8 @@ import requests
 from app.config import RUN_CONFIG
 from app.cache import CACHE
 
+from utils import id_properties
+
 
 class ContextLoaderError(Exception):
     """Base class for exceptions in this module."""
@@ -45,11 +47,11 @@ def get_context(context_dict):
     return results, total_results
 
 
-def load_context_index(context_id, id_property, context):
+def load_context_index(context_id, id_properties_list, context):
     """
     Loads an index based on the id property of the context, for fast access
     :param context_id: id of the context loaded
-    :param id_property: property used to identify each item
+    :param id_properties_list: property used to identify each item
     :param context: context loaded
     :return:
     """
@@ -59,9 +61,10 @@ def load_context_index(context_id, id_property, context):
     if context_index is None:
         context_index = {}
 
-        for index, item in enumerate(context):
-            context_index[item[id_property]] = item
-            context_index[item[id_property]]['index'] = index
+        for index_number, item in enumerate(context):
+            id_value = id_properties.get_id_value(id_properties_list)
+            context_index[id_value] = item
+            context_index[id_value]['index'] = index_number
 
         CACHE.set(context_index_key, context_index, 3600)
 
