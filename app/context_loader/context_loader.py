@@ -62,7 +62,7 @@ def load_context_index(context_id, id_properties_list, context):
         context_index = {}
 
         for index_number, item in enumerate(context):
-            id_value = id_properties.get_id_value(id_properties_list)
+            id_value = id_properties.get_id_value(id_properties_list, item)
             context_index[id_value] = item
             context_index[id_value]['index'] = index_number
 

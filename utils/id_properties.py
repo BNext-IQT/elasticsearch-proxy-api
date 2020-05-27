@@ -1,6 +1,8 @@
 """
 Module that helps loading values from an id property list
 """
+
+
 def get_id_value(id_properties_list, item: dict):
     """
     :param id_properties_list: the properties that identify the item
