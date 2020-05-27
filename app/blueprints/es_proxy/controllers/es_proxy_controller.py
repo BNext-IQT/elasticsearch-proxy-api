@@ -22,13 +22,11 @@ def get_es_data():
     index_name = sanitise_parameter(form_data.get('index_name'))
     raw_es_query = sanitise_parameter(form_data.get('es_query'))
     raw_context = sanitise_parameter(form_data.get('context_obj'))
-    id_property = sanitise_parameter(form_data.get('id_property'))
     raw_contextual_sort_data = sanitise_parameter(form_data.get('contextual_sort_data'))
 
     app_logging.debug(f'index_name: {index_name}')
     app_logging.debug(f'raw_es_query: {raw_es_query}')
     app_logging.debug(f'raw_context: {raw_context}')
-    app_logging.debug(f'id_property: {id_property}')
     app_logging.debug(f'raw_contextual_sort_data: {raw_contextual_sort_data}')
 
     try:
@@ -37,7 +35,6 @@ def get_es_data():
             index_name,
             raw_es_query,
             raw_context,
-            id_property,
             raw_contextual_sort_data)
 
         return jsonify(json_response)

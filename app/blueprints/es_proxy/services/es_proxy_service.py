@@ -7,6 +7,7 @@ from app import app_logging
 from app.es_data import es_data
 from app.blueprints.es_proxy.services.helpers import context_loader
 from app.config import RUN_CONFIG
+from app.es_data import es_mappings
 
 CONTEXT_PREFIX = '_context'
 
@@ -44,12 +45,11 @@ def get_es_data(index_name, raw_es_query, raw_context, id_property, raw_contextu
     return response
 
 
-def get_items_with_context(index_name, raw_es_query, raw_context, id_property, raw_contextual_sort_data='{}'):
+def get_items_with_context(index_name, raw_es_query, raw_context, raw_contextual_sort_data='{}'):
     """
     :param index_name: name of the index to query
     :param raw_es_query: es_query stringifyied
     :param raw_context: context dict stringifyied
-    :param id_property: property used to identify the items
     :param raw_contextual_sort_data:
     :return: the items in the es_query with the context given in the context description
     """
@@ -57,9 +57,10 @@ def get_items_with_context(index_name, raw_es_query, raw_context, id_property, r
     context_dict = json.loads(raw_context)
     context, total_results = context_loader.get_context(context_dict)
 
+    id_properties = es_mappings.get_id_properties_for_index(index_name)
     # create a context index so access is faster
     context_id = context_dict['context_id']
-    context_index = context_loader.load_context_index(context_id, id_property, context)
+    context_index = context_loader.load_context_index(context_id, id_properties, context)
 
     if raw_contextual_sort_data is not None:
         contextual_sort_data = json.loads(raw_contextual_sort_data)

@@ -50,7 +50,6 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
         'index_name': 'chembl_molecule',
         'es_query': json.dumps(es_query),
         'context_obj': json.dumps(context_obj),
-        'id_property': 'molecule_chembl_id',
         'contextual_sort_data': {},
     }
 
