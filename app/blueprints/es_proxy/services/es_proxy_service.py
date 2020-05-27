@@ -5,7 +5,7 @@ import json
 
 from app import app_logging
 from app.es_data import es_data
-from app.blueprints.es_proxy.services.helpers import context_loader
+from app.context_loader import context_loader
 from app.config import RUN_CONFIG
 from app.es_data import es_mappings
 
