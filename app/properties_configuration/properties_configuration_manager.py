@@ -9,6 +9,7 @@ from elasticsearch.exceptions import NotFoundError
 from app.es_data import es_mappings
 from app import app_logging
 from app.cache import CACHE
+from app.config import RUN_CONFIG
 
 
 class PropertyConfiguration:
@@ -56,6 +57,9 @@ class PropertyConfiguration:
         property_override_description = self.get_property_base_override_description(index_name, prop_id)
         config = self.get_merged_prop_config(index_name, prop_id, es_property_description,
                                              property_override_description)
+
+        seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
         return config
 
     def get_property_base_es_description(self, index_name, prop_id):
