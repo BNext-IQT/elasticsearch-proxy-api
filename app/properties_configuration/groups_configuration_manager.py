@@ -8,6 +8,7 @@ import yaml
 from app import app_logging
 from app.cache import CACHE
 from app.config import RUN_CONFIG
+from app.properties_configuration import properties_configuration_manager
 
 
 class GroupConfiguration:
@@ -95,3 +96,18 @@ class GroupConfiguration:
         CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
 
         return config
+
+
+def get_groups_configuration_instance():
+    """
+    :return: a default instance for the groups configuration
+    """
+    property_configuration_manager = properties_configuration_manager.get_property_configuration_instance()
+
+    group_configuration_manager = GroupConfiguration(
+        groups_file_path='app/properties_configuration/config/groups.yml',
+        sorting_file_path='app/properties_configuration/config/default_sorting.yml',
+        property_configuration_manager=property_configuration_manager
+    )
+
+    return group_configuration_manager
