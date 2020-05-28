@@ -5,7 +5,7 @@
 """
 import argparse
 
-from specific_tests import fun_test_simple_query, fun_test_query_with_context
+from specific_tests import fun_test_simple_query, fun_test_query_with_context, fun_test_property_config
 
 
 PARSER = argparse.ArgumentParser()
@@ -22,9 +22,8 @@ def run():
     """
     print(f'Running functional tests on {ARGS.server_base_path}')
 
-    for test_module in [fun_test_simple_query, fun_test_query_with_context]:
+    for test_module in [fun_test_simple_query, fun_test_query_with_context, fun_test_property_config]:
         test_module.run_test(ARGS.server_base_path, ARGS.delayed_jobs_server_base_path)
-
 
 if __name__ == "__main__":
     run()
