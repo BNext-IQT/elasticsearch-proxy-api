@@ -10,5 +10,4 @@ class ESProxyQuery(Schema):
     index_name = fields.String(required=True)
     es_query = fields.String(required=True)
     context_obj = fields.String()
-    id_property = fields.String()
     contextual_sort_data = fields.String()

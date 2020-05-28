@@ -14,6 +14,8 @@ info:
 tags:
 - name: 'ES proxy'
   description: 'Endpoints related to proxying elasticsearch'
+- name: 'Properties Configuration'
+  description: 'Endpoints related to the properties configuration'
 schemes:
 - "https"
 - "http"
@@ -47,10 +49,6 @@ paths:
           in: 'formData'
           description: 'stringifyied version of a JSON object describing the context of the query'
           type: 'string'
-        - name: 'id_property'
-          in: 'formData'
-          description: 'property that identifies every item. Required when context provided'
-          type: 'string'
         - name: 'contextual_sort_data'
           in: 'formData'
           description: 'description of sorting if sorting by contextual properties'
@@ -60,6 +58,60 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/ESProxyResponse'
+  /properties_configuration/property/{index_name}/{property_id}:
+    get:
+      tags:
+        - 'Properties Configuration'
+      summary: 'Get the configuration of a single property'
+      description: 'Returns the standard description for the interface of a single property'
+      operationId: 'get_property_configuration'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index to which the property belongs"
+          required: true
+          type: 'string'
+          default: 'chembl_molecule'
+        - name: "property_id"
+          in: "path"
+          description: "ID of the property to check, e.g. molecule_properties.cx_most_bpka"
+          required: true
+          type: 'string'
+          default: 'molecule_properties.aromatic_rings'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/PropertyConfigResponse'
+  /properties_configuration/group/{index_name}/{group_name}:
+    get:
+      tags:
+        - 'Properties Configuration'
+      summary: 'Get the configuration of a group of properties'
+      description: 'Returns the standard description for the interface of a group of properties'
+      operationId: 'get_group_configuration'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index to which the group belongs"
+          required: true
+          type: 'string'
+          default: 'chembl_molecule'
+        - name: "group_name"
+          in: "path"
+          description: "ID of the group to check, e.g. browser_table"
+          required: true
+          type: 'string'
+          default: 'browser_table'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/GroupConfigResponse'
 
 definitions:
   ESProxyResponse:
@@ -69,3 +121,30 @@ definitions:
         type: 'object'
       metadata:
         type: 'object'
+  PropertyConfigResponse:
+    type: 'object'
+    properties:
+      index_name:
+        type: 'string'
+      label:
+        type: 'string'
+      type:
+        type: 'string'
+      label_mini:
+        type: 'string'
+      aggregatable:
+        type: 'boolean'
+      prop_id:
+        type: 'string'
+      sortable:
+        type: 'boolean'
+  GroupConfigResponse:
+    type: 'object'
+    properties:
+      properties:
+        type: 'object'
+        properties:
+          optional:
+            type: 'object'
+          default:
+            type: 'object'

@@ -1,10 +1,15 @@
 """
 Module that loads contexts from results
 """
+import re
+
 import requests
 
 from app.config import RUN_CONFIG
 from app.cache import CACHE
+from app import app_logging
+
+from utils import id_properties
 
 
 class ContextLoaderError(Exception):
@@ -17,11 +22,21 @@ WEB_RESULTS_SIZE_LIMIT = RUN_CONFIG.get('filter_query_max_clauses')
 def get_context_url(context_dict):
     """
     returns the url for loading the context
-    :param context_dict: dict describing
+    :param context_dict: dict describing the context
     """
-    delayed_jobs_config = RUN_CONFIG.get('delayed_jobs')
-    delayed_jobs_base_url = delayed_jobs_config.get('base_url')
-    return f'{delayed_jobs_base_url}/outputs/{context_dict["context_id"]}/results.json'
+    host = re.search(r'[^/]+\.ebi\.ac\.uk(:\d+)?', context_dict["delayed_jobs_base_url"]).group(0)
+    host_mappings = RUN_CONFIG.get('delayed_jobs', {}).get('server_mapping', {})
+    mapped_host = host_mappings.get(host)
+    mapped_base_url = context_dict['delayed_jobs_base_url'].replace(host, mapped_host)
+
+    # Make sure to always use http because connection is internal
+    scheme = re.search(r'^http(s)?://', mapped_base_url).group(0)
+    if scheme is None:
+        mapped_base_url = f'http://{mapped_base_url}'
+    else:
+        mapped_base_url = mapped_base_url.replace(scheme, 'http://')
+
+    return f'{mapped_base_url}/outputs/{context_dict["context_id"]}/results.json'
 
 
 def get_context(context_dict):
@@ -31,6 +46,7 @@ def get_context(context_dict):
     :return: the context loaded as an object
     """
     context_url = get_context_url(context_dict)
+    app_logging.debug(f'Loading context from url: {context_url}')
     context_request = requests.get(context_url)
 
     if context_request.status_code != 200:
@@ -45,11 +61,11 @@ def get_context(context_dict):
     return results, total_results
 
 
-def load_context_index(context_id, id_property, context):
+def load_context_index(context_id, id_properties_list, context):
     """
     Loads an index based on the id property of the context, for fast access
     :param context_id: id of the context loaded
-    :param id_property: property used to identify each item
+    :param id_properties_list: property used to identify each item
     :param context: context loaded
     :return:
     """
@@ -59,9 +75,10 @@ def load_context_index(context_id, id_property, context):
     if context_index is None:
         context_index = {}
 
-        for index, item in enumerate(context):
-            context_index[item[id_property]] = item
-            context_index[item[id_property]]['index'] = index
+        for index_number, item in enumerate(context):
+            id_value = id_properties.get_id_value(id_properties_list, item)
+            context_index[id_value] = item
+            context_index[id_value]['index'] = index_number
 
         CACHE.set(context_index_key, context_index, 3600)
 

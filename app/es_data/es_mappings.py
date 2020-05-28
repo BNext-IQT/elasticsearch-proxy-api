@@ -83,6 +83,7 @@ def get_simplified_property_mapping(index_name, property_id):
     simplified_mapping = {
         'type': get_simplified_property_type(property_raw_mapping),
         'aggregatable': get_simplified_property_aggregatability(property_raw_mapping),
+        'sortable': get_simplified_property_aggregatability(property_raw_mapping),
         'label': label,
         'label_mini': label_mini
     }

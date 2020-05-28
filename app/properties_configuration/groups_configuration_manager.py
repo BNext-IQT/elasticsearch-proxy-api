@@ -2,7 +2,13 @@
     Module tht handles the configuration of the groups of properties for the interface
 """
 import os
+
 import yaml
+
+from app import app_logging
+from app.cache import CACHE
+from app.config import RUN_CONFIG
+from app.properties_configuration import properties_configuration_manager
 
 
 class GroupConfiguration:
@@ -59,6 +65,16 @@ class GroupConfiguration:
         }
         """
 
+        cache_key = f'config_for_group_{index_name}-{group_name}'
+        app_logging.debug(f'cache_key: {cache_key}')
+
+        cache_response = CACHE.get(key=cache_key)
+        if cache_response is not None:
+            app_logging.debug(f'results were cached')
+            return cache_response
+
+        app_logging.debug(f'results were not cached')
+
         with open(self.groups_file_path, 'rt') as groups_file:
 
             groups_config = yaml.load(groups_file, Loader=yaml.FullLoader)
@@ -76,4 +92,22 @@ class GroupConfiguration:
 
             config = {'properties': props_configs}
 
+        seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
+
         return config
+
+
+def get_groups_configuration_instance():
+    """
+    :return: a default instance for the groups configuration
+    """
+    property_configuration_manager = properties_configuration_manager.get_property_configuration_instance()
+
+    group_configuration_manager = GroupConfiguration(
+        groups_file_path='app/properties_configuration/config/groups.yml',
+        sorting_file_path='app/properties_configuration/config/default_sorting.yml',
+        property_configuration_manager=property_configuration_manager
+    )
+
+    return group_configuration_manager
