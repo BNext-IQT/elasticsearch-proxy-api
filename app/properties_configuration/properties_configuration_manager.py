@@ -174,3 +174,13 @@ class PropertyConfiguration:
             **property_override_description,
             'is_contextual': True,
         }
+
+def get_property_configuration_instance():
+    """
+    :return: a default instance for the property configuration
+    """
+    property_configuration_manager = PropertyConfiguration(
+        override_file_path='app/properties_configuration/config/override.yml'
+    )
+
+    return property_configuration_manager
