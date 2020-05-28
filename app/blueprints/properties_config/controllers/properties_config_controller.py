@@ -9,7 +9,8 @@ from app.blueprints.properties_config.services import properties_config_service
 
 PROPERTIES_CONFIG_BLUEPRINT = Blueprint('properties_configuration', __name__)
 
-@PROPERTIES_CONFIG_BLUEPRINT.route('/property/<index_name>/<property_id>', methods = ['GET'])
+
+@PROPERTIES_CONFIG_BLUEPRINT.route('/property/<index_name>/<property_id>', methods=['GET'])
 @validate_url_params_with(marshmallow_schemas.PropertyConfigRequest)
 def get_property_config(index_name, property_id):
     """

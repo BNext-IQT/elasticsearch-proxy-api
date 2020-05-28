@@ -1,3 +1,4 @@
+# pylint: disable=import-error,unused-argument
 """
 Module that tests a property_config
 """
