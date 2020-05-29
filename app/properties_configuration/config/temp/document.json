@@ -1,0 +1,48 @@
+{
+  "doc_type": {
+    "label": "Type",
+    "label_mini": "Doc Type",
+    "show": true,
+    "position": 1,
+    "es_index": "chembl_27_document",
+    "prop_name": "doc_type",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "doc_type"
+  },
+  "journal": {
+    "label": "Journal",
+    "label_mini": "Journal",
+    "show": true,
+    "position": 2,
+    "es_index": "chembl_27_document",
+    "prop_name": "journal",
+    "initial_sort": "asc",
+    "initial_intervals": 20,
+    "prop_id": "journal"
+  },
+  "_metadata.source.src_description": {
+    "label": "Source",
+    "label_mini": "Sorc. Src Desc.",
+    "show": true,
+    "position": 3,
+    "es_index": "chembl_27_document",
+    "prop_name": "_metadata.source.src_description",
+    "initial_sort": "asc",
+    "initial_intervals": 20,
+    "prop_id": "_metadata.source.src_description"
+  },
+  "year": {
+    "label": "Year",
+    "label_mini": "Year",
+    "show": true,
+    "position": 4,
+    "es_index": "chembl_27_document",
+    "prop_name": "year",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "year"
+  }
+}
