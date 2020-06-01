@@ -5,6 +5,7 @@ import os
 
 import yaml
 
+
 class FacetsGroupsConfiguration:
     """
     Class that handles the configuration of the groups of facets for the interface
@@ -45,8 +46,8 @@ class FacetsGroupsConfiguration:
                 raise self.FacetsGroupsConfigurationManagerError(
                     f'The group {group_name} does not exist in index {index_name}!')
 
-            default_properties = group_config['default']
-            optional_properties = group_config['optional']
+            default_properties = group_config.get('default', {})
+            optional_properties = group_config.get('optional', {})
 
         return {
             'properties': {
