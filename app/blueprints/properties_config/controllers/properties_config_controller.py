@@ -27,6 +27,7 @@ def get_property_config(index_name, property_id):
 
         abort(500, repr(error))
 
+
 @PROPERTIES_CONFIG_BLUEPRINT.route('/group/<index_name>/<group_name>', methods=['GET'])
 @validate_url_params_with(marshmallow_schemas.GroupConfigRequest)
 def get_group_config(index_name, group_name):
@@ -39,6 +40,24 @@ def get_group_config(index_name, group_name):
 
         group_config = properties_config_service.get_group_config(index_name, group_name)
         return jsonify(group_config)
+
+    except properties_config_service.PropertiesConfigServiceError as error:
+
+        abort(500, repr(error))
+
+
+@PROPERTIES_CONFIG_BLUEPRINT.route('/facets/<index_name>/<group_name>', methods=['GET'])
+@validate_url_params_with(marshmallow_schemas.FacetsGroupConfigRequest)
+def get_facet_group_config(index_name, group_name):
+    """
+    :param index_name: name of the index to which the facet group belongs
+    :param group_name: name of the group to check
+    :return: the response for requests asking for facet group configurations
+    """
+    try:
+
+        facet_group_config = properties_config_service.get_facets_group_config(index_name, group_name)
+        return jsonify(facet_group_config)
 
     except properties_config_service.PropertiesConfigServiceError as error:
 

@@ -5,6 +5,8 @@ import os
 
 import yaml
 
+from app.properties_configuration import properties_configuration_manager
+
 
 class FacetsGroupsConfiguration:
     """
@@ -73,3 +75,17 @@ class FacetsGroupsConfiguration:
             description.append(facet_config)
 
         return description
+
+
+def get_facets_groups_configuration_instance():
+    """
+    :return: a default instance for the facets groups configuration
+    """
+    property_configuration_manager = properties_configuration_manager.get_property_configuration_instance()
+
+    group_configuration_manager = FacetsGroupsConfiguration(
+        facets_groups_file_path='app/properties_configuration/config/facets_groups.yml',
+        property_configuration_manager=property_configuration_manager
+    )
+
+    return group_configuration_manager
