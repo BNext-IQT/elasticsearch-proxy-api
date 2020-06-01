@@ -1,0 +1,15 @@
+chembl_molecule:
+  browser_facets:
+    default:
+      molecule_type:
+        agg_type: terms
+        agg_params:
+          initial_sort: 'asc'
+          initial_intervals: 20
+      max_phase:
+        agg_type: terms
+        agg_params: {}
+    optional:
+      molecule_properties.hbd:
+        agg_type: terms
+        agg_params: {}
