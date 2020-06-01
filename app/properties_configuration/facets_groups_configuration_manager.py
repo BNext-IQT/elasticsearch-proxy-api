@@ -6,6 +6,9 @@ import os
 import yaml
 
 from app.properties_configuration import properties_configuration_manager
+from app.cache import CACHE
+from app import app_logging
+from app.config import RUN_CONFIG
 
 
 class FacetsGroupsConfiguration:
@@ -34,6 +37,16 @@ class FacetsGroupsConfiguration:
         :return: the configuration for the facets group
         """
 
+        cache_key = f'facets_config_for_group_{index_name}-{group_name}'
+        app_logging.debug(f'cache_key: {cache_key}')
+
+        cache_response = CACHE.get(key=cache_key)
+        if cache_response is not None:
+            app_logging.debug(f'results were cached')
+            return cache_response
+
+        app_logging.debug(f'results were not cached')
+
         with open(self.facets_groups_file_path, 'rt') as groups_file:
 
             groups_config = yaml.load(groups_file, Loader=yaml.FullLoader)
@@ -51,12 +64,16 @@ class FacetsGroupsConfiguration:
             default_properties = group_config.get('default', {})
             optional_properties = group_config.get('optional', {})
 
-        return {
+        config = {
             'properties': {
                 'default': self.get_facets_config_for_properties(default_properties, index_name),
                 'optional': self.get_facets_config_for_properties(optional_properties, index_name)
             }
         }
+
+        seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
+        return config
 
     def get_facets_config_for_properties(self, props_dict, index_name):
         """
