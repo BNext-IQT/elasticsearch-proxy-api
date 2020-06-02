@@ -59,6 +59,7 @@ chembl_activity:
         agg_params:
           initial_intervals: 20
           initial_sort: null
+          report_card_entity: 'Assay'
         agg_type: terms
       data_validity_comment:
         agg_params: {}
@@ -67,6 +68,7 @@ chembl_activity:
         agg_params:
           initial_intervals: 20
           initial_sort: null
+          report_card_entity: 'Document'
         agg_type: terms
       document_journal:
         agg_params: {}
@@ -90,6 +92,7 @@ chembl_activity:
         agg_params:
           initial_intervals: 20
           initial_sort: null
+          report_card_entity: 'Compound'
         agg_type: terms
       potential_duplicate:
         agg_params: {}
@@ -107,6 +110,7 @@ chembl_activity:
         agg_params:
           initial_intervals: 20
           initial_sort: null
+          report_card_entity: 'Target'
         agg_type: terms
 chembl_assay:
   browser_facets:
