@@ -7,7 +7,7 @@ chembl_molecule:
     label_mini: 'Targets'
   '_metadata.related_activities.count':
     label: 'Bioactivities'
-    label_mini: 'Compounds'
+    label_mini: 'Activities'
   'molecule_properties.alogp':
     label: 'AlogP'
     label_mini: 'AlogP'
