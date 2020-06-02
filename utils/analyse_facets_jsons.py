@@ -1,3 +1,4 @@
+# pylint: skip-file
 from os import listdir
 import json
 import yaml

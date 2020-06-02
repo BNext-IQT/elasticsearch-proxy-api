@@ -62,6 +62,7 @@ def get_facets_group_config(index_name, group_name):
         return facets_group_configuration_manager.get_facets_config_for_group(index_name, group_name)
 
     except (properties_configuration_manager.PropertyConfiguration.PropertiesConfigurationManagerError,
-            facets_group_configuration_manager.GroupConfiguration.FacetsGroupsConfigurationManagerError) as error:
+            facets_groups_configuration_manager.FacetsGroupsConfiguration.FacetsGroupsConfigurationManagerError) \
+            as error:
 
         raise PropertiesConfigServiceError(repr(error))

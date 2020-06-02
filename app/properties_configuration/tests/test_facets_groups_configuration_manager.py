@@ -57,6 +57,7 @@ class FacetsGroupsConfigurationManagerTester(unittest.TestCase):
                                msg='This should have thrown an exception for a non existing property!'):
             facets_groups_configuration_manager.get_facets_config_for_group(index_name, group_name)
 
+    # pylint: disable=too-many-locals
     def test_gets_config_for_a_facets_group(self):
         """
         tests that gets config for a group with default and additional properties
@@ -86,7 +87,3 @@ class FacetsGroupsConfigurationManagerTester(unittest.TestCase):
 
                     self.assertEqual(agg_config_got, agg_config_must_be,
                                      msg='The agg config was not generated properly!')
-
-
-
-

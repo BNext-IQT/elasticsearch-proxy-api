@@ -25,7 +25,7 @@ class FacetsGroupsConfiguration:
         :param property_configuration_manager: instance of the properties configuration manager
         """
         if not os.path.isfile(facets_groups_file_path):
-            raise self.GroupsConfigurationManagerError(f'The path {path} does not exist!')
+            raise self.FacetsGroupsConfigurationManagerError(f'The path {facets_groups_file_path} does not exist!')
 
         self.facets_groups_file_path = facets_groups_file_path
         self.property_configuration_manager = property_configuration_manager
