@@ -18,3 +18,11 @@ class GroupConfigRequest(Schema):
     """
     index_name = fields.String(required=True)
     group_name = fields.String(required=True)
+
+
+class FacetsGroupConfigRequest(Schema):
+    """
+    Class with the schema for getting the configuration of a facet group
+    """
+    index_name = fields.String(required=True)
+    group_name = fields.String(required=True)

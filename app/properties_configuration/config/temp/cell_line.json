@@ -1,0 +1,61 @@
+{
+  "cell_source_tissue": {
+    "label": "Source Tissue",
+    "label_mini": "Source Tissue",
+    "show": true,
+    "position": 1,
+    "es_index": "chembl_27_cell_line",
+    "prop_name": "cell_source_tissue",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "cell_source_tissue"
+  },
+  "_metadata.organism_taxonomy.l1": {
+    "label": "Organism Taxonomy L1",
+    "label_mini": "Orgnsm. Taxnm. L1",
+    "show": true,
+    "position": 2,
+    "es_index": "chembl_27_cell_line",
+    "prop_name": "_metadata.organism_taxonomy.l1",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "_metadata.organism_taxonomy.l1"
+  },
+  "_metadata.organism_taxonomy.l2": {
+    "label": "Organism Taxonomy L2",
+    "label_mini": "Orgnsm. Taxnm. L2",
+    "show": true,
+    "position": 3,
+    "es_index": "chembl_27_cell_line",
+    "prop_name": "_metadata.organism_taxonomy.l2",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "_metadata.organism_taxonomy.l2"
+  },
+  "_metadata.organism_taxonomy.l3": {
+    "label": "Organism Taxonomy L3",
+    "label_mini": "Orgnsm. Taxnm. L3",
+    "show": true,
+    "position": 4,
+    "es_index": "chembl_27_cell_line",
+    "prop_name": "_metadata.organism_taxonomy.l3",
+    "initial_sort": null,
+    "initial_intervals": null,
+    "report_card_entity": null,
+    "prop_id": "_metadata.organism_taxonomy.l3"
+  },
+  "cell_source_organism": {
+    "label": "Source Organism",
+    "label_mini": "Source Organism",
+    "show": true,
+    "position": 5,
+    "es_index": "chembl_27_cell_line",
+    "prop_name": "cell_source_organism",
+    "initial_sort": "asc",
+    "initial_intervals": 20,
+    "prop_id": "cell_source_organism"
+  }
+}

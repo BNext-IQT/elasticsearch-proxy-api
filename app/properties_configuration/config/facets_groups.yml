@@ -1,0 +1,684 @@
+chembl_activity:
+  browser_facets:
+    default:
+      _metadata.organism_taxonomy.l1:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l2:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l3:
+        agg_params: {}
+        agg_type: terms
+      _metadata.parent_molecule_data.alogp:
+        agg_params: {}
+        agg_type: terms
+      _metadata.parent_molecule_data.full_mwt:
+        agg_params: {}
+        agg_type: terms
+      _metadata.parent_molecule_data.max_phase:
+        agg_params: {}
+        agg_type: terms
+      _metadata.parent_molecule_data.num_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      _metadata.source.src_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      _metadata.target_data.target_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      bao_label:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      pchembl_value:
+        agg_params: {}
+        agg_type: terms
+      standard_type:
+        agg_params: {}
+        agg_type: terms
+      target_organism:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      _metadata.assay_data.type_label:
+        agg_params: {}
+        agg_type: terms
+      _metadata.protein_classification.l1:
+        agg_params: {}
+        agg_type: terms
+      assay_chembl_id:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: null
+        agg_type: terms
+      data_validity_comment:
+        agg_params: {}
+        agg_type: terms
+      document_chembl_id:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: null
+        agg_type: terms
+      document_journal:
+        agg_params: {}
+        agg_type: terms
+      document_year:
+        agg_params: {}
+        agg_type: terms
+      ligand_efficiency.bei:
+        agg_params: {}
+        agg_type: terms
+      ligand_efficiency.le:
+        agg_params: {}
+        agg_type: terms
+      ligand_efficiency.lle:
+        agg_params: {}
+        agg_type: terms
+      ligand_efficiency.sei:
+        agg_params: {}
+        agg_type: terms
+      molecule_chembl_id:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: null
+        agg_type: terms
+      potential_duplicate:
+        agg_params: {}
+        agg_type: terms
+      standard_relation:
+        agg_params: {}
+        agg_type: terms
+      standard_units:
+        agg_params: {}
+        agg_type: terms
+      standard_value:
+        agg_params: {}
+        agg_type: terms
+      target_chembl_id:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: null
+        agg_type: terms
+chembl_assay:
+  browser_facets:
+    default:
+      _metadata.assay_generated.confidence_label:
+        agg_params:
+          initial_intervals: null
+          initial_sort: asc
+        agg_type: terms
+      _metadata.assay_generated.type_label:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l1:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l2:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l3:
+        agg_params: {}
+        agg_type: terms
+      _metadata.source.src_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      assay_classifications.l1:
+        agg_params: {}
+        agg_type: terms
+      assay_classifications.l2:
+        agg_params: {}
+        agg_type: terms
+      assay_classifications.l3:
+        agg_params: {}
+        agg_type: terms
+      assay_organism:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      bao_label:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      _metadata.assay_generated.relationship_label:
+        agg_params: {}
+        agg_type: terms
+      assay_cell_type:
+        agg_params: {}
+        agg_type: terms
+      assay_strain:
+        agg_params: {}
+        agg_type: terms
+      assay_subcellular_fraction:
+        agg_params: {}
+        agg_type: terms
+      assay_tissue:
+        agg_params: {}
+        agg_type: terms
+chembl_cell_line:
+  browser_facets:
+    default:
+      _metadata.organism_taxonomy.l1:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l2:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l3:
+        agg_params: {}
+        agg_type: terms
+      cell_source_organism:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      cell_source_tissue:
+        agg_params: {}
+        agg_type: terms
+chembl_document:
+  browser_facets:
+    default:
+      _metadata.source.src_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      doc_type:
+        agg_params: {}
+        agg_type: terms
+      journal:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      year:
+        agg_params: {}
+        agg_type: terms
+chembl_drug_indication_by_parent:
+  browser_facets:
+    default:
+      drug_indication.efo.term:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      drug_indication.max_phase_for_ind:
+        agg_params: {}
+        agg_type: terms
+      drug_indication.mesh_heading:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule._metadata.atc_classifications.level1_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule._metadata.atc_classifications.level2_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule.molecule_properties.alogp:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.full_mwt:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.num_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      parent_molecule._metadata.compound_generated.availability_type_label:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule._metadata.compound_generated.chirality_label:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.black_box_warning:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.dosed_ingredient:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.first_approval:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.first_in_class:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.aromatic_rings:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_logd:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_logp:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_most_apka:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_most_bpka:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.hba:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.hbd:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.heavy_atoms:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.molecular_species:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.mw_freebase:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.num_lipinski_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.psa:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.qed_weighted:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.rtb:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.natural_product:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.oral:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.parenteral:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.prodrug:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.structure_type:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.therapeutic_flag:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.topical:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.usan_stem:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule.usan_year:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.withdrawn_flag:
+        agg_params: {}
+        agg_type: terms
+chembl_mechanism_by_parent_target:
+  browser_facets:
+    default:
+      mechanism_of_action.action_type:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule._metadata.atc_classifications.level1_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule._metadata.atc_classifications.level2_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule._metadata.drug.is_drug:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.max_phase:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.alogp:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.full_mwt:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.num_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      target._metadata.organism_taxonomy.l1:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.organism_taxonomy.l2:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.organism_taxonomy.l3:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.protein_classification.l1:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.protein_classification.l2:
+        agg_params: {}
+        agg_type: terms
+      target.organism:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      target.target_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      parent_molecule._metadata.compound_generated.availability_type_label:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule._metadata.compound_generated.chirality_label:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.black_box_warning:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.dosed_ingredient:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.first_approval:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.first_in_class:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.aromatic_rings:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_logd:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_logp:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_most_apka:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.cx_most_bpka:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.hba:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.hbd:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.heavy_atoms:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.molecular_species:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.mw_freebase:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.num_lipinski_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.psa:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.qed_weighted:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.molecule_properties.rtb:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.natural_product:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.oral:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.parenteral:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.prodrug:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.structure_type:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.therapeutic_flag:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.topical:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.usan_stem:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      parent_molecule.usan_year:
+        agg_params: {}
+        agg_type: terms
+      parent_molecule.withdrawn_flag:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.protein_classification.l3:
+        agg_params: {}
+        agg_type: terms
+      target._metadata.protein_classification.l4:
+        agg_params: {}
+        agg_type: terms
+chembl_molecule:
+  browser_facets:
+    default:
+      _metadata.atc_classifications.level1_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      _metadata.atc_classifications.level2_description:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      _metadata.related_activities.count:
+        agg_params: {}
+        agg_type: terms
+      _metadata.related_targets.count:
+        agg_params: {}
+        agg_type: terms
+      max_phase:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.alogp:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.full_mwt:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.num_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      molecule_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      _metadata.compound_generated.availability_type_label:
+        agg_params: {}
+        agg_type: terms
+      _metadata.compound_generated.chirality_label:
+        agg_params: {}
+        agg_type: terms
+      black_box_warning:
+        agg_params: {}
+        agg_type: terms
+      dosed_ingredient:
+        agg_params: {}
+        agg_type: terms
+      first_approval:
+        agg_params: {}
+        agg_type: terms
+      first_in_class:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.aromatic_rings:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.cx_logd:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.cx_logp:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.cx_most_apka:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.cx_most_bpka:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.hba:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.hbd:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.heavy_atoms:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.molecular_species:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.mw_freebase:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.num_lipinski_ro5_violations:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.psa:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.qed_weighted:
+        agg_params: {}
+        agg_type: terms
+      molecule_properties.rtb:
+        agg_params: {}
+        agg_type: terms
+      natural_product:
+        agg_params: {}
+        agg_type: terms
+      oral:
+        agg_params: {}
+        agg_type: terms
+      parenteral:
+        agg_params: {}
+        agg_type: terms
+      prodrug:
+        agg_params: {}
+        agg_type: terms
+      structure_type:
+        agg_params: {}
+        agg_type: terms
+      therapeutic_flag:
+        agg_params: {}
+        agg_type: terms
+      topical:
+        agg_params: {}
+        agg_type: terms
+      usan_stem:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      usan_year:
+        agg_params: {}
+        agg_type: terms
+      withdrawn_class:
+        agg_params: {}
+        agg_type: terms
+      withdrawn_country:
+        agg_params: {}
+        agg_type: terms
+      withdrawn_flag:
+        agg_params: {}
+        agg_type: terms
+      withdrawn_reason:
+        agg_params: {}
+        agg_type: terms
+      withdrawn_year:
+        agg_params: {}
+        agg_type: terms
+chembl_target:
+  browser_facets:
+    default:
+      _metadata.organism_taxonomy.l1:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l2:
+        agg_params: {}
+        agg_type: terms
+      _metadata.organism_taxonomy.l3:
+        agg_params: {}
+        agg_type: terms
+      _metadata.protein_classification.l1:
+        agg_params: {}
+        agg_type: terms
+      _metadata.protein_classification.l2:
+        agg_params: {}
+        agg_type: terms
+      _metadata.related_activities.count:
+        agg_params: {}
+        agg_type: terms
+      _metadata.related_compounds.count:
+        agg_params: {}
+        agg_type: terms
+      organism:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+      target_type:
+        agg_params:
+          initial_intervals: 20
+          initial_sort: asc
+        agg_type: terms
+    optional:
+      _metadata.protein_classification.l3:
+        agg_params: {}
+        agg_type: terms
+      _metadata.protein_classification.l4:
+        agg_params: {}
+        agg_type: terms

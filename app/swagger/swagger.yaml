@@ -112,7 +112,33 @@ paths:
           description: "success"
           schema:
             $ref: '#/definitions/GroupConfigResponse'
-
+  /properties_configuration/facets/{index_name}/{group_name}:
+    get:
+      tags:
+        - 'Properties Configuration'
+      summary: 'Get the configuration of a group of facets'
+      description: 'Returns the standard description for the interface of a group of facets'
+      operationId: 'get_facet_group_configuration'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index to which the group belongs"
+          required: true
+          type: 'string'
+          default: 'chembl_activity'
+        - name: "group_name"
+          in: "path"
+          description: "ID of the group to check, e.g. browser_facets"
+          required: true
+          type: 'string'
+          default: 'browser_facets'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/GroupConfigResponse'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -139,6 +165,16 @@ definitions:
       sortable:
         type: 'boolean'
   GroupConfigResponse:
+    type: 'object'
+    properties:
+      properties:
+        type: 'object'
+        properties:
+          optional:
+            type: 'object'
+          default:
+            type: 'object'
+  FacetsGroupConfigResponse:
     type: 'object'
     properties:
       properties:
