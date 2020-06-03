@@ -46,7 +46,8 @@ for file_path in listdir(jsons_path):
 
                 property_config = {
                     'agg_type': 'terms',
-                    'agg_params': {}
+                    'agg_params': {},
+                    'position': source_config_value['position']
                 }
 
             else:
@@ -56,7 +57,8 @@ for file_path in listdir(jsons_path):
                     'agg_params': {
                       'initial_sort': initial_sort,
                       'initial_intervals': initial_intervals
-                    }
+                    },
+                    'position': source_config_value['position']
                 }
 
             properties_config[item_key] = property_config
