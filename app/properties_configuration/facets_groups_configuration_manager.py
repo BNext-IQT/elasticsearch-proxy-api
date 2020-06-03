@@ -82,7 +82,9 @@ class FacetsGroupsConfiguration:
         :return: the facets config for the properties in the dict
         """
         description = []
-        for prop_id, agg_config in props_dict.items():
+        sorted_items = sorted(props_dict.items(), key=lambda item: item[1]['position'])
+
+        for prop_id, agg_config in sorted_items:
             prop_config = self.property_configuration_manager.get_config_for_prop(index_name, prop_id)
             facet_config = {
                 'prop_id': prop_id,

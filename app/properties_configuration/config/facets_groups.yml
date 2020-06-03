@@ -4,114 +4,140 @@ chembl_activity:
       _metadata.organism_taxonomy.l1:
         agg_params: {}
         agg_type: terms
+        position: 3
       _metadata.organism_taxonomy.l2:
         agg_params: {}
         agg_type: terms
+        position: 4
       _metadata.organism_taxonomy.l3:
         agg_params: {}
         agg_type: terms
+        position: 5
       _metadata.parent_molecule_data.alogp:
         agg_params: {}
         agg_type: terms
+        position: 11
       _metadata.parent_molecule_data.full_mwt:
         agg_params: {}
         agg_type: terms
+        position: 12
       _metadata.parent_molecule_data.max_phase:
         agg_params: {}
         agg_type: terms
+        position: 9
       _metadata.parent_molecule_data.num_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 10
       _metadata.source.src_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 13
       _metadata.target_data.target_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 2
       bao_label:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 7
       pchembl_value:
         agg_params: {}
         agg_type: terms
+        position: 8
       standard_type:
         agg_params: {}
         agg_type: terms
+        position: 1
       target_organism:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 6
     optional:
       _metadata.assay_data.type_label:
         agg_params: {}
         agg_type: terms
+        position: 21
       _metadata.protein_classification.l1:
         agg_params: {}
         agg_type: terms
+        position: 30
       assay_chembl_id:
         agg_params:
           initial_intervals: 20
           initial_sort: null
-          report_card_entity: 'Assay'
         agg_type: terms
+        position: 16
       data_validity_comment:
         agg_params: {}
         agg_type: terms
+        position: 29
       document_chembl_id:
         agg_params:
           initial_intervals: 20
           initial_sort: null
-          report_card_entity: 'Document'
         agg_type: terms
+        position: 17
       document_journal:
         agg_params: {}
         agg_type: terms
+        position: 22
       document_year:
         agg_params: {}
         agg_type: terms
+        position: 23
       ligand_efficiency.bei:
         agg_params: {}
         agg_type: terms
+        position: 24
       ligand_efficiency.le:
         agg_params: {}
         agg_type: terms
+        position: 25
       ligand_efficiency.lle:
         agg_params: {}
         agg_type: terms
+        position: 26
       ligand_efficiency.sei:
         agg_params: {}
         agg_type: terms
+        position: 27
       molecule_chembl_id:
         agg_params:
           initial_intervals: 20
           initial_sort: null
-          report_card_entity: 'Compound'
         agg_type: terms
+        position: 14
       potential_duplicate:
         agg_params: {}
         agg_type: terms
+        position: 28
       standard_relation:
         agg_params: {}
         agg_type: terms
+        position: 20
       standard_units:
         agg_params: {}
         agg_type: terms
+        position: 19
       standard_value:
         agg_params: {}
         agg_type: terms
+        position: 18
       target_chembl_id:
         agg_params:
           initial_intervals: 20
           initial_sort: null
-          report_card_entity: 'Target'
         agg_type: terms
+        position: 15
 chembl_assay:
   browser_facets:
     default:
@@ -120,78 +146,99 @@ chembl_assay:
           initial_intervals: null
           initial_sort: asc
         agg_type: terms
+        position: 11
       _metadata.assay_generated.type_label:
         agg_params: {}
         agg_type: terms
+        position: 1
       _metadata.organism_taxonomy.l1:
         agg_params: {}
         agg_type: terms
+        position: 5
       _metadata.organism_taxonomy.l2:
         agg_params: {}
         agg_type: terms
+        position: 6
       _metadata.organism_taxonomy.l3:
         agg_params: {}
         agg_type: terms
+        position: 7
       _metadata.source.src_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 10
       assay_classifications.l1:
         agg_params: {}
         agg_type: terms
+        position: 2
       assay_classifications.l2:
         agg_params: {}
         agg_type: terms
+        position: 3
       assay_classifications.l3:
         agg_params: {}
         agg_type: terms
+        position: 4
       assay_organism:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 8
       bao_label:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 9
     optional:
       _metadata.assay_generated.relationship_label:
         agg_params: {}
         agg_type: terms
+        position: 17
       assay_cell_type:
         agg_params: {}
         agg_type: terms
+        position: 15
       assay_strain:
         agg_params: {}
         agg_type: terms
+        position: 16
       assay_subcellular_fraction:
         agg_params: {}
         agg_type: terms
+        position: 14
       assay_tissue:
         agg_params: {}
         agg_type: terms
+        position: 12
 chembl_cell_line:
   browser_facets:
     default:
       _metadata.organism_taxonomy.l1:
         agg_params: {}
         agg_type: terms
+        position: 2
       _metadata.organism_taxonomy.l2:
         agg_params: {}
         agg_type: terms
+        position: 3
       _metadata.organism_taxonomy.l3:
         agg_params: {}
         agg_type: terms
+        position: 4
       cell_source_organism:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 5
       cell_source_tissue:
         agg_params: {}
         agg_type: terms
+        position: 1
 chembl_document:
   browser_facets:
     default:
@@ -200,17 +247,21 @@ chembl_document:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 3
       doc_type:
         agg_params: {}
         agg_type: terms
+        position: 1
       journal:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 2
       year:
         agg_params: {}
         agg_type: terms
+        position: 4
 chembl_drug_indication_by_parent:
   browser_facets:
     default:
@@ -219,291 +270,378 @@ chembl_drug_indication_by_parent:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 2
       drug_indication.max_phase_for_ind:
         agg_params: {}
         agg_type: terms
+        position: 3
       drug_indication.mesh_heading:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 1
       parent_molecule._metadata.atc_classifications.level1_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 8
       parent_molecule._metadata.atc_classifications.level2_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 9
       parent_molecule.molecule_properties.alogp:
         agg_params: {}
         agg_type: terms
+        position: 7
       parent_molecule.molecule_properties.full_mwt:
         agg_params: {}
         agg_type: terms
+        position: 6
       parent_molecule.molecule_properties.num_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 5
       parent_molecule.molecule_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 4
     optional:
       parent_molecule._metadata.compound_generated.availability_type_label:
         agg_params: {}
         agg_type: terms
+        position: 19
       parent_molecule._metadata.compound_generated.chirality_label:
         agg_params: {}
         agg_type: terms
+        position: 24
       parent_molecule.black_box_warning:
         agg_params: {}
         agg_type: terms
+        position: 23
       parent_molecule.dosed_ingredient:
         agg_params: {}
         agg_type: terms
+        position: 25
       parent_molecule.first_approval:
         agg_params: {}
         agg_type: terms
+        position: 26
       parent_molecule.first_in_class:
         agg_params: {}
         agg_type: terms
+        position: 27
       parent_molecule.molecule_properties.aromatic_rings:
         agg_params: {}
         agg_type: terms
+        position: 31
       parent_molecule.molecule_properties.cx_logd:
         agg_params: {}
         agg_type: terms
+        position: 15
       parent_molecule.molecule_properties.cx_logp:
         agg_params: {}
         agg_type: terms
+        position: 28
       parent_molecule.molecule_properties.cx_most_apka:
         agg_params: {}
         agg_type: terms
+        position: 29
       parent_molecule.molecule_properties.cx_most_bpka:
         agg_params: {}
         agg_type: terms
+        position: 30
       parent_molecule.molecule_properties.hba:
         agg_params: {}
         agg_type: terms
+        position: 11
       parent_molecule.molecule_properties.hbd:
         agg_params: {}
         agg_type: terms
+        position: 12
       parent_molecule.molecule_properties.heavy_atoms:
         agg_params: {}
         agg_type: terms
+        position: 32
       parent_molecule.molecule_properties.molecular_species:
         agg_params: {}
         agg_type: terms
+        position: 16
       parent_molecule.molecule_properties.mw_freebase:
         agg_params: {}
         agg_type: terms
+        position: 33
       parent_molecule.molecule_properties.num_lipinski_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 17
       parent_molecule.molecule_properties.psa:
         agg_params: {}
         agg_type: terms
+        position: 10
       parent_molecule.molecule_properties.qed_weighted:
         agg_params: {}
         agg_type: terms
+        position: 14
       parent_molecule.molecule_properties.rtb:
         agg_params: {}
         agg_type: terms
+        position: 13
       parent_molecule.natural_product:
         agg_params: {}
         agg_type: terms
+        position: 34
       parent_molecule.oral:
         agg_params: {}
         agg_type: terms
+        position: 20
       parent_molecule.parenteral:
         agg_params: {}
         agg_type: terms
+        position: 21
       parent_molecule.prodrug:
         agg_params: {}
         agg_type: terms
+        position: 35
       parent_molecule.structure_type:
         agg_params: {}
         agg_type: terms
+        position: 36
       parent_molecule.therapeutic_flag:
         agg_params: {}
         agg_type: terms
+        position: 18
       parent_molecule.topical:
         agg_params: {}
         agg_type: terms
+        position: 22
       parent_molecule.usan_stem:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 37
       parent_molecule.usan_year:
         agg_params: {}
         agg_type: terms
+        position: 38
       parent_molecule.withdrawn_flag:
         agg_params: {}
         agg_type: terms
+        position: 39
 chembl_mechanism_by_parent_target:
   browser_facets:
     default:
       mechanism_of_action.action_type:
         agg_params: {}
         agg_type: terms
+        position: 1
       parent_molecule._metadata.atc_classifications.level1_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 15
       parent_molecule._metadata.atc_classifications.level2_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 16
       parent_molecule._metadata.drug.is_drug:
         agg_params: {}
         agg_type: terms
+        position: 14
       parent_molecule.max_phase:
         agg_params: {}
         agg_type: terms
+        position: 3
       parent_molecule.molecule_properties.alogp:
         agg_params: {}
         agg_type: terms
+        position: 13
       parent_molecule.molecule_properties.full_mwt:
         agg_params: {}
         agg_type: terms
+        position: 12
       parent_molecule.molecule_properties.num_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 11
       parent_molecule.molecule_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 2
       target._metadata.organism_taxonomy.l1:
         agg_params: {}
         agg_type: terms
+        position: 4
       target._metadata.organism_taxonomy.l2:
         agg_params: {}
         agg_type: terms
+        position: 5
       target._metadata.organism_taxonomy.l3:
         agg_params: {}
         agg_type: terms
+        position: 6
       target._metadata.protein_classification.l1:
         agg_params: {}
         agg_type: terms
+        position: 8
       target._metadata.protein_classification.l2:
         agg_params: {}
         agg_type: terms
+        position: 9
       target.organism:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 7
       target.target_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 10
     optional:
       parent_molecule._metadata.compound_generated.availability_type_label:
         agg_params: {}
         agg_type: terms
+        position: 28
       parent_molecule._metadata.compound_generated.chirality_label:
         agg_params: {}
         agg_type: terms
+        position: 33
       parent_molecule.black_box_warning:
         agg_params: {}
         agg_type: terms
+        position: 32
       parent_molecule.dosed_ingredient:
         agg_params: {}
         agg_type: terms
+        position: 34
       parent_molecule.first_approval:
         agg_params: {}
         agg_type: terms
+        position: 35
       parent_molecule.first_in_class:
         agg_params: {}
         agg_type: terms
+        position: 36
       parent_molecule.molecule_properties.aromatic_rings:
         agg_params: {}
         agg_type: terms
+        position: 40
       parent_molecule.molecule_properties.cx_logd:
         agg_params: {}
         agg_type: terms
+        position: 24
       parent_molecule.molecule_properties.cx_logp:
         agg_params: {}
         agg_type: terms
+        position: 37
       parent_molecule.molecule_properties.cx_most_apka:
         agg_params: {}
         agg_type: terms
+        position: 38
       parent_molecule.molecule_properties.cx_most_bpka:
         agg_params: {}
         agg_type: terms
+        position: 39
       parent_molecule.molecule_properties.hba:
         agg_params: {}
         agg_type: terms
+        position: 20
       parent_molecule.molecule_properties.hbd:
         agg_params: {}
         agg_type: terms
+        position: 21
       parent_molecule.molecule_properties.heavy_atoms:
         agg_params: {}
         agg_type: terms
+        position: 41
       parent_molecule.molecule_properties.molecular_species:
         agg_params: {}
         agg_type: terms
+        position: 25
       parent_molecule.molecule_properties.mw_freebase:
         agg_params: {}
         agg_type: terms
+        position: 42
       parent_molecule.molecule_properties.num_lipinski_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 26
       parent_molecule.molecule_properties.psa:
         agg_params: {}
         agg_type: terms
+        position: 19
       parent_molecule.molecule_properties.qed_weighted:
         agg_params: {}
         agg_type: terms
+        position: 23
       parent_molecule.molecule_properties.rtb:
         agg_params: {}
         agg_type: terms
+        position: 22
       parent_molecule.natural_product:
         agg_params: {}
         agg_type: terms
+        position: 43
       parent_molecule.oral:
         agg_params: {}
         agg_type: terms
+        position: 29
       parent_molecule.parenteral:
         agg_params: {}
         agg_type: terms
+        position: 30
       parent_molecule.prodrug:
         agg_params: {}
         agg_type: terms
+        position: 44
       parent_molecule.structure_type:
         agg_params: {}
         agg_type: terms
+        position: 45
       parent_molecule.therapeutic_flag:
         agg_params: {}
         agg_type: terms
+        position: 27
       parent_molecule.topical:
         agg_params: {}
         agg_type: terms
+        position: 31
       parent_molecule.usan_stem:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 46
       parent_molecule.usan_year:
         agg_params: {}
         agg_type: terms
+        position: 47
       parent_molecule.withdrawn_flag:
         agg_params: {}
         agg_type: terms
+        position: 48
       target._metadata.protein_classification.l3:
         agg_params: {}
         agg_type: terms
+        position: 17
       target._metadata.protein_classification.l4:
         agg_params: {}
         agg_type: terms
+        position: 18
 chembl_molecule:
   browser_facets:
     default:
@@ -512,177 +650,231 @@ chembl_molecule:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 6
       _metadata.atc_classifications.level2_description:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 7
       _metadata.related_activities.count:
         agg_params: {}
         agg_type: terms
+        position: 9
       _metadata.related_targets.count:
         agg_params: {}
         agg_type: terms
+        position: 8
       max_phase:
         agg_params: {}
         agg_type: terms
+        position: 2
       molecule_properties.alogp:
         agg_params: {}
         agg_type: terms
+        position: 5
       molecule_properties.full_mwt:
         agg_params: {}
         agg_type: terms
+        position: 4
       molecule_properties.num_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 3
       molecule_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 1
     optional:
       _metadata.compound_generated.availability_type_label:
         agg_params: {}
         agg_type: terms
+        position: 19
       _metadata.compound_generated.chirality_label:
         agg_params: {}
         agg_type: terms
+        position: 24
       black_box_warning:
         agg_params: {}
         agg_type: terms
+        position: 23
       dosed_ingredient:
         agg_params: {}
         agg_type: terms
+        position: 25
       first_approval:
         agg_params: {}
         agg_type: terms
+        position: 26
       first_in_class:
         agg_params: {}
         agg_type: terms
+        position: 27
       molecule_properties.aromatic_rings:
         agg_params: {}
         agg_type: terms
+        position: 31
       molecule_properties.cx_logd:
         agg_params: {}
         agg_type: terms
+        position: 15
       molecule_properties.cx_logp:
         agg_params: {}
         agg_type: terms
+        position: 28
       molecule_properties.cx_most_apka:
         agg_params: {}
         agg_type: terms
+        position: 29
       molecule_properties.cx_most_bpka:
         agg_params: {}
         agg_type: terms
+        position: 30
       molecule_properties.hba:
         agg_params: {}
         agg_type: terms
+        position: 11
       molecule_properties.hbd:
         agg_params: {}
         agg_type: terms
+        position: 12
       molecule_properties.heavy_atoms:
         agg_params: {}
         agg_type: terms
+        position: 32
       molecule_properties.molecular_species:
         agg_params: {}
         agg_type: terms
+        position: 16
       molecule_properties.mw_freebase:
         agg_params: {}
         agg_type: terms
+        position: 33
       molecule_properties.num_lipinski_ro5_violations:
         agg_params: {}
         agg_type: terms
+        position: 17
       molecule_properties.psa:
         agg_params: {}
         agg_type: terms
+        position: 10
       molecule_properties.qed_weighted:
         agg_params: {}
         agg_type: terms
+        position: 14
       molecule_properties.rtb:
         agg_params: {}
         agg_type: terms
+        position: 13
       natural_product:
         agg_params: {}
         agg_type: terms
+        position: 34
       oral:
         agg_params: {}
         agg_type: terms
+        position: 20
       parenteral:
         agg_params: {}
         agg_type: terms
+        position: 21
       prodrug:
         agg_params: {}
         agg_type: terms
+        position: 35
       structure_type:
         agg_params: {}
         agg_type: terms
+        position: 36
       therapeutic_flag:
         agg_params: {}
         agg_type: terms
+        position: 18
       topical:
         agg_params: {}
         agg_type: terms
+        position: 22
       usan_stem:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 37
       usan_year:
         agg_params: {}
         agg_type: terms
+        position: 38
       withdrawn_class:
         agg_params: {}
         agg_type: terms
+        position: 40
       withdrawn_country:
         agg_params: {}
         agg_type: terms
+        position: 43
       withdrawn_flag:
         agg_params: {}
         agg_type: terms
+        position: 39
       withdrawn_reason:
         agg_params: {}
         agg_type: terms
+        position: 42
       withdrawn_year:
         agg_params: {}
         agg_type: terms
+        position: 41
 chembl_target:
   browser_facets:
     default:
       _metadata.organism_taxonomy.l1:
         agg_params: {}
         agg_type: terms
+        position: 1
       _metadata.organism_taxonomy.l2:
         agg_params: {}
         agg_type: terms
+        position: 2
       _metadata.organism_taxonomy.l3:
         agg_params: {}
         agg_type: terms
+        position: 3
       _metadata.protein_classification.l1:
         agg_params: {}
         agg_type: terms
+        position: 5
       _metadata.protein_classification.l2:
         agg_params: {}
         agg_type: terms
+        position: 6
       _metadata.related_activities.count:
         agg_params: {}
         agg_type: terms
+        position: 9
       _metadata.related_compounds.count:
         agg_params: {}
         agg_type: terms
+        position: 8
       organism:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 4
       target_type:
         agg_params:
           initial_intervals: 20
           initial_sort: asc
         agg_type: terms
+        position: 7
     optional:
       _metadata.protein_classification.l3:
         agg_params: {}
         agg_type: terms
+        position: 10
       _metadata.protein_classification.l4:
         agg_params: {}
         agg_type: terms
+        position: 11
