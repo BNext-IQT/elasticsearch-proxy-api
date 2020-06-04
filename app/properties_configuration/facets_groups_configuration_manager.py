@@ -37,7 +37,7 @@ class FacetsGroupsConfiguration:
         :return: the configuration for the facets group
         """
 
-        cache_key = f'facets_config_for_group_{index_name}-{group_name}_2'
+        cache_key = f'facets_config_for_group_{index_name}-{group_name}_3'
         app_logging.debug(f'cache_key: {cache_key}')
 
         cache_response = CACHE.get(key=cache_key)
