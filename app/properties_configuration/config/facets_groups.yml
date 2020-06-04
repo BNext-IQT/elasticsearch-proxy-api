@@ -91,7 +91,8 @@ chembl_activity:
         agg_type: terms
         position: 22
       document_year:
-        agg_params: {}
+        agg_params:
+          is_year: True
         agg_type: terms
         position: 23
       ligand_efficiency.bei:
@@ -259,7 +260,8 @@ chembl_document:
         agg_type: terms
         position: 2
       year:
-        agg_params: {}
+        agg_params:
+           is_year: True
         agg_type: terms
         position: 4
 chembl_drug_indication_by_parent:
@@ -427,7 +429,8 @@ chembl_drug_indication_by_parent:
         agg_type: terms
         position: 37
       parent_molecule.usan_year:
-        agg_params: {}
+        agg_params:
+          is_year: True
         agg_type: terms
         position: 38
       parent_molecule.withdrawn_flag:
@@ -627,7 +630,8 @@ chembl_mechanism_by_parent_target:
         agg_type: terms
         position: 46
       parent_molecule.usan_year:
-        agg_params: {}
+        agg_params:
+          is_year: True
         agg_type: terms
         position: 47
       parent_molecule.withdrawn_flag:
@@ -803,7 +807,8 @@ chembl_molecule:
         agg_type: terms
         position: 37
       usan_year:
-        agg_params: {}
+        agg_params:
+          is_year: True
         agg_type: terms
         position: 38
       withdrawn_class:
@@ -823,7 +828,8 @@ chembl_molecule:
         agg_type: terms
         position: 42
       withdrawn_year:
-        agg_params: {}
+        agg_params:
+          is_year: True
         agg_type: terms
         position: 41
 chembl_target:
