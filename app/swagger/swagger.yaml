@@ -79,7 +79,7 @@ paths:
           description: "ID of the document to check"
           required: true
           type: 'string'
-          default: 'CHEMBL_59'
+          default: 'CHEMBL59'
       responses:
         '200':
           description: "success"

@@ -49,9 +49,11 @@ def get_es_doc(index_name, doc_id):
     :param doc_id: id of the document to search for
     :return: the json response from elasticsearch of the document
     """
-    response = {
-        'msg': 'hola'
-    }
+    print('get_es_doc ')
+    print('index_name: ', index_name)
+    print('doc_id: ', doc_id)
+
+    response = es_data.get_es_doc(index_name, doc_id)
     return response
 
 

@@ -38,6 +38,40 @@ def get_es_response(index_name, es_query):
     return response
 
 
+def get_es_doc(index_name, doc_id):
+    """
+    :param index_name: name of the intex to which the document belongs
+    :param doc_id: id of the document
+    :return: the dict with the response from es corresponding to the document
+    """
+
+    cache_key = f'document-{doc_id}'
+    app_logging.debug(f'cache_key: {cache_key}')
+
+    equivalent_query = {
+        "query": {
+            "ids": {
+                "values": doc_id
+            }
+        }
+    }
+
+    cache_response = CACHE.get(key=cache_key)
+    if cache_response is not None:
+        app_logging.debug(f'results were cached')
+        record_that_response_was_cached(index_name, equivalent_query)
+        return cache_response
+
+    app_logging.debug(f'results were not cached')
+    record_that_response_not_cached(index_name, equivalent_query)
+    response = ES.get(index=index_name, id=doc_id)
+
+    seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+    CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
+
+    return response
+
+
 def get_es_query_cache_key(index_name, es_query):
     """
     Produces a key to save the data in the cache based on the parameters given
