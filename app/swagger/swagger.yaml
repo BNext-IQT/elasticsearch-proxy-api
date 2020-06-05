@@ -58,6 +58,33 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/ESProxyResponse'
+  /es_data/get_es_document/{index_name}/{doc_id}:
+    post:
+      tags:
+        - 'ES proxy'
+      summary: 'Get a document from elasticsearch'
+      description: 'Returns the data of a document from elasticsearch'
+      operationId: 'get_es_document'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index to which the document belongs"
+          required: true
+          type: 'string'
+          default: 'chembl_molecule'
+        - name: "doc_id"
+          in: "path"
+          description: "ID of the document to check"
+          required: true
+          type: 'string'
+          default: 'CHEMBL_59'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/EsDocResponse'
   /properties_configuration/property/{index_name}/{property_id}:
     get:
       tags:
@@ -184,3 +211,5 @@ definitions:
             type: 'object'
           default:
             type: 'object'
+  EsDocResponse:
+    type: 'object'
