@@ -43,6 +43,17 @@ def get_es_data(index_name, raw_es_query, raw_context, raw_contextual_sort_data)
     }
     return response
 
+def get_es_doc(index_name, doc_id):
+    """
+    :param index_name: name of the index to which the doc belongs
+    :param doc_id: id of the document to search for
+    :return: the json response from elasticsearch of the document
+    """
+    response = {
+        'msg': 'hola'
+    }
+    return response
+
 
 def get_items_with_context(index_name, raw_es_query, raw_context, raw_contextual_sort_data='{}'):
     """

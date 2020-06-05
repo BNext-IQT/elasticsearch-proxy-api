@@ -59,7 +59,7 @@ paths:
           schema:
             $ref: '#/definitions/ESProxyResponse'
   /es_data/get_es_document/{index_name}/{doc_id}:
-    post:
+    get:
       tags:
         - 'ES proxy'
       summary: 'Get a document from elasticsearch'
