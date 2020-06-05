@@ -2,7 +2,6 @@
 """
 Module that tests a group config
 """
-import requests
 from specific_tests import utils
 
 
