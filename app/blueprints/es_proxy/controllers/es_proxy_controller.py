@@ -3,7 +3,7 @@
 """
 from flask import Blueprint, jsonify, abort, request
 
-from app.request_validation.decorators import validate_form_with
+from app.request_validation.decorators import validate_form_with, validate_url_params_with
 from app.blueprints.es_proxy.controllers import marshmallow_schemas
 from app.blueprints.es_proxy.services import es_proxy_service
 from app import app_logging
@@ -42,6 +42,23 @@ def get_es_data():
     except es_proxy_service.ESProxyServiceError as error:
 
         abort(500, msg=f'Internal server error: {str(error)}')
+
+
+@ES_PROXY_BLUEPRINT.route('/get_es_document/<index_name>/<doc_id>', methods=['GET'])
+@validate_url_params_with(marshmallow_schemas.ESProxyDoc)
+def get_es_doc(index_name, doc_id):
+    """
+    :param index_name: name of the index to which the doc belongs
+    :param doc_id: id of the document to search for
+    :return: the json response with the es_doc data
+    """
+    try:
+        json_response = es_proxy_service.get_es_doc(index_name, doc_id)
+        return jsonify(json_response)
+    except es_proxy_service.ESProxyServiceError as error:
+        abort(500, msg=f'Internal server error: {str(error)}')
+    except es_proxy_service.ESDataNotFoundError as error:
+        abort(404)
 
 
 def sanitise_parameter(param_value):

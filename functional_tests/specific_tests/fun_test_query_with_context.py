@@ -117,7 +117,6 @@ def wait_until_job_finished(delayed_jobs_server_base_path, job_id):
     job_status = None
 
     while job_status != 'FINISHED':
-
         status_request = requests.get(status_url)
         print('Status request response code: ', status_request.status_code)
 
