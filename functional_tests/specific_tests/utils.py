@@ -1,6 +1,7 @@
 """
 Module with utils functions for the tests
 """
+import requests
 
 
 def get_url_for_get_es_data(server_base_url):
@@ -44,3 +45,21 @@ def print_es_response(response_text, max_chars=200):
         print(f'{response_text[0:max_chars]}...')
     else:
         print(response_text)
+
+
+def assert_get_request_succeeds(url_to_test):
+    """
+    tests that doing a get to the url returns a 200 code
+    :param url_to_test: url to test
+    """
+
+    print('url: ', url_to_test)
+
+    config_request = requests.get(url_to_test)
+
+    status_code = config_request.status_code
+    print(f'status_code: {status_code}')
+
+    response_text = config_request.text
+    print_es_response(response_text)
+    assert status_code == 200, 'The request failed!'

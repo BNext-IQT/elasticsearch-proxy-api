@@ -2,7 +2,6 @@
 """
 Module that tests a facets group config
 """
-import requests
 from specific_tests import utils
 
 
@@ -18,13 +17,4 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('-------------------------------------------')
 
     url = f'{server_base_url}/properties_configuration/facets/chembl_activity/browser_facets'
-    print('url: ', url)
-
-    config_request = requests.get(url)
-
-    status_code = config_request.status_code
-    print(f'status_code: {status_code}')
-
-    response_text = config_request.text
-    utils.print_es_response(response_text)
-    assert status_code == 200, 'The request failed!'
+    utils.assert_get_request_succeeds(url)
