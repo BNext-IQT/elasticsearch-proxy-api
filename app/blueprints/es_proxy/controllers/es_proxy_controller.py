@@ -53,13 +53,12 @@ def get_es_doc(index_name, doc_id):
     :return: the json response with the es_doc data
     """
     try:
-
         json_response = es_proxy_service.get_es_doc(index_name, doc_id)
         return jsonify(json_response)
-
     except es_proxy_service.ESProxyServiceError as error:
-
         abort(500, msg=f'Internal server error: {str(error)}')
+    except es_proxy_service.ESDataNotFoundError as error:
+        abort(404)
 
 
 def sanitise_parameter(param_value):

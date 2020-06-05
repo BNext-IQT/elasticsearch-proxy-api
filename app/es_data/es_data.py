@@ -5,11 +5,17 @@ import json
 import hashlib
 import base64
 
+import elasticsearch
+
 from app.es_connection import ES
 from app.cache import CACHE
 from app.config import RUN_CONFIG
 from app import app_logging
 from app.usage_statistics import statistics_saver
+
+
+class ESDataNotFoundError(Exception):
+    """Base class for exceptions in this file."""
 
 
 def get_es_response(index_name, es_query):
@@ -64,7 +70,11 @@ def get_es_doc(index_name, doc_id):
 
     app_logging.debug(f'results were not cached')
     record_that_response_not_cached(index_name, equivalent_query)
-    response = ES.get(index=index_name, id=doc_id)
+
+    try:
+        response = ES.get(index=index_name, id=doc_id)
+    except elasticsearch.exceptions.NotFoundError as error:
+        raise ESDataNotFoundError(repr(error))
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
     CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
