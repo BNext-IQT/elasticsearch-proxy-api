@@ -16,6 +16,8 @@ tags:
   description: 'Endpoints related to proxying elasticsearch'
 - name: 'Properties Configuration'
   description: 'Endpoints related to the properties configuration'
+- name: 'Contexts'
+  description: 'Endpoints related to the contextual data, e.g. Similarity search results, substructure search results, etc.'
 schemes:
 - "https"
 - "http"
@@ -187,6 +189,45 @@ paths:
           description: "success"
           schema:
             $ref: '#/definitions/GroupConfigResponse'
+  /contexts/get_context_data:
+    post:
+      tags:
+        - 'Contexts'
+      summary: 'Get data from a context'
+      description: 'Returns the data corresponding to the context described in the parameters'
+      operationId: 'get_context_data'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "context_type"
+          in: "formData"
+          description: "Type of the context to load, refers to the type of search for which to get the results"
+          required: true
+          type: 'string'
+          default: 'SIMILARITY'
+          enum: ['SIMILARITY', 'SUBSTRUCTURE', 'CONNECTIVITY', 'BLAST']
+        - name: "context_id"
+          in: "formData"
+          description: "ID of the context. The id of the search job for which to load the results"
+          required: true
+          type: 'string'
+          default: 'STRUCTURE_SEARCH-Ni1rjATkIGNsRJW-ajYLJrTM2yFfIJefN2HAFSQe4uE='
+        - name: "delayed_jobs_base_url"
+          in: "formData"
+          description: "URL of the Delayed Jobs used to run the job (STAGING, PROD, etc...)
+          so I know from which env load the results"
+          required: true
+          type: 'string'
+          default: 'https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs'
+          enum: ['https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs',
+          'http://www.ebi.ac.uk/chembl/interface_api/delayed_jobs',
+          'https://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs',
+          'http://wwwdev.ebi.ac.uk/chembl/interface_api/delayed_jobs']
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/ContextResponse'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -236,3 +277,5 @@ definitions:
     type: 'object'
   IDPropertiesResponse:
     type: 'array'
+  ContextResponse:
+    type: 'object'
