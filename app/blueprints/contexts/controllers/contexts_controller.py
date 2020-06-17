@@ -7,8 +7,8 @@ from app.request_validation.decorators import validate_form_with
 from app.blueprints.contexts.controllers import marshmallow_schemas
 from app.blueprints.contexts.services import contexts_service
 
-
 CONTEXTS_BLUEPRINT = Blueprint('contexts', __name__)
+
 
 @CONTEXTS_BLUEPRINT.route('/get_context_data', methods=['POST'])
 @validate_form_with(marshmallow_schemas.ContextDataRequest)
