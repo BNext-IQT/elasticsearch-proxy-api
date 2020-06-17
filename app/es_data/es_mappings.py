@@ -144,5 +144,5 @@ def get_id_properties_for_index(index_name):
     """
     id_properties = ID_PROPERTIES.get(index_name)
     if id_properties is None:
-        EsMappingsError(f'The index {index_name} does not exist or does not have an id property defined')
+        raise EsMappingsError(f'The index {index_name} does not exist or does not have an id property defined')
     return id_properties

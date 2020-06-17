@@ -4,6 +4,7 @@ Properties configuration service
 from app.properties_configuration import properties_configuration_manager
 from app.properties_configuration import groups_configuration_manager
 from app.properties_configuration import facets_groups_configuration_manager
+from app.es_data import es_mappings
 
 
 class PropertiesConfigServiceError(Exception):
@@ -64,5 +65,23 @@ def get_facets_group_config(index_name, group_name):
     except (properties_configuration_manager.PropertyConfiguration.PropertiesConfigurationManagerError,
             facets_groups_configuration_manager.FacetsGroupsConfiguration.FacetsGroupsConfigurationManagerError) \
             as error:
+
+        raise PropertiesConfigServiceError(repr(error))
+
+
+def get_index_properties_of_index(index_name):
+    """
+    :param index_name: name of the index to get the id properties
+    :return: a dict with the id properties of the index
+    """
+
+    try:
+
+        id_properties = es_mappings.get_id_properties_for_index(index_name)
+        return {
+            'id_properties': id_properties
+        }
+
+    except es_mappings.EsMappingsError as error:
 
         raise PropertiesConfigServiceError(repr(error))
