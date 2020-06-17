@@ -1,8 +1,9 @@
 """
 Module with utils functions for the tests
 """
-import requests
 import time
+
+import requests
 
 
 def get_url_for_get_es_data(server_base_url):
@@ -64,6 +65,7 @@ def assert_get_request_succeeds(url_to_test):
     response_text = config_request.text
     print_es_response(response_text)
     assert status_code == 200, 'The request failed!'
+
 
 def submit_similarity_search_job(delayed_jobs_server_base_path):
     """
