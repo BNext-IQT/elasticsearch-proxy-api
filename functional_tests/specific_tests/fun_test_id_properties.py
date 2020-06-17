@@ -16,5 +16,5 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('Testing getting the id property of an index')
     print('-------------------------------------------')
 
-    url = f'{server_base_url}/properties_configuration/group/id_properties/chembl_molecule'
+    url = f'{server_base_url}/properties_configuration/id_properties/chembl_molecule'
     utils.assert_get_request_succeeds(url)
