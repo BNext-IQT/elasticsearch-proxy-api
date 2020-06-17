@@ -26,3 +26,10 @@ class FacetsGroupConfigRequest(Schema):
     """
     index_name = fields.String(required=True)
     group_name = fields.String(required=True)
+
+
+class IDPropertiesRequest(Schema):
+    """
+    Class with the schema for getting the id properties of an index
+    """
+    index_name = fields.String(required=True)

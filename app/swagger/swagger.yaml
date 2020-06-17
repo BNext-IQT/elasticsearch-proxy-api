@@ -85,6 +85,27 @@ paths:
           description: "success"
           schema:
             $ref: '#/definitions/EsDocResponse'
+  /properties_configuration/id_properties/{index_name}:
+    get:
+      tags:
+        - 'Properties Configuration'
+      summary: 'Returns the id properties of an index'
+      description: 'Returns the list of properties that identify each item in an index'
+      operationId: 'get_index_id_property'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index for which to get the id properties"
+          required: true
+          type: 'string'
+          default: 'chembl_molecule'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/IDPropertiesResponse'
   /properties_configuration/property/{index_name}/{property_id}:
     get:
       tags:
@@ -213,3 +234,5 @@ definitions:
             type: 'object'
   EsDocResponse:
     type: 'object'
+  IDPropertiesResponse:
+    type: 'array'
