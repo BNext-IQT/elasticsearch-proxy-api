@@ -3,7 +3,6 @@
 Module that tests an es_query with context
 """
 import json
-import time
 
 import requests
 
@@ -21,8 +20,8 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('Testing a es_query with context')
     print('-------------------------------------------')
 
-    job_id = submit_similarity_search_job(delayed_jobs_server_base_path)
-    wait_until_job_finished(delayed_jobs_server_base_path, job_id)
+    job_id = utils.submit_similarity_search_job(delayed_jobs_server_base_path)
+    utils.wait_until_job_finished(delayed_jobs_server_base_path, job_id)
     print('Now going to make a request with this context')
 
     url = utils.get_url_for_get_es_data(server_base_url)
@@ -72,58 +71,3 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('metadata: ', metadata)
 
     assert metadata['total_results'] > 0, 'There should be more than 0 results!'
-
-
-def submit_similarity_search_job(delayed_jobs_server_base_path):
-    """
-    :param delayed_jobs_server_base_path: base path of the delayed jobs server
-    :return: job_id
-    """
-    print('Launching a similarity search job...')
-    submission_url = utils.get_url_for_similarity_job_submission(delayed_jobs_server_base_path)
-    print('submission_url: ', submission_url)
-
-    payload = {
-        'search_type': 'SIMILARITY',
-        'search_term': 'NCCc1ccc(O)c(O)c1',
-        'threshold': 40,
-        'dl__ignore_cache': False
-    }
-    print('payload: ', payload)
-
-    submit_request = requests.post(submission_url, data=payload)
-    submission_status_code = submit_request.status_code
-    print(f'submission_status_code: {submission_status_code}')
-    assert submission_status_code == 200, 'Job could not be submitted!'
-
-    submission_response = submit_request.json()
-    job_id = submission_response.get('job_id')
-    print('job_id: ', job_id)
-
-    return job_id
-
-
-def wait_until_job_finished(delayed_jobs_server_base_path, job_id):
-    """
-    Waits until the job finished
-    :param delayed_jobs_server_base_path: base path of the delayed jobs server
-    :param job_id: id of the job
-    """
-    print('Waiting until job finishes...')
-
-    status_url = utils.get_url_for_job_status(delayed_jobs_server_base_path, job_id)
-    print('status_url: ', status_url)
-
-    job_status = None
-
-    while job_status != 'FINISHED':
-        status_request = requests.get(status_url)
-        print('Status request response code: ', status_request.status_code)
-
-        status_response = status_request.json()
-        job_status = status_response.get('status')
-        job_progress = status_response.get('progress')
-
-        print('job_status: ', job_status)
-        print('job_progress: ', job_progress)
-        time.sleep(1)
