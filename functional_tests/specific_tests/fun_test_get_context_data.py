@@ -23,7 +23,7 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('Now going to load this context')
 
     context_params = {
-        'delayed_jobs_base_url': 'https://www.ebi.ac.uk/chembl/interface_api/delayed_jobs',
+        'delayed_jobs_base_url': delayed_jobs_server_base_path,
         'context_type': 'SIMILARITY',
         'context_id': f'{job_id}'
     }
