@@ -45,3 +45,17 @@ spec:
   ports:
   - port: 5000
     targetPort: 5000
+--
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: elasticsearch-proxy-api-server
+  namespace: <NAMESPACE>
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: elasticsearch-proxy-api-server
+  minReplicas: <MIN_NUM_REPLICAS>
+  maxReplicas: <MAX_NUM_REPLICAS>
+  targetCPUUtilizationPercentage: <TARGET_CPU_UTILIZATION_PERCENTAGE>

@@ -144,6 +144,9 @@ deploy_to_staging:
   - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
   - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<MIN_NUM_REPLICAS>~${MIN_NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<MAX_NUM_REPLICAS>~${MAX_NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<TARGET_CPU_UTILIZATION_PERCENTAGE>~${TARGET_CPU_UTILIZATION_PERCENTAGE_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
   - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
