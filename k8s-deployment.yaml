@@ -45,6 +45,7 @@ spec:
   ports:
   - port: 5000
     targetPort: 5000
+
 --
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
