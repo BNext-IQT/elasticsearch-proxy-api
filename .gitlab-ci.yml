@@ -12,14 +12,17 @@ variables:
   CONFIG_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.yml
   CONFIG_GUNICORN_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/staging.gunicorn.config.py
   INGRESS_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/ingress-staging.yml
+  AUTOSCALER_STAGING_FILE_PATH: ${CONFIGS_FOLDER}/autoscaler-staging.yml
   # Config prod_hx
   CONFIG_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.yml
   CONFIG_GUNICORN_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/prod_hx.gunicorn.config.py
   INGRESS_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/ingress-prod_hx.yml
+  AUTOSCALER_PROD_HX_FILE_PATH: ${CONFIGS_FOLDER}/autoscaler-prod_hx.yml
   # Config prod_hh
   CONFIG_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/prod_hh.yml
   CONFIG_GUNICORN_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/prod_hh.gunicorn.config.py
   INGRESS_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/ingress-prod_hh.yml
+  AUTOSCALER_PROD_HH_FILE_PATH: ${CONFIGS_FOLDER}/autoscaler-prod_hh.yml
 
 image: docker:latest
 
@@ -118,6 +121,7 @@ prepare_config_staging:
       - ${CONFIG_STAGING_FILE_PATH}
       - ${CONFIG_GUNICORN_STAGING_FILE_PATH}
       - ${INGRESS_STAGING_FILE_PATH}
+      - ${AUTOSCALER_STAGING_FILE_PATH}
 
 deploy_to_staging:
   stage: deploy_to_staging
@@ -155,6 +159,8 @@ deploy_to_staging:
   - cat ${INGRESS_STAGING_FILE_PATH}
   - kubectl apply -n ${CHEMBL_NS_STAGING} -f ${INGRESS_STAGING_FILE_PATH}
   - kubectl describe ingress -n ${CHEMBL_NS_STAGING}
+  - cat ${AUTOSCALER_STAGING_FILE_PATH}
+  - kubectl apply -n ${CHEMBL_NS_STAGING} -f ${AUTOSCALER_STAGING_FILE_PATH}
 #
 ## ----------------------------------------------------------------------------------------------------------------------
 ## Test staging
@@ -192,6 +198,7 @@ prepare_config_prod_hx:
       - ${CONFIG_PROD_HX_FILE_PATH}
       - ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
       - ${INGRESS_PROD_HX_FILE_PATH}
+      - ${AUTOSCALER_PROD_HX_FILE_PATH}
 
 deploy_to_prod_hx:
   stage: deploy_to_prod_hx
@@ -228,6 +235,8 @@ deploy_to_prod_hx:
     - cat ${INGRESS_PROD_HX_FILE_PATH}
     - kubectl apply -n ${CHEMBL_NS_PROD} -f ${INGRESS_PROD_HX_FILE_PATH}
     - kubectl describe ingress -n ${CHEMBL_NS_PROD}
+    - cat ${AUTOSCALER_PROD_HX_FILE_PATH}
+    - kubectl apply -n ${CHEMBL_NS_PROD} -f ${AUTOSCALER_PROD_HX_FILE_PATH}
 
 functional_tests_prod_hx:
   stage: test_prod_hx
@@ -261,6 +270,7 @@ prepare_config_prod_hh:
       - ${CONFIG_PROD_HH_FILE_PATH}
       - ${CONFIG_GUNICORN_PROD_HH_FILE_PATH}
       - ${INGRESS_PROD_HH_FILE_PATH}
+      - ${AUTOSCALER_PROD_HH_FILE_PATH}
 
 deploy_to_prod_hh:
   stage: deploy_to_prod_hh
@@ -297,6 +307,8 @@ deploy_to_prod_hh:
     - cat ${INGRESS_PROD_HH_FILE_PATH}
     - kubectl apply -n ${CHEMBL_NS_PROD} -f ${INGRESS_PROD_HH_FILE_PATH}
     - kubectl describe ingress -n ${CHEMBL_NS_PROD}
+    - cat ${AUTOSCALER_PROD_HH_FILE_PATH}
+    - kubectl apply -n ${CHEMBL_NS_PROD} -f ${AUTOSCALER_PROD_HH_FILE_PATH}
 
 functional_tests_prod_hh:
   stage: test_prod_hh
