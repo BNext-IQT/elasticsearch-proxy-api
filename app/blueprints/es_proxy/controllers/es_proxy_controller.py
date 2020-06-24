@@ -7,6 +7,8 @@ from app.request_validation.decorators import validate_form_with, validate_url_p
 from app.blueprints.es_proxy.controllers import marshmallow_schemas
 from app.blueprints.es_proxy.services import es_proxy_service
 from app import app_logging
+from app.http_cache import http_cache_utils
+
 
 ES_PROXY_BLUEPRINT = Blueprint('es_proxy', __name__)
 
@@ -37,7 +39,9 @@ def get_es_data():
             raw_context,
             raw_contextual_sort_data)
 
-        return jsonify(json_response)
+        http_response = jsonify(json_response)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except es_proxy_service.ESProxyServiceError as error:
 
@@ -54,7 +58,9 @@ def get_es_doc(index_name, doc_id):
     """
     try:
         json_response = es_proxy_service.get_es_doc(index_name, doc_id)
-        return jsonify(json_response)
+        http_response = jsonify(json_response)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
     except es_proxy_service.ESProxyServiceError as error:
         abort(500, msg=f'Internal server error: {str(error)}')
     except es_proxy_service.ESDataNotFoundError as error:
