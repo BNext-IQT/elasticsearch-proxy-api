@@ -6,6 +6,7 @@ from flask import Blueprint, jsonify, abort
 from app.blueprints.properties_config.controllers import marshmallow_schemas
 from app.request_validation.decorators import validate_url_params_with
 from app.blueprints.properties_config.services import properties_config_service
+from app.http_cache import http_cache_utils
 
 PROPERTIES_CONFIG_BLUEPRINT = Blueprint('properties_configuration', __name__)
 
@@ -21,7 +22,9 @@ def get_property_config(index_name, property_id):
     try:
 
         properties_config = properties_config_service.get_property_config(index_name, property_id)
-        return jsonify(properties_config)
+        http_response = jsonify(properties_config)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except properties_config_service.PropertiesConfigServiceError as error:
 
@@ -39,7 +42,9 @@ def get_group_config(index_name, group_name):
     try:
 
         group_config = properties_config_service.get_group_config(index_name, group_name)
-        return jsonify(group_config)
+        http_response = jsonify(group_config)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except properties_config_service.PropertiesConfigServiceError as error:
 
@@ -57,7 +62,9 @@ def get_facet_group_config(index_name, group_name):
     try:
 
         facet_group_config = properties_config_service.get_facets_group_config(index_name, group_name)
-        return jsonify(facet_group_config)
+        http_response = jsonify(facet_group_config)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except properties_config_service.PropertiesConfigServiceError as error:
 
@@ -73,7 +80,9 @@ def get_index_id_properties(index_name):
     try:
 
         id_properties = properties_config_service.get_index_properties_of_index(index_name)
-        return jsonify(id_properties)
+        http_response = jsonify(id_properties)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except properties_config_service.PropertiesConfigServiceError as error:
 

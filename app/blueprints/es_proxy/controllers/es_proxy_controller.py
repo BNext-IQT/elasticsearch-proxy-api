@@ -39,7 +39,9 @@ def get_es_data():
             raw_context,
             raw_contextual_sort_data)
 
-        return jsonify(json_response)
+        http_response = jsonify(json_response)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
 
     except es_proxy_service.ESProxyServiceError as error:
 

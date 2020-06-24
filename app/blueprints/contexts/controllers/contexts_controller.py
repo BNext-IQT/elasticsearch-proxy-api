@@ -6,6 +6,8 @@ from flask import Blueprint, jsonify, abort, request
 from app.request_validation.decorators import validate_form_with
 from app.blueprints.contexts.controllers import marshmallow_schemas
 from app.blueprints.contexts.services import contexts_service
+from app.http_cache import http_cache_utils
+
 
 CONTEXTS_BLUEPRINT = Blueprint('contexts', __name__)
 
@@ -31,6 +33,8 @@ def get_context_data():
 
     try:
         context_data = contexts_service.get_context_data(context_dict)
-        return jsonify(context_data)
+        http_response = jsonify(context_data)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
     except contexts_service.ContextError as error:
         abort(500, repr(error))
