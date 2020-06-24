@@ -11,6 +11,6 @@ def add_cache_headers_to_response(response, hours=24):
     :return: the response object with the corresponding cache headers
     """
     expires = datetime.utcnow() + timedelta(hours=hours)
-    response.headers.add('Expires', expires.strftime("%a, %d %b %Y %H:%M:%S UTC"))
+    response.headers.add('Expires', expires.strftime("%a, %d %b %Y %H:%M:%S GMT"))
     response.headers.add('Cache-Control', 'public,max-age=%d' % int(3600 * hours))
     response.add_etag()
