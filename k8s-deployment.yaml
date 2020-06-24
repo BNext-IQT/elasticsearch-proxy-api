@@ -17,6 +17,11 @@ spec:
       - name: elasticsearch-proxy-api
         image: <SERVER_IMAGE_TAG>
         imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: <CPU_LIMIT>
+          requests:
+            cpu: <CPU_REQUESTED>
         volumeMounts:
         - name: run-config
           mountPath: '/etc/run_config/'

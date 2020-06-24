@@ -6,7 +6,7 @@ import re
 import requests
 
 from app.config import RUN_CONFIG
-from app.cache import CACHE
+from app import cache
 from app import app_logging
 
 from utils import id_properties
@@ -71,7 +71,7 @@ def load_context_index(context_id, id_properties_list, context):
     """
 
     context_index_key = 'context_index-{}'.format(context_id)
-    context_index = CACHE.get(context_index_key)
+    context_index = cache.fail_proof_get(context_index_key)
     if context_index is None:
         context_index = {}
 
@@ -80,6 +80,6 @@ def load_context_index(context_id, id_properties_list, context):
             context_index[id_value] = item
             context_index[id_value]['index'] = index_number
 
-        CACHE.set(context_index_key, context_index, 3600)
+        cache.fail_proof_set(context_index_key, context_index, 3600)
 
     return context_index

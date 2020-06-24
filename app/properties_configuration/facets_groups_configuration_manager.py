@@ -6,7 +6,7 @@ import os
 import yaml
 
 from app.properties_configuration import properties_configuration_manager
-from app.cache import CACHE
+from app import cache
 from app import app_logging
 from app.config import RUN_CONFIG
 
@@ -40,7 +40,7 @@ class FacetsGroupsConfiguration:
         cache_key = f'facets_config_for_group_{index_name}-{group_name}_3'
         app_logging.debug(f'cache_key: {cache_key}')
 
-        cache_response = CACHE.get(key=cache_key)
+        cache_response = cache.fail_proof_get(key=cache_key)
         if cache_response is not None:
             app_logging.debug(f'results were cached')
             return cache_response
@@ -72,7 +72,7 @@ class FacetsGroupsConfiguration:
         }
 
         seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
+        cache.fail_proof_set(key=cache_key, value=config, timeout=seconds_valid)
         return config
 
     def get_facets_config_for_properties(self, props_dict, index_name):

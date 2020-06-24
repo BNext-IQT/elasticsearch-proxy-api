@@ -8,7 +8,7 @@ from elasticsearch.exceptions import NotFoundError
 
 from app.es_data import es_mappings
 from app import app_logging
-from app.cache import CACHE
+from app import cache
 from app.config import RUN_CONFIG
 
 
@@ -45,7 +45,7 @@ class PropertyConfiguration:
         cache_key = f'config_for_{index_name}-{prop_id}'
         app_logging.debug(f'cache_key: {cache_key}')
 
-        cache_response = CACHE.get(key=cache_key)
+        cache_response = cache.fail_proof_get(key=cache_key)
         if cache_response is not None:
             app_logging.debug(f'results were cached')
             return cache_response
@@ -59,7 +59,7 @@ class PropertyConfiguration:
                                              property_override_description)
 
         seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
+        cache.fail_proof_set(key=cache_key, value=config, timeout=seconds_valid)
         return config
 
     def get_property_base_es_description(self, index_name, prop_id):
