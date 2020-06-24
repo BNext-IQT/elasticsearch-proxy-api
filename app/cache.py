@@ -18,6 +18,7 @@ def fail_proof_get(key):
     try:
         item = CACHE.get(key=key)
         return item
+    # pylint: disable=no-member
     except pylibmc.ConnectionError as error:
         app_logging.error(f"Error while reading from cache({str(error)}). Returning None and continuing. Don't worry")
         return None
@@ -31,5 +32,6 @@ def fail_proof_set(key, value, timeout):
     """
     try:
         CACHE.set(key=key, value=value, timeout=timeout)
+    # pylint: disable=no-member
     except pylibmc.TooBig as error:
         app_logging.error(f"Error while writing to cache({str(error)}). Continuing. Don't worry")

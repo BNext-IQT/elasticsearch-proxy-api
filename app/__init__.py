@@ -29,7 +29,8 @@ def create_app():
     with flask_app.app_context():
         CACHE.init_app(flask_app)
 
-        if RUN_CONFIG.get('cache_config').get('CACHE_TYPE')=='memcached':
+        # pylint: disable=protected-access
+        if RUN_CONFIG.get('cache_config').get('CACHE_TYPE') == 'memcached':
             CACHE.cache._client.behaviors['tcp_nodelay'] = True
             CACHE.cache._client.behaviors['_noreply'] = True
             CACHE.cache._client.behaviors['no_block'] = True
