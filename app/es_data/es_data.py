@@ -8,7 +8,7 @@ import base64
 import elasticsearch
 
 from app.es_connection import ES
-from app.cache import CACHE
+from app import cache
 from app.config import RUN_CONFIG
 from app import app_logging
 from app.usage_statistics import statistics_saver
@@ -28,7 +28,7 @@ def get_es_response(index_name, es_query):
     cache_key = get_es_query_cache_key(index_name, es_query)
     app_logging.debug(f'cache_key: {cache_key}')
 
-    cache_response = CACHE.get(key=cache_key)
+    cache_response = cache.fail_proof_get(key=cache_key)
     if cache_response is not None:
         app_logging.debug(f'results were cached')
         record_that_response_was_cached(index_name, es_query)
@@ -39,7 +39,7 @@ def get_es_response(index_name, es_query):
     response = ES.search(index=index_name, body=es_query)
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-    CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
+    cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
 
     return response
 
@@ -62,7 +62,7 @@ def get_es_doc(index_name, doc_id):
         }
     }
 
-    cache_response = CACHE.get(key=cache_key)
+    cache_response = cache.fail_proof_get(key=cache_key)
     if cache_response is not None:
         app_logging.debug(f'results were cached')
         record_that_response_was_cached(index_name, equivalent_query)
@@ -77,7 +77,7 @@ def get_es_doc(index_name, doc_id):
         raise ESDataNotFoundError(repr(error))
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-    CACHE.set(key=cache_key, value=response, timeout=seconds_valid)
+    cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
 
     return response
 

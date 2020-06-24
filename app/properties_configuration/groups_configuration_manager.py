@@ -6,7 +6,7 @@ import os
 import yaml
 
 from app import app_logging
-from app.cache import CACHE
+from app import cache
 from app.config import RUN_CONFIG
 from app.properties_configuration import properties_configuration_manager
 
@@ -68,7 +68,7 @@ class GroupConfiguration:
         cache_key = f'config_for_group_{index_name}-{group_name}'
         app_logging.debug(f'cache_key: {cache_key}')
 
-        cache_response = CACHE.get(key=cache_key)
+        cache_response = cache.fail_proof_get(key=cache_key)
         if cache_response is not None:
             app_logging.debug(f'results were cached')
             return cache_response
@@ -93,7 +93,7 @@ class GroupConfiguration:
             config = {'properties': props_configs}
 
         seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-        CACHE.set(key=cache_key, value=config, timeout=seconds_valid)
+        cache.fail_proof_set(key=cache_key, value=config, timeout=seconds_valid)
 
         return config
 

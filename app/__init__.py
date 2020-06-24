@@ -29,6 +29,15 @@ def create_app():
     with flask_app.app_context():
         CACHE.init_app(flask_app)
 
+        if RUN_CONFIG.get('cache_config').get('CACHE_TYPE')=='memcached':
+            CACHE.cache._client.behaviors['tcp_nodelay'] = True
+            CACHE.cache._client.behaviors['_noreply'] = True
+            CACHE.cache._client.behaviors['no_block'] = True
+            CACHE.cache._client.behaviors['remove_failed'] = 10
+            CACHE.cache._client.behaviors['retry_timeout'] = 10
+            CACHE.cache._client.behaviors['retry_timeout'] = 600
+
+
     flask_app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=f'{base_path}/swagger')
     flask_app.register_blueprint(ES_PROXY_BLUEPRINT, url_prefix=f'{base_path}/es_data')
     flask_app.register_blueprint(PROPERTIES_CONFIG_BLUEPRINT, url_prefix=f'{base_path}/properties_configuration')
