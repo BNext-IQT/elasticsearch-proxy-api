@@ -144,6 +144,8 @@ deploy_to_staging:
   - cat ${CONFIG_GUNICORN_STAGING_FILE_PATH}
   - sed -i "s~<NAMESPACE>~${CHEMBL_NS_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<CPU_LIMIT>~${CPU_LIMIT_STAGING}~" k8s-deployment.yaml
+  - sed -i "s~<CPU_REQUESTED>~${CPU_REQUESTED_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
   - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
   - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_STAGING}~" k8s-deployment.yaml
@@ -215,6 +217,8 @@ deploy_to_prod_hx:
     - cat ${CONFIG_GUNICORN_PROD_HX_FILE_PATH}
     - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
     - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<CPU_LIMIT>~${CPU_LIMIT_PROD_HX}~" k8s-deployment.yaml
+    - sed -i "s~<CPU_REQUESTED>~${CPU_REQUESTED_PROD_HX}~" k8s-deployment.yaml
     - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
     - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
     - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HX}~" k8s-deployment.yaml
@@ -283,6 +287,8 @@ deploy_to_prod_hh:
     - sed -i "s~<NAMESPACE>~${CHEMBL_NS_PROD}~" k8s-deployment.yaml
     - sed -i "s~<NUM_REPLICAS>~${NUM_REPLICAS_PROD_HH}~" k8s-deployment.yaml
     - sed -i "s~<SERVER_IMAGE_TAG>~${SERVER_IMAGE_TAG}~" k8s-deployment.yaml
+    - sed -i "s~<CPU_LIMIT>~${CPU_LIMIT_PROD_HH}~" k8s-deployment.yaml
+    - sed -i "s~<CPU_REQUESTED>~${CPU_REQUESTED_PROD_HH}~" k8s-deployment.yaml
     - sed -i "s~<RUN_CONFIG_SECRET_NAME>~${RUN_CONFIG_SECRET_NAME_PROD_HH}~" k8s-deployment.yaml
     - sed -i "s~<GUNICORN_CONFIG_SECRET_NAME>~${GUNICORN_CONFIG_SECRET_NAME_PROD_HH}~" k8s-deployment.yaml
     - cat k8s-deployment.yaml

@@ -19,9 +19,9 @@ spec:
         imagePullPolicy: Always
         resources:
           limits:
-            cpu: 500m
+            cpu: <CPU_LIMIT>
           requests:
-            cpu: 200m
+            cpu: <CPU_REQUESTED>
         volumeMounts:
         - name: run-config
           mountPath: '/etc/run_config/'
