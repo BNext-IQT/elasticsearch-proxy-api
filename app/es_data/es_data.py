@@ -36,7 +36,15 @@ def get_es_response(index_name, es_query):
 
     app_logging.debug(f'results were not cached')
     record_that_response_not_cached(index_name, es_query)
-    response = ES.search(index=index_name, body=es_query)
+
+    try:
+        response = ES.search(index=index_name, body=es_query)
+    except elasticsearch.exceptions.RequestError as error:
+        app_logging.error(f'This query caused an error: ')
+        app_logging.error(f'index_name:{index_name}')
+        app_logging.error(f'es_query:')
+        app_logging.error(es_query)
+        raise error
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
     cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
