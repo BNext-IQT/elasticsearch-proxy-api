@@ -64,6 +64,13 @@ def save_index_usage_record(es_index, es_full_query, es_request_digest, is_cache
     save_record_to_elasticsearch(cache_record_dict, index_name)
 
 
+def save_free_text_search_record(time_taken):
+    """
+    saves the record in the monitorint elasticsearch with the parameters given
+    :param time_taken: time taken to process the search
+    """
+    print('SAVE FREE TEXT SEARCH: ', time_taken)
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Saving records to elasticsearch
 # ----------------------------------------------------------------------------------------------------------------------

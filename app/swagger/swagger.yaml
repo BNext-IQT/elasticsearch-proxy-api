@@ -314,3 +314,7 @@ definitions:
     properties:
       parsed_query:
         type: 'object'
+      best_es_base_queries:
+        type: 'object'
+      sorted_indexes_by_score:
+        type: 'object'

@@ -10,4 +10,11 @@ def parse_search(search_term, es_indexes, selected_es_index):
     :param selected_es_index: es index to focus on
     :return: the query to send to elasticsearch based on the search term provided
     """
-    return {'parsed_query': 'hola'}
+
+    response_dict = {
+        'parsed_query': {},
+        'best_es_base_queries': {},
+        'sorted_indexes_by_score': {}
+    }
+
+    return response_dict
