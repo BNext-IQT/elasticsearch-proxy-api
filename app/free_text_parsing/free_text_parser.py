@@ -3,8 +3,10 @@ Entry module for the free text parsing package
 """
 import re
 
-# from app.free_text_parsing.parser import PARSER
+import arpeggio
 
+from app.free_text_parsing.parser import PARSER
+from app.free_text_parsing.grammar.terms_visitor import TERMS_VISITOR
 
 def parse_query_str(query_string: str):
     """
@@ -14,10 +16,8 @@ def parse_query_str(query_string: str):
     if len(query_string.strip()) == 0:
         return {}
     query_string = re.sub(r'[\s&&[^\n]]+', ' ', query_string)
-    # parse_tree = PARSER.parse(query_string)
-
-    return 'here'
-    result = arpeggio.visit_parse_tree(pt, TermsVisitor())
+    parse_tree = PARSER.parse(query_string)
+    result = arpeggio.visit_parse_tree(parse_tree, TERMS_VISITOR)
     return result
 
 
@@ -32,7 +32,7 @@ def parse_search(search_term, es_indexes, selected_es_index):
     parsed_query = parse_query_str(search_term)
 
     response_dict = {
-        'parsed_query': {},
+        'parsed_query': parsed_query,
         'best_es_base_queries': {},
         'sorted_indexes_by_score': {}
     }
