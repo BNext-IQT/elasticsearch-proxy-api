@@ -69,7 +69,19 @@ def save_free_text_search_record(time_taken):
     saves the record in the monitorint elasticsearch with the parameters given
     :param time_taken: time taken to process the search
     """
-    print('SAVE FREE TEXT SEARCH: ', time_taken)
+
+    doc = {
+        'search_type': 'FREE_TEXT',
+        'time_taken': time_taken,
+        'host': 'es_proxy_api_k8s',
+        'is_new': False,
+        'request_date': datetime.utcnow().timestamp() * 1000,
+        'run_env_type': RUN_CONFIG.get('run_env')
+    }
+
+    index_name = RUN_CONFIG.get('usage_statistics').get('search_statistics_index')
+    save_record_to_elasticsearch(doc, index_name)
+
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Saving records to elasticsearch
