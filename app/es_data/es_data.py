@@ -4,6 +4,7 @@ Module that returns data from elascticsearch
 import json
 import hashlib
 import base64
+import time
 
 import elasticsearch
 
@@ -28,17 +29,26 @@ def get_es_response(index_name, es_query):
     cache_key = get_es_query_cache_key(index_name, es_query)
     app_logging.debug(f'cache_key: {cache_key}')
 
+    start_time = time.time()
     cache_response = cache.fail_proof_get(key=cache_key)
     if cache_response is not None:
+        end_time = time.time()
+        time_taken = end_time - start_time
         app_logging.debug(f'results were cached')
-        record_that_response_was_cached(index_name, es_query)
+        record_that_response_was_cached(index_name, es_query, time_taken)
         return cache_response
 
     app_logging.debug(f'results were not cached')
-    record_that_response_not_cached(index_name, es_query)
 
     try:
+
+        start_time = time.time()
         response = ES.search(index=index_name, body=es_query)
+        end_time = time.time()
+        time_taken = end_time - start_time
+
+        record_that_response_not_cached(index_name, es_query, time_taken)
+
     except elasticsearch.exceptions.RequestError as error:
         app_logging.error(f'This query caused an error: ')
         app_logging.error(f'index_name:{index_name}')
@@ -70,17 +80,24 @@ def get_es_doc(index_name, doc_id):
         }
     }
 
+    start_time = time.time()
     cache_response = cache.fail_proof_get(key=cache_key)
     if cache_response is not None:
+        end_time = time.time()
+        time_taken = end_time - start_time
         app_logging.debug(f'results were cached')
-        record_that_response_was_cached(index_name, equivalent_query)
+        record_that_response_was_cached(index_name, equivalent_query, time_taken)
         return cache_response
 
     app_logging.debug(f'results were not cached')
-    record_that_response_not_cached(index_name, equivalent_query)
 
     try:
+        start_time = time.time()
         response = ES.get(index=index_name, id=doc_id)
+        end_time = time.time()
+        time_taken = end_time - start_time
+
+        record_that_response_not_cached(index_name, equivalent_query, time_taken)
     except elasticsearch.exceptions.NotFoundError as error:
         raise ESDataNotFoundError(repr(error))
 
@@ -114,23 +131,25 @@ def get_es_request_digest(es_query):
     return base64_search_data_hash
 
 
-def record_that_response_was_cached(index_name, es_query):
+def record_that_response_was_cached(index_name, es_query, time_taken):
     """
     Records that a response was already cached
     :param index_name: name of the index queried
     :param es_query: the query sent
+    :param time_taken: time taken (seconds) to get the data
     """
     es_request_digest = get_es_request_digest(es_query)
     is_cached = True
-    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached)
+    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached, time_taken)
 
 
-def record_that_response_not_cached(index_name, es_query):
+def record_that_response_not_cached(index_name, es_query, time_taken):
     """
     Records that a response was not cached
     :param index_name: name of the index queried
     :param es_query: the query sent
+    :param time_taken: time taken (seconds) to get the data
     """
     es_request_digest = get_es_request_digest(es_query)
     is_cached = False
-    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached)
+    statistics_saver.save_index_usage_record(index_name, es_query, es_request_digest, is_cached, time_taken)
