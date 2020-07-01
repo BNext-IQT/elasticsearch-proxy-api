@@ -46,9 +46,11 @@ class TestStatisticsSaver(unittest.TestCase):
         is_cached = True
         request_date = datetime.now().timestamp() * 1000
         run_env_type = RUN_CONFIG.get('run_env')
+        time_taken = 2.1
 
         usage_record_dict_got = statistics_saver.get_index_usage_record_dict(es_index, full_es_query, es_request_digest,
-                                                                             is_cached, request_date, run_env_type)
+                                                                             is_cached, request_date, run_env_type,
+                                                                             time_taken)
 
         es_index_got = usage_record_dict_got.get('es_index')
         self.assertEqual(es_index_got, es_index, msg='The es index was not calculated correctly')

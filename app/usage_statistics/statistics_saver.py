@@ -10,7 +10,8 @@ from app import app_logging
 from app.es_monitoring_connection import ES_MONITORING
 
 
-def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type):
+def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type,
+                                time_taken):
     """
     :param es_index: index used in the request
     :param es_full_query: full query sent requested
@@ -18,6 +19,7 @@ def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_c
     :param is_cached: whether the data was cached or not
     :param request_date: timestamp for the request date
     :param run_env_type: type of run environment
+    :param time_taken: time taken (seconds) to get the data
     :return: a dict to be used to save the cache statistics in the elasticsearch index
     """
 
@@ -31,11 +33,12 @@ def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_c
         'es_request_digest': es_request_digest,
         'is_cached': is_cached,
         'request_date': request_date,
-        'run_env_type': run_env_type
+        'run_env_type': run_env_type,
+        'time_taken': time_taken
     }
 
 
-def save_index_usage_record(es_index, es_full_query, es_request_digest, is_cached):
+def save_index_usage_record(es_index, es_full_query, es_request_digest, is_cached, time_taken):
     """
     Saves the job record in elasticsearch with the parameters given
     :param es_index: index used in the request
@@ -43,13 +46,14 @@ def save_index_usage_record(es_index, es_full_query, es_request_digest, is_cache
     :param es_request_digest: digest of the request
     :param is_cached: whether the data was cached or not
     :return: a dict to be used to save the cache statistics in the elasticsearch index
+    :param time_taken: time taken (seconds) to get the data
     """
 
     request_date = datetime.now().timestamp() * 1000
     run_env_type = RUN_CONFIG.get('run_env')
 
     cache_record_dict = get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date,
-                                                    run_env_type)
+                                                    run_env_type, time_taken)
 
     index_name = RUN_CONFIG.get('usage_statistics').get('cache_statistics_index')
 
