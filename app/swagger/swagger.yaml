@@ -245,13 +245,13 @@ paths:
           default: 'MDCK'
         - name: 'es_indexes'
           in: 'formData'
-          description: 'indexes in which the search will be done'
+          description: 'indexes in which the search will be done, separated by a comma'
           required: true
           type: 'string'
           default: 'chembl_molecule,chembl_target,chembl_assay,chembl_document,chembl_cell_line,chembl_tissue'
         - name: 'selected_es_index'
           in: 'formData'
-          description: 'es index to focus'
+          description: 'es index to focus on'
           type: 'string'
       responses:
         '200':
