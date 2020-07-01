@@ -1,9 +1,10 @@
 """
 Search parser controller
 """
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, jsonify
 
 SEARCH_PARSER_BLUEPRINT = Blueprint('search_parsing', __name__)
+
 
 @SEARCH_PARSER_BLUEPRINT.route('/parse_free_text_search', methods=['POST'])
 def parse_free_text_search():

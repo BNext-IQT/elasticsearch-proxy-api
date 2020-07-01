@@ -10,7 +10,8 @@ from app import app_logging
 from app.es_monitoring_connection import ES_MONITORING
 
 
-def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type, time_taken):
+def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type,
+                                time_taken):
     """
     :param es_index: index used in the request
     :param es_full_query: full query sent requested
