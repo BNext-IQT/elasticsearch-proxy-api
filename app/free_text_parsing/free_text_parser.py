@@ -6,7 +6,9 @@ import re
 import arpeggio
 
 from app.free_text_parsing.parser import PARSER
-from app.free_text_parsing.grammar.terms_visitor import TERMS_VISITOR
+from app.free_text_parsing.query_builder.query_builder import QueryBuilder
+from app.free_text_parsing.terms_visitor import TERMS_VISITOR
+
 
 def parse_query_str(query_string: str):
     """
@@ -31,10 +33,13 @@ def parse_search(search_term, es_indexes, selected_es_index):
 
     parsed_query = parse_query_str(search_term)
 
+    indexes_list = es_indexes.split(',')
+    best_queries, sorted_indexes_by_score = QueryBuilder.get_best_es_query(parsed_query, indexes_list, selected_es_index)
+
     response_dict = {
         'parsed_query': parsed_query,
-        'best_es_base_queries': {},
-        'sorted_indexes_by_score': {}
+        'best_es_base_queries': best_queries,
+        'sorted_indexes_by_score': sorted_indexes_by_score
     }
 
     return response_dict
