@@ -88,6 +88,9 @@ def do_multisearch(body):
 
     record_that_response_not_cached('multisearch', {'query':body}, time_taken)
 
+    seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+    cache.fail_proof_set(key=cache_key, value=result, timeout=seconds_valid)
+
     return result
 
 
