@@ -61,12 +61,33 @@ def get_es_response(index_name, es_query):
 
     return response
 
+
 def do_multisearch(body):
     """
     :param body: body of the multisearch
     :return: the result of the multisearch
     """
+    cache_key = get_multisearch_cache_key(body)
+    app_logging.debug(f'cache_key: {cache_key}')
+
+    start_time = time.time()
+    cache_response = cache.fail_proof_get(key=cache_key)
+    if cache_response is not None:
+        end_time = time.time()
+        time_taken = end_time - start_time
+        app_logging.debug(f'results were cached')
+        record_that_response_was_cached('multisearch', {'query':body}, time_taken)
+        return cache_response
+
+    app_logging.debug(f'results were not cached')
+
+    start_time = time.time()
     result = ES.msearch(body=body)
+    end_time = time.time()
+    time_taken = end_time - start_time
+
+    record_that_response_not_cached('multisearch', {'query':body}, time_taken)
+
     return result
 
 
@@ -125,6 +146,19 @@ def get_es_query_cache_key(index_name, es_query):
     es_request_digest = get_es_request_digest(es_query)
 
     return f'{index_name}-{es_request_digest}'
+
+
+def get_multisearch_cache_key(body):
+    """
+    :param body: body of the multisearch
+    :return: the key to save the data in the cache
+    """
+
+    stable_raw_body = json.dumps(body, sort_keys=True)
+    body_digest = hashlib.sha256(stable_raw_body.encode('utf-8')).digest()
+    base64_hash = base64.b64encode(body_digest).decode('utf-8')
+
+    return base64_hash
 
 
 def get_es_request_digest(es_query):

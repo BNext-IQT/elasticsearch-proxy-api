@@ -14,8 +14,6 @@ def do_multi_search(queries: List[ElasticSearchMultiSearchQuery]):
     try:
 
         multi_search_body = []
-        i = 0
-        print('num multisearches: ', len(queries))
         for query_i in queries:
             multi_search_body.append({'index': query_i.index})
             if query_i.body is None:
@@ -23,7 +21,7 @@ def do_multi_search(queries: List[ElasticSearchMultiSearchQuery]):
             query_i.body['track_total_hits'] = True
             multi_search_body.append(query_i.body)
 
-            result = es_data.do_multisearch(body=multi_search_body)
+        result = es_data.do_multisearch(body=multi_search_body)
 
         return result
     except Exception as e:
