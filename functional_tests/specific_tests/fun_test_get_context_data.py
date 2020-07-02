@@ -1,4 +1,4 @@
-# pylint: disable=import-error
+# pylint: disable=import-error, unused-argument
 """
 Module that tests getting a context data
 """
