@@ -61,6 +61,14 @@ def get_es_response(index_name, es_query):
 
     return response
 
+def do_multisearch(body):
+    """
+    :param body: body of the multisearch
+    :return: the result of the multisearch
+    """
+    result = ES.msearch(body=body)
+    return result
+
 
 def get_es_doc(index_name, doc_id):
     """

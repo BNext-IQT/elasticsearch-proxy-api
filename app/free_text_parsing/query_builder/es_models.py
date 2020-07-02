@@ -1,6 +1,5 @@
 from typing import List
-
-from app.es_connection import ES
+from app.es_data import es_data
 
 class ElasticSearchMultiSearchQuery:
 
@@ -13,14 +12,19 @@ DATA_CONNECTION = 'data'
 
 def do_multi_search(queries: List[ElasticSearchMultiSearchQuery]):
     try:
-        conn = ES
+
         multi_search_body = []
+        i = 0
+        print('num multisearches: ', len(queries))
         for query_i in queries:
             multi_search_body.append({'index': query_i.index})
             if query_i.body is None:
                 query_i.body = {}
             query_i.body['track_total_hits'] = True
             multi_search_body.append(query_i.body)
-        return conn.msearch(body=multi_search_body)
+
+            result = es_data.do_multisearch(body=multi_search_body)
+
+        return result
     except Exception as e:
         raise Exception('ERROR: can\'t retrieve elastic search data!')

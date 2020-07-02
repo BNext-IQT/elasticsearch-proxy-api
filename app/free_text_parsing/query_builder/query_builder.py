@@ -224,6 +224,7 @@ class QueryBuilder:
         cur_min_should_match = 100
 
         while cur_min_should_match > 0:
+            print('cur_min_should_match: ', cur_min_should_match)
             es_query_i = QueryBuilder.get_es_query_for_json_query(json_query, cur_es_key, False,
                                                                   cur_min_should_match)
             es_base_queries.append(es_query_i)
@@ -236,6 +237,7 @@ class QueryBuilder:
         )
         queries = []
         for index in indexes:
+            print('index: ', index)
             for es_query_i in es_base_queries:
                 # it is necessary to request at least 1 document to get the max_score value
                 queries.append(ElasticSearchMultiSearchQuery(index, {
@@ -243,7 +245,16 @@ class QueryBuilder:
                     '_source': ['_id'],
                     'query': es_query_i
                 }))
+
+        import time
+        start_time_ms = time.time()
+
         results = do_multi_search(queries)['responses']
+
+        end_time_ms = time.time()
+        time_taken_ms = end_time_ms - start_time_ms
+        print('time_taken_ms: ', time_taken_ms)
+
         best_queries = {}
         for i, es_index_i in enumerate(indexes):
             best_query_i = None
