@@ -1,0 +1,404 @@
+{
+  "best_es_base_queries": {
+    "chembl_target": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": 0,
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 2,
+      "max_score": 504.90216
+    },
+    "chembl_document": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": 0,
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 106,
+      "max_score": 757.2496
+    },
+    "chembl_cell_line": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": 0,
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 3,
+      "max_score": 323.80472
+    },
+    "chembl_molecule": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "40%",
+                    "fuzziness": "AUTO"
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "40%",
+                    "fuzziness": "AUTO"
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": "AUTO",
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 26,
+      "max_score": 0.0095
+    },
+    "chembl_tissue": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": 0,
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 0,
+      "max_score": 0.0
+    },
+    "chembl_assay": {
+      "query": {
+        "bool": {
+          "must": {
+            "bool": {
+              "should": [
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 10,
+                    "type": "most_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.std_analyzed^1.6",
+                      "*.eng_analyzed^0.8",
+                      "*.ws_analyzed^1.4",
+                      "*.keyword^2",
+                      "*.lower_case_keyword^1.5",
+                      "*.alphanumeric_lowercase_keyword^1.3"
+                    ],
+                    "query": "MDCK",
+                    "boost": 2,
+                    "type": "best_fields",
+                    "minimum_should_match": "100%",
+                    "fuzziness": 0
+                  }
+                },
+                {
+                  "multi_match": {
+                    "fields": [
+                      "*.entity_id^2",
+                      "*.id_reference^1.5",
+                      "*.chembl_id^2",
+                      "*.chembl_id_reference^1.5"
+                    ],
+                    "query": "MDCK",
+                    "type": "most_fields",
+                    "fuzziness": 0,
+                    "boost": 10
+                  }
+                }
+              ],
+              "must": []
+            }
+          },
+          "boost": 1
+        }
+      },
+      "total": 3227,
+      "max_score": 524.67615
+    }
+  },
+  "sorted_indexes_by_score": [
+    "chembl_document",
+    "chembl_assay",
+    "chembl_target",
+    "chembl_cell_line",
+    "chembl_molecule",
+    "chembl_tissue"
+  ],
+  "parsed_query": {
+    "filter_term": false,
+    "exact_match_term": false,
+    "references": [],
+    "include_in_query": true,
+    "term": "MDCK",
+    "chembl_entity": null
+  }
+}

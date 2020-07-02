@@ -78,7 +78,7 @@ pylint:
     - schedules
   script:
     - set -x
-    - find . -iname "*.py" | xargs pylint
+    - find . -iname "*.py" | grep -v './app/free_text_parsing/.*' | xargs pylint
 
 ## ---------------------------------------------------------------------------------------------------------------------
 ## Tests
