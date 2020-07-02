@@ -18,7 +18,6 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('Testing parsing s search')
     print('-------------------------------------------')
 
-
     term_params = {
         'search_term': 'MDCK',
         'es_indexes': 'chembl_molecule,chembl_target,chembl_assay,chembl_document,chembl_cell_line,chembl_tissue',
