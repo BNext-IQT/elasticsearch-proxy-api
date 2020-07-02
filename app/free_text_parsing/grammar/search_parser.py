@@ -569,6 +569,7 @@ def parse_url_search(request):
         indexes_str = request.POST.get('es_indexes', '')
         indexes = indexes_str.split(',')
         selected_es_index = request.POST.get('selected_es_index', None)
+
         parsed_query = parse_query_str(query_string)
         best_queries, sorted_indexes_by_score = QueryBuilder.get_best_es_query(parsed_query, indexes, selected_es_index)
 

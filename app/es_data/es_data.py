@@ -161,7 +161,7 @@ def get_multisearch_cache_key(body):
     body_digest = hashlib.sha256(stable_raw_body.encode('utf-8')).digest()
     base64_hash = base64.b64encode(body_digest).decode('utf-8')
 
-    return base64_hash
+    return f'multisearch-{base64_hash}'
 
 
 def get_es_request_digest(es_query):
