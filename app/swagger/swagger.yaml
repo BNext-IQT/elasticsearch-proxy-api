@@ -20,6 +20,8 @@ tags:
   description: 'Endpoints related to the contextual data, e.g. Similarity search results, substructure search results, etc.'
 - name: 'Free Text Search'
   description: 'Endpoints related to the free text search parsing.'
+- name: 'URL Shortening'
+  description: 'Endpoints related to the shortening of urls'
 schemes:
 - "https"
 - "http"
@@ -258,6 +260,47 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/SearchParseResponse'
+  /url_shortening/shorten_url:
+    post:
+      tags:
+        - 'URL Shortening'
+      summary: 'Shorten a url'
+      description: 'Returns a short hash of an url'
+      operationId: 'shorten_url'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'long_url'
+          in: 'formData'
+          description: 'long version of the url to shorten'
+          required: true
+          type: 'string'
+          default: '#substructure_search_results/C[C@H](CCc1ccccc1)NC[C@H](O)c1ccc(O)c(C(N)=O)c1'
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ShortenedURLResponse'
+  /url_shortening/expand_url:
+    post:
+      tags:
+        - 'URL Shortening'
+      summary: 'Expand a hash'
+      description: 'Returns the url corresponding to the hash'
+      operationId: 'expand_url'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'hash'
+          in: 'formData'
+          description: 'hash of the url to expand'
+          required: true
+          type: 'string'
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/ExoandedURLResponse'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -318,3 +361,16 @@ definitions:
         type: 'object'
       sorted_indexes_by_score:
         type: 'object'
+  ShortenedURLResponse:
+    type: 'object'
+    properties:
+      expires:
+        type: 'string'
+      hash:
+        type: 'string'
+  ExoandedURLResponse:
+    type: 'object'
+    properties:
+      long:
+        type: 'string'
+
