@@ -12,6 +12,7 @@ from app.blueprints.es_proxy.controllers.es_proxy_controller import ES_PROXY_BLU
 from app.blueprints.properties_config.controllers.properties_config_controller import PROPERTIES_CONFIG_BLUEPRINT
 from app.blueprints.contexts.controllers.contexts_controller import CONTEXTS_BLUEPRINT
 from app.blueprints.search_parser.controllers.search_parser_controller import SEARCH_PARSER_BLUEPRINT
+from app.blueprints.url_shortening.controllers.url_shortening_controller import URL_SHORTENING_BLUEPRINT
 
 
 def create_app():
@@ -45,6 +46,7 @@ def create_app():
     flask_app.register_blueprint(PROPERTIES_CONFIG_BLUEPRINT, url_prefix=f'{base_path}/properties_configuration')
     flask_app.register_blueprint(CONTEXTS_BLUEPRINT, url_prefix=f'{base_path}/contexts')
     flask_app.register_blueprint(SEARCH_PARSER_BLUEPRINT, url_prefix=f'{base_path}/search_parsing')
+    flask_app.register_blueprint(URL_SHORTENING_BLUEPRINT, url_prefix=f'{base_path}/url_shortening')
 
     return flask_app
 
