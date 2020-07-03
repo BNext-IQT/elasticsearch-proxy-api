@@ -300,7 +300,25 @@ paths:
         '200':
           description: "successful operation"
           schema:
-            $ref: '#/definitions/ExoandedURLResponse'
+            $ref: '#/definitions/ExpandedURLResponse'
+  /url_shortening/delete_expired_urls:
+    post:
+      tags:
+        - 'URL Shortening'
+      summary: 'Deletes the shortened urls that have expired'
+      description: 'Delete sthe shortened urls that have expired'
+      operationId: 'delete_expired_urls'
+      produces:
+        - 'application/json'
+      responses:
+        "200":
+          description: 'All expired urls were deleted!'
+          schema:
+            $ref: '#/definitions/AdminOperationResult'
+        "401":
+          description: 'Invalid Admin token supplied'
+      security:
+        - adminTokenAuth: []
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -368,9 +386,14 @@ definitions:
         type: 'string'
       hash:
         type: 'string'
-  ExoandedURLResponse:
+  ExpandedURLResponse:
     type: 'object'
     properties:
       long:
+        type: 'string'
+  AdminOperationResult:
+    type: "object"
+    properties:
+      operation_result:
         type: 'string'
 
