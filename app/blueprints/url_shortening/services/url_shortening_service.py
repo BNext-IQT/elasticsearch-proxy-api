@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 from app.es_data import es_data
 from app.config import RUN_CONFIG
+from app import app_logging
 
 
 class URLShorteningError(Exception):
@@ -48,11 +49,11 @@ def shorten_url(long_url):
 
     else:
 
-        save_shortened_url(long_url, url_hash)
+        url_hash, expires = save_shortened_url(long_url, url_hash)
 
     return {
-        'hash': 'aaa',
-        'expires': 'tomorrow'
+        'hash': url_hash,
+        'expires': expires
     }
 
 
@@ -69,4 +70,19 @@ def save_shortened_url(long_url, url_hash):
     expires = expiration_date.timestamp() * 1000
     print('expires: ', expires)
 
+    index_name = RUN_CONFIG.get('url_shortening').get('index_name')
 
+    document = {
+        'long_url': long_url,
+        'hash': url_hash,
+        'expires': expires,
+        'creation_date': now.timestamp() * 1000
+    }
+
+    dry_run = RUN_CONFIG.get('url_shortening').get('dry_run')
+    print('dry_run: ', dry_run)
+    if dry_run:
+        app_logging.debug(f'Dry run is true, not saving the document {document} to the index {index_name}')
+
+    print('document: ', document)
+    return url_hash, expiration_date
