@@ -101,6 +101,21 @@ def record_url_was_shortened():
     save_record_to_elasticsearch(doc, index_name)
 
 
+def record_expired_urls_were_deleted():
+    """
+    Records that the expired urls were deleted
+    """
+    doc = {
+        "event": "EXPIRED_URLS_DELETED",
+        "run_env_type": RUN_CONFIG.get('run_env'),
+        "host": 'es_proxy_api_k8s',
+        "request_date": datetime.utcnow().timestamp() * 1000,
+    }
+
+    index_name = RUN_CONFIG.get('url_shortening').get('statistics_index_name')
+    save_record_to_elasticsearch(doc, index_name)
+
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Saving records to elasticsearch
 # ----------------------------------------------------------------------------------------------------------------------

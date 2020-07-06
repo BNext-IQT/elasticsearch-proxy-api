@@ -125,7 +125,8 @@ DEFAULT_URL_SHORTENING_CONFIG = {
     'keep_alive': True,
     'keep_alive_days': 1,
     'index_name': 'some_index',
-    'statistics_index_name': 'some_index'
+    'statistics_index_name': 'some_index',
+    'expired_urls_lazy_deletion_threshold': 1000
 }
 RUN_CONFIG['url_shortening'] = {
     **DEFAULT_URL_SHORTENING_CONFIG,

@@ -19,10 +19,11 @@ class ESDataNotFoundError(Exception):
     """Base class for exceptions in this file."""
 
 
-def get_es_response(index_name, es_query):
+def get_es_response(index_name, es_query, ignore_cache=False):
     """""
     :param index_name: name of the index to query against
     :param es_query: dict with the query to send
+    :param ignore_cache: determines if cache must be ignored or not
     :return: the dict with the response from es
     """
 
@@ -30,13 +31,16 @@ def get_es_response(index_name, es_query):
     app_logging.debug(f'cache_key: {cache_key}')
 
     start_time = time.time()
-    cache_response = cache.fail_proof_get(key=cache_key)
-    if cache_response is not None:
-        end_time = time.time()
-        time_taken = end_time - start_time
-        app_logging.debug(f'results were cached')
-        record_that_response_was_cached(index_name, es_query, time_taken)
-        return cache_response
+
+    if not ignore_cache:
+
+        cache_response = cache.fail_proof_get(key=cache_key)
+        if cache_response is not None:
+            end_time = time.time()
+            time_taken = end_time - start_time
+            app_logging.debug(f'results were cached')
+            record_that_response_was_cached(index_name, es_query, time_taken)
+            return cache_response
 
     app_logging.debug(f'results were not cached')
 
@@ -57,7 +61,9 @@ def get_es_response(index_name, es_query):
         raise error
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
-    cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
+
+    if not ignore_cache:
+        cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
 
     return response
 
