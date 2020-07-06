@@ -111,9 +111,20 @@ DEFAULT_DELAYED_JOBS_CONFIG = {
     'www.ebi.ac.uk': 'www.ebi.ac.uk'
 }
 RUN_CONFIG['delayed_jobs'] = {
-    **DEFAULT_CACHE_CONFIG,
+    **DEFAULT_DELAYED_JOBS_CONFIG,
     **DELAYED_JOBS_CONFIG,
 }
 
 if not RUN_CONFIG.get('server_public_host'):
     RUN_CONFIG['server_public_host'] = '0.0.0.0:5000'
+
+URL_SHORTENING_CONFIG = RUN_CONFIG.get('url_shortening', {})
+DEFAULT_URL_SHORTENING_CONFIG = {
+    'days_valid': 7,
+    'dry_run': False
+    'index_name': 'some_index'
+}
+RUN_CONFIG['url_shortening'] = {
+    **DEFAULT_URL_SHORTENING_CONFIG,
+    **URL_SHORTENING_CONFIG,
+}
