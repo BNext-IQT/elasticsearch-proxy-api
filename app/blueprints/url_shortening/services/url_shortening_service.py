@@ -28,15 +28,20 @@ def shorten_url(long_url):
     url_hash = base64.b64encode(hex_digest).decode('utf-8').replace('/', '_').replace('+', '-')
     print('url_hash: ', url_hash)
 
+    print('checking if it exists')
     # check if the url has been shortened before
     index_name = RUN_CONFIG.get('url_shortening').get('index_name')
     es_query = {
         "query": {
-            "terms": {
-                "_id": ["7Vj59yCHzqkB4OhGt4z3xg=="]
+            "query_string": {
+                "query": url_hash,
+                "default_field": "hash"
             }
         }
     }
+
+    print('index_name: ', index_name)
+    print('es_query: ', es_query)
 
     shortening_response = es_data.get_es_response(index_name, es_query)
     print('shortening_response: ', shortening_response)
@@ -46,10 +51,17 @@ def shorten_url(long_url):
     if already_exists:
 
         print('already exists')
+        raw_document = shortening_response['hits']['hits'][0]
+        keep_alive = RUN_CONFIG.get('url_shortening').get('keep_alive', False)
+        if not keep_alive:
+            expiration_timestamp = raw_document['_source']['expires']
+            expires = datetime.utcfromtimestamp(expiration_timestamp / 1000)
+        else:
+            expires = extend_expiration_date(raw_document)
 
     else:
 
-        url_hash, expires = save_shortened_url(long_url, url_hash)
+        expires = save_shortened_url(long_url, url_hash)
 
     return {
         'hash': url_hash,
@@ -68,7 +80,6 @@ def save_shortened_url(long_url, url_hash):
     time_delta = timedelta(days=RUN_CONFIG.get('url_shortening').get('days_valid'))
     expiration_date = now + time_delta
     expires = expiration_date.timestamp() * 1000
-    print('expires: ', expires)
 
     index_name = RUN_CONFIG.get('url_shortening').get('index_name')
 
@@ -80,9 +91,44 @@ def save_shortened_url(long_url, url_hash):
     }
 
     dry_run = RUN_CONFIG.get('url_shortening').get('dry_run')
-    print('dry_run: ', dry_run)
     if dry_run:
         app_logging.debug(f'Dry run is true, not saving the document {document} to the index {index_name}')
+    else:
+        es_data.save_es_doc(index_name, document)
 
-    print('document: ', document)
-    return url_hash, expiration_date
+    return expiration_date
+
+
+def extend_expiration_date(raw_document):
+    """
+    extends the expiration date of the url_shortening document
+    :param raw_document: raw document obtained
+    :return: the new expiration date
+    """
+
+    print('raw_document')
+    print(raw_document)
+    old_expires = raw_document['_source']['expires']
+    old_expiration_date = datetime.utcfromtimestamp(old_expires / 1000)
+    time_delta = timedelta(days=RUN_CONFIG.get('url_shortening').get('keep_alive_days'))
+    new_expiration_date = old_expiration_date + time_delta
+
+    print('extending expiration date to: ', new_expiration_date)
+
+    times_extended = raw_document['_source'].get('times_extended', 0)
+    times_extended += 1
+
+    doc_id = raw_document['_id']
+    index_name = RUN_CONFIG.get('url_shortening').get('index_name')
+
+    updated_fields = {
+        'doc': {
+            'expires': new_expiration_date.timestamp() * 1000,
+            'times_extended': times_extended
+        }
+    }
+
+    print('doc_id: ', doc_id)
+    es_data.update_es_doc(index_name=index_name, updated_fields=updated_fields, doc_id=doc_id)
+
+    return new_expiration_date

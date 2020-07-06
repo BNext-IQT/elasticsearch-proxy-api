@@ -76,7 +76,7 @@ def do_multisearch(body):
         end_time = time.time()
         time_taken = end_time - start_time
         app_logging.debug(f'results were cached')
-        record_that_response_was_cached('multisearch', {'query':body}, time_taken)
+        record_that_response_was_cached('multisearch', {'query': body}, time_taken)
         return cache_response
 
     app_logging.debug(f'results were not cached')
@@ -86,7 +86,7 @@ def do_multisearch(body):
     end_time = time.time()
     time_taken = end_time - start_time
 
-    record_that_response_not_cached('multisearch', {'query':body}, time_taken)
+    record_that_response_not_cached('multisearch', {'query': body}, time_taken)
 
     seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
     cache.fail_proof_set(key=cache_key, value=result, timeout=seconds_valid)
@@ -137,6 +137,29 @@ def get_es_doc(index_name, doc_id):
     cache.fail_proof_set(key=cache_key, value=response, timeout=seconds_valid)
 
     return response
+
+
+def save_es_doc(index_name, document):
+    """
+    Saves to elasticsearch the document at the index indicated by parameter
+    :param index_name: index in which to save the document
+    :param document: document to save
+    """
+    app_logging.debug(f'Saving the document {document} to the index {index_name}')
+    result = ES.index(index=index_name, body=document, doc_type='_doc')
+    app_logging.debug(f'Result {result}')
+
+
+def update_es_doc(index_name, updated_fields, doc_id):
+    """
+    Updates the document with the document provided
+    :param doc_id: id of the document to update
+    :param index_name: index where to save the document
+    :param updated_fields: updated fields of the document to save
+    """
+    app_logging.debug(f'Updating the document with id {doc_id} with this {updated_fields} on the index {index_name}')
+    result = ES.update(index=index_name, body=updated_fields, doc_type='_doc', id=doc_id)
+    app_logging.debug(f'Result {result}')
 
 
 def get_es_query_cache_key(index_name, es_query):

@@ -26,5 +26,5 @@ def shorten_url():
         http_response = jsonify(shortening_data)
         http_cache_utils.add_cache_headers_to_response(http_response)
         return http_response
-    except url_shortening_service as error:
+    except url_shortening_service.URLShorteningError as error:
         abort(500, repr(error))
