@@ -124,7 +124,8 @@ DEFAULT_URL_SHORTENING_CONFIG = {
     'dry_run': True,
     'keep_alive': True,
     'keep_alive_days': 1,
-    'index_name': 'some_index'
+    'index_name': 'some_index',
+    'statistics_index_name': 'some_index'
 }
 RUN_CONFIG['url_shortening'] = {
     **DEFAULT_URL_SHORTENING_CONFIG,

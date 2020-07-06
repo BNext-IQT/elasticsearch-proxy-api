@@ -84,6 +84,24 @@ def save_free_text_search_record(time_taken):
 
 
 # ----------------------------------------------------------------------------------------------------------------------
+# URL shortening
+# ----------------------------------------------------------------------------------------------------------------------
+def record_url_was_shortened():
+    """
+    Records that an url was shortened.
+    """
+    doc = {
+        "event": "URL_SHORTENED",
+        "run_env_type": RUN_CONFIG.get('run_env'),
+        "host": 'es_proxy_api_k8s',
+        "request_date": datetime.utcnow().timestamp() * 1000,
+    }
+
+    index_name = RUN_CONFIG.get('url_shortening').get('statistics_index_name')
+    save_record_to_elasticsearch(doc, index_name)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
 # Saving records to elasticsearch
 # ----------------------------------------------------------------------------------------------------------------------
 def save_record_to_elasticsearch(doc, index_name):

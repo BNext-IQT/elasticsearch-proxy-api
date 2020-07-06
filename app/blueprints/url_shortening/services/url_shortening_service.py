@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 from app.es_data import es_data
 from app.config import RUN_CONFIG
 from app import app_logging
+from app.usage_statistics import statistics_saver
 
 
 class URLShorteningError(Exception):
@@ -63,6 +64,7 @@ def shorten_url(long_url):
 
         expires = save_shortened_url(long_url, url_hash)
 
+    statistics_saver.record_url_was_shortened()
     return {
         'hash': url_hash,
         'expires': expires
@@ -111,7 +113,6 @@ def extend_expiration_date(raw_document):
 
     time_delta = timedelta(days=RUN_CONFIG.get('url_shortening').get('keep_alive_days'))
     new_expiration_date = old_expiration_date + time_delta
-
 
     times_extended = raw_document['_source'].get('times_extended', 0)
     times_extended += 1
