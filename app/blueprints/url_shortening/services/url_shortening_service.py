@@ -106,14 +106,12 @@ def extend_expiration_date(raw_document):
     :return: the new expiration date
     """
 
-    print('raw_document')
-    print(raw_document)
     old_expires = raw_document['_source']['expires']
     old_expiration_date = datetime.utcfromtimestamp(old_expires / 1000)
+
     time_delta = timedelta(days=RUN_CONFIG.get('url_shortening').get('keep_alive_days'))
     new_expiration_date = old_expiration_date + time_delta
 
-    print('extending expiration date to: ', new_expiration_date)
 
     times_extended = raw_document['_source'].get('times_extended', 0)
     times_extended += 1
@@ -128,7 +126,6 @@ def extend_expiration_date(raw_document):
         }
     }
 
-    print('doc_id: ', doc_id)
     es_data.update_es_doc(index_name=index_name, updated_fields=updated_fields, doc_id=doc_id)
 
     return new_expiration_date
