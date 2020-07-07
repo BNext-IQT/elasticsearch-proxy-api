@@ -98,7 +98,6 @@ def expand_url(url_hash):
     :param url_hash: hash of the url to expand
     :return: the expanded url corresponding to the hash
     """
-    print('expand_url: ', url_hash)
     raw_document = get_url_shortening(url_hash)
     if raw_document is None:
         raise URLNotFoundError(f'No url correspond to the hash {url_hash}')
