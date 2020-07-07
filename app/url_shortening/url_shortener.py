@@ -85,7 +85,7 @@ def save_shortened_url(long_url, url_hash):
     if dry_run:
         app_logging.debug(f'Dry run is true, not saving the document {document} to the index {index_name}')
     else:
-        es_data.save_es_doc(index_name, document)
+        es_data.save_es_doc(index_name, document, refresh='wait_for')
 
     return expiration_date
 

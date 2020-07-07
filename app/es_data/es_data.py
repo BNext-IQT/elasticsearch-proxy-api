@@ -145,14 +145,16 @@ def get_es_doc(index_name, doc_id):
     return response
 
 
-def save_es_doc(index_name, document):
+def save_es_doc(index_name, document, **kwargs):
     """
     Saves to elasticsearch the document at the index indicated by parameter
     :param index_name: index in which to save the document
     :param document: document to save
+    :param kwargs: keyword args to pass to the index function:
+    https://elasticsearch-py.readthedocs.io/en/master/api.html#elasticsearch.Elasticsearch.index
     """
     app_logging.debug(f'Saving the document {document} to the index {index_name}')
-    result = ES.index(index=index_name, body=document, doc_type='_doc')
+    result = ES.index(index=index_name, body=document, doc_type='_doc', **kwargs)
     app_logging.debug(f'Result {result}')
 
 
