@@ -1,8 +1,8 @@
-# pylint: disable=import-error, unused-import
+# pylint: disable=import-error
 """
 Module that tests a url shortening
 """
-import json
+import time
 
 import requests
 
@@ -49,6 +49,8 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     response_text = request.text
     utils.print_es_response(response_text)
     assert status_code == 200, 'The request failed!'
+
+    time.sleep(5) # make it sleep to make sure the url is saved in ES
 
     response_json = request.json()
     long_url_got = response_json.get('long_url')
