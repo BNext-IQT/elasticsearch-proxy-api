@@ -11,7 +11,10 @@ from app import app_logging
 from app.usage_statistics import statistics_saver
 from app.url_shortening.expired_urls_deletion import ExpiredURLsDeletionThread
 
-
+class URLNotFoundError(Exception):
+    """
+    Error raises when an url was not found
+    """
 # ----------------------------------------------------------------------------------------------------------------------
 # URL Shortening
 # ----------------------------------------------------------------------------------------------------------------------
@@ -95,6 +98,9 @@ def expand_url(url_hash):
     :param url_hash: hash of the url to expand
     :return: the expanded url corresponding to the hash
     """
+    raw_document = get_url_shortening(url_hash)
+    if raw_document is None:
+        raise URLNotFoundError(f'No url correspond to the hash {url_hash}')
 
 
 def extend_expiration_date(raw_document):

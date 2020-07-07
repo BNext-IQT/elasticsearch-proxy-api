@@ -15,4 +15,4 @@ class ExpandURLRequest(Schema):
     """
     Class with the schema for shortening a URL
     """
-    expand_url = fields.String(required=True)
+    hash = fields.String(required=True)

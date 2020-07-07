@@ -9,6 +9,11 @@ class URLShorteningError(Exception):
     Class for errors in this module
     """
 
+class URLNotFoundError(Exception):
+    """
+    Class for errors when an url is not found
+    """
+
 
 def shorten_url(long_url):
     """
@@ -27,6 +32,8 @@ def expand_url(url_hash):
     :return: an object with the expanded url and expiration date of the hash
     """
 
-    expanded_url_dict = url_shortener.expand_url(url_hash)
-
-    return expanded_url_dict
+    try:
+        expanded_url_dict = url_shortener.expand_url(url_hash)
+        return expanded_url_dict
+    except url_shortener.URLNotFoundError as error:
+        raise URLNotFoundError(str(error))

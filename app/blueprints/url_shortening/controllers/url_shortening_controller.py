@@ -3,7 +3,7 @@ URL Shortening controller
 """
 from flask import Blueprint, jsonify, abort, request
 
-from app.request_validation.decorators import validate_form_with
+from app.request_validation.decorators import validate_form_with, validate_url_params_with
 from app.blueprints.url_shortening.controllers import marshmallow_schemas
 from app.blueprints.url_shortening.services import url_shortening_service
 from app.http_cache import http_cache_utils
@@ -30,8 +30,8 @@ def shorten_url():
         abort(500, repr(error))
 
 
-@URL_SHORTENING_BLUEPRINT.route('/expand_url', methods=['POST'])
-@validate_form_with(marshmallow_schemas.ExpandURLRequest)
+@URL_SHORTENING_BLUEPRINT.route('/expand_url', methods=['GET'])
+@validate_url_params_with(marshmallow_schemas.ExpandURLRequest)
 def expand_url():
     """
     :return: the json response with the expanded url
@@ -42,8 +42,8 @@ def expand_url():
 
     try:
         expansion_data = url_shortening_service.expand_url(url_hash)
-        http_response = jsonify(expansion_data)
-        http_cache_utils.add_cache_headers_to_response(http_response)
-        return http_response
+        return jsonify(expansion_data)
     except url_shortening_service.URLShorteningError as error:
         abort(500, repr(error))
+    except url_shortening_service.URLNotFoundError as error:
+        abort(400, repr(error))

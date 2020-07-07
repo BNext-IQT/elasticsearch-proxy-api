@@ -281,8 +281,8 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/ShortenedURLResponse'
-  /url_shortening/expand_url:
-    post:
+  /url_shortening/expand_url/{hash}:
+    get:
       tags:
         - 'URL Shortening'
       summary: 'Expand a hash'
@@ -292,10 +292,11 @@ paths:
         - 'application/json'
       parameters:
         - name: 'hash'
-          in: 'formData'
+          in: 'path'
           description: 'hash of the url to expand'
           required: true
           type: 'string'
+          default: 'Q29IOwX-ZUGyyB6GXDjwZw=='
       responses:
         '200':
           description: "successful operation"
