@@ -1,4 +1,4 @@
-# pylint: disable=import-error
+# pylint: disable=import-error, unused-import
 """
 Module that tests a url shortening
 """
