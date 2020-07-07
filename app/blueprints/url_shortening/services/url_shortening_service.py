@@ -19,3 +19,14 @@ def shorten_url(long_url):
     sortened_url_dict = url_shortener.shorten_url(long_url)
 
     return sortened_url_dict
+
+
+def expand_url(url_hash):
+    """
+    :param url_hash: hash of the url to expand
+    :return: an object with the expanded url and expiration date of the hash
+    """
+
+    expanded_url_dict = url_shortener.expand_url(url_hash)
+
+    return expanded_url_dict

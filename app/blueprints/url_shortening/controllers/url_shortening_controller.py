@@ -28,3 +28,22 @@ def shorten_url():
         return http_response
     except url_shortening_service.URLShorteningError as error:
         abort(500, repr(error))
+
+
+@URL_SHORTENING_BLUEPRINT.route('/expand_url', methods=['POST'])
+@validate_form_with(marshmallow_schemas.ExpandURLRequest)
+def expand_url():
+    """
+    :return: the json response with the expanded url
+    """
+
+    form_data = request.form
+    url_hash = form_data.get('hash')
+
+    try:
+        expansion_data = url_shortening_service.expand_url(url_hash)
+        http_response = jsonify(expansion_data)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
+    except url_shortening_service.URLShorteningError as error:
+        abort(500, repr(error))
