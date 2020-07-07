@@ -43,4 +43,4 @@ def expand_url(url_hash):
     except url_shortening_service.URLShorteningError as error:
         abort(500, repr(error))
     except url_shortening_service.URLNotFoundError as error:
-        abort(400, repr(error))
+        abort(404, repr(error))

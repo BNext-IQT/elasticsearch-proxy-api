@@ -172,7 +172,7 @@ def get_url_shortening(url_hash):
     es_query = {
         "query": {
             "query_string": {
-                "query": url_hash,
+                "query": f'"{url_hash}"',
                 "default_field": "hash"
             }
         }
