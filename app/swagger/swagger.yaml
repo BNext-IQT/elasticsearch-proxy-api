@@ -291,7 +291,7 @@ paths:
       produces:
         - 'application/json'
       parameters:
-        - name: 'hash'
+        - name: 'url_hash'
           in: 'path'
           description: 'hash of the url to expand'
           required: true
@@ -372,7 +372,9 @@ definitions:
   ExpandedURLResponse:
     type: 'object'
     properties:
-      long:
+      long_url:
+        type: 'string'
+      expires:
         type: 'string'
   AdminOperationResult:
     type: "object"

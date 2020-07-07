@@ -30,15 +30,12 @@ def shorten_url():
         abort(500, repr(error))
 
 
-@URL_SHORTENING_BLUEPRINT.route('/expand_url', methods=['GET'])
+@URL_SHORTENING_BLUEPRINT.route('/expand_url/<url_hash>', methods=['GET'])
 @validate_url_params_with(marshmallow_schemas.ExpandURLRequest)
-def expand_url():
+def expand_url(url_hash):
     """
     :return: the json response with the expanded url
     """
-
-    form_data = request.form
-    url_hash = form_data.get('hash')
 
     try:
         expansion_data = url_shortening_service.expand_url(url_hash)

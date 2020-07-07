@@ -31,7 +31,7 @@ def expand_url(url_hash):
     :param url_hash: hash of the url to expand
     :return: an object with the expanded url and expiration date of the hash
     """
-
+    print('expand_url service: ', url_hash)
     try:
         expanded_url_dict = url_shortener.expand_url(url_hash)
         return expanded_url_dict

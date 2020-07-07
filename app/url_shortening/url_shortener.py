@@ -42,9 +42,9 @@ def shorten_url(long_url):
         if not keep_alive:
             expiration_timestamp = raw_document['_source']['expires']
             expires = datetime.fromtimestamp(expiration_timestamp / 1000)
-            app_logging.debug(f'keep_alive is on, new expiration date is {expires}')
         else:
             expires = extend_expiration_date(raw_document)
+            app_logging.debug(f'keep_alive is on, new expiration date is {expires}')
 
     else:
 
@@ -98,9 +98,27 @@ def expand_url(url_hash):
     :param url_hash: hash of the url to expand
     :return: the expanded url corresponding to the hash
     """
+    print('expand_url: ', url_hash)
     raw_document = get_url_shortening(url_hash)
     if raw_document is None:
         raise URLNotFoundError(f'No url correspond to the hash {url_hash}')
+
+    keep_alive = RUN_CONFIG.get('url_shortening').get('keep_alive', False)
+
+    if not keep_alive:
+        expiration_timestamp = raw_document['_source']['expires']
+        expires = datetime.fromtimestamp(expiration_timestamp / 1000)
+    else:
+        expires = extend_expiration_date(raw_document)
+        app_logging.debug(f'keep_alive is on, new expiration date is {expires}')
+
+    long_url = raw_document['_source']['long_url']
+    statistics_saver.record_url_was_expanded()
+    trigger_deletion_of_expired_urls()
+    return {
+        'long_url': long_url,
+        'expires': expires
+    }
 
 
 def extend_expiration_date(raw_document):
