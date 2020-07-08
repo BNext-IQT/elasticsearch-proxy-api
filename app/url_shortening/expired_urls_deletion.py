@@ -5,8 +5,6 @@ import threading
 import random
 from datetime import datetime, timezone
 
-from elasticsearch.helpers import scan, bulk
-
 from app import app_logging
 from app.config import RUN_CONFIG
 from app.es_data import es_data
@@ -58,8 +56,8 @@ class ExpiredURLsDeletionThread(threading.Thread):
 
         if must_do_deletion:
 
+            # pylint: disable=unexpected-keyword-arg
             ES.delete_by_query(index=index_name, body=query, conflicts='proceed')
-
             app_logging.info(f'Deleted {num_items} expired shortened urls.')
             statistics_saver.record_expired_urls_were_deleted()
 

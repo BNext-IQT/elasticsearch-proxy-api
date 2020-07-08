@@ -82,9 +82,9 @@ def delete_old_index_data(index_name, timestamp_field, days_old):
 
     if must_do_deletion:
 
+        # pylint: disable=unexpected-keyword-arg
         app_logging.info('Deleting!!!')
         ES_MONITORING.delete_by_query(index=index_name, body=query, conflicts='proceed')
-        # bulk(ES_MONITORING, stream_items_for_deletion(query, index_name), chunk_size=BULK_SIZE, doc_type='_doc')
         app_logging.info(f'Deleted {num_items} monitoring records olddr than {expiration_date} in index {index_name}')
 
     else:
