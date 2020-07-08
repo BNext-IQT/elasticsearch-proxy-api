@@ -20,7 +20,7 @@ def register_element_usage(view_name, view_type, entity_name):
     :param entity_name: name of the entity involved
     :return: result of the operation
     """
-    index_name = RUN_CONFIG.get('usage_statistics').get('chembl_glados_es_view_record')
+    index_name = RUN_CONFIG.get('usage_statistics').get('element_usage_index')
     document = {
         'view_name': view_name,
         'view_type': view_type,
