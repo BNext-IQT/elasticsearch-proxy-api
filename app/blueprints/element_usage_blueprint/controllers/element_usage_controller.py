@@ -9,6 +9,7 @@ from app.blueprints.element_usage_blueprint.services import element_usage_servic
 
 ELEMENT_USAGE_BLUEPRINT = Blueprint('frontend_element_usage', __name__)
 
+
 @ELEMENT_USAGE_BLUEPRINT.route('/register_element_usage', methods=['POST'])
 @validate_form_with(marshmallow_schemas.RegisterUsageRequest)
 def register_element_usage():

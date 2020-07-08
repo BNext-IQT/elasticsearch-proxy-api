@@ -24,7 +24,7 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     payload = {
         'view_name': 'Compound-CompoundNameAndClassification',
         'view_type': 'CARD',
-        'entity_name': 'Compound''
+        'entity_name': 'Compound'
     }
 
     request = requests.post(url, data=payload)
