@@ -24,7 +24,7 @@ class OldMonitoringRecordsDeletionThread(threading.Thread):
         app_logging.info('Initialising thread to delete old monitoring records')
 
     def run(self):
-        dice = random.randint(0, 3)
+        dice = random.randint(0, 1000)
         dice_must_be = 0
         do_this = dice == dice_must_be
         if not do_this:

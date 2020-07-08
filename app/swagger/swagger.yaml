@@ -22,6 +22,8 @@ tags:
   description: 'Endpoints related to the free text search parsing.'
 - name: 'URL Shortening'
   description: 'Endpoints related to the shortening of urls'
+- name: 'Frontend Element Tracking'
+  description: 'Endpoints related to the tracking of elements in the frontend'
 schemes:
 - "https"
 - "http"
@@ -302,6 +304,39 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/ExpandedURLResponse'
+  /frontend_element_usage/register_element_usage:
+    post:
+      tags:
+        - 'Frontend Element Tracking'
+      summary: 'Register usage of a frontend element'
+      description: 'Register usage of a frontend element'
+      operationId: 'register_element_usage'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: 'view_name'
+          in: 'formData'
+          description: 'name of the element for which to register usage'
+          required: true
+          type: 'string'
+          default: 'Compound-CompoundNameAndClassification'
+        - name: 'view_type'
+          in: 'formData'
+          description: 'Card of the element for which to register usage'
+          required: true
+          type: 'string'
+          default: 'CARD'
+        - name: 'entity_name'
+          in: 'formData'
+          description: 'Name of the entity involved'
+          required: true
+          type: 'string'
+          default: 'Compound'
+      responses:
+        '200':
+          description: "successful operation"
+          schema:
+            $ref: '#/definitions/UsageRegisteredResult'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -377,6 +412,11 @@ definitions:
       expires:
         type: 'string'
   AdminOperationResult:
+    type: "object"
+    properties:
+      operation_result:
+        type: 'string'
+  UsageRegisteredResult:
     type: "object"
     properties:
       operation_result:
