@@ -19,7 +19,7 @@ def run_test(server_base_url, delayed_jobs_server_base_path):
     print('-------------------------------------------')
     print('delayed_jobs_server_base_path: ', delayed_jobs_server_base_path)
 
-    url = f'{server_base_url}/es_data/frontend_element_usage/register_element_usage'
+    url = f'{server_base_url}/frontend_element_usage/register_element_usage'
 
     payload = {
         'view_name': 'Compound-CompoundNameAndClassification',
