@@ -132,3 +132,15 @@ RUN_CONFIG['url_shortening'] = {
     **DEFAULT_URL_SHORTENING_CONFIG,
     **URL_SHORTENING_CONFIG,
 }
+
+DEFAULT_LAZY_OLD_RECORD_DELETION_CONFIG = {
+    'delete_records_older_than_days': 365,
+    'expired_docs_lazy_deletion_threshold': 1000,
+    'index_names_and_timestamps': []
+}
+
+LAZY_OLD_RECORD_DELETION_CONFIG = RUN_CONFIG.get('lazy_old_record_deletion', {})
+RUN_CONFIG['lazy_old_record_deletion'] = {
+    **DEFAULT_LAZY_OLD_RECORD_DELETION_CONFIG,
+    **LAZY_OLD_RECORD_DELETION_CONFIG
+}

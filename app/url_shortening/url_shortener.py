@@ -195,6 +195,5 @@ def trigger_deletion_of_expired_urls():
     """
     Triggers the deletion of old shortened urls records
     """
-    print('trigger_deletion_of_expired_urls')
     deletion_thread = ExpiredURLsDeletionThread()
     deletion_thread.start()
