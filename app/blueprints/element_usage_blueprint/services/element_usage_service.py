@@ -24,10 +24,10 @@ def register_element_usage(view_name, view_type, entity_name):
     document = {
         'view_name': view_name,
         'view_type': view_type,
-        'entity_name': entity_name
+        'entity_name': entity_name,
         'run_env_type': RUN_CONFIG.get('run_env'),
         'request_date': datetime.utcnow().timestamp() * 1000,
-        'host': 'es_proxy_api_k8s',
+        'host': 'es_proxy_api_k8s'
     }
 
     statistics_saver.save_record_to_elasticsearch(document, index_name)
