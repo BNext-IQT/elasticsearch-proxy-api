@@ -5,8 +5,6 @@ import threading
 import random
 from datetime import datetime, timezone
 
-from elasticsearch.helpers import scan, bulk
-
 from app import app_logging
 from app.config import RUN_CONFIG
 from app.es_data import es_data
@@ -24,14 +22,15 @@ class ExpiredURLsDeletionThread(threading.Thread):
     def __init__(self):
 
         threading.Thread.__init__(self, )
-        app_logging.debug('Initialising thread to delete expired urls')
+        app_logging.info('Initialising thread to delete expired urls')
 
     def run(self):
 
         dice = random.randint(0, 9)
-        do_this = dice in [0, 1, 2]
+        dice_must_be = [0, 1, 2]
+        do_this = dice in dice_must_be
         if not do_this:
-            app_logging.debug(f'Not trying to delete expired urls. Dice was {dice}')
+            app_logging.info(f'Not trying to delete expired urls. Dice was {dice}. Must be {str(dice_must_be)}')
             return
 
         now = datetime.utcnow().replace(tzinfo=timezone.utc)
@@ -57,24 +56,12 @@ class ExpiredURLsDeletionThread(threading.Thread):
 
         if must_do_deletion:
 
-            bulk(ES, stream_items_for_deletion(query, index_name), chunk_size=BULK_SIZE)
+            # pylint: disable=unexpected-keyword-arg
+            ES.delete_by_query(index=index_name, body=query, conflicts='proceed')
             app_logging.info(f'Deleted {num_items} expired shortened urls.')
             statistics_saver.record_expired_urls_were_deleted()
 
         else:
-            app_logging.debug(
+            app_logging.info(
                 f'Not deleting expired urls because there are just {num_items}, '
                 f'will do deletion when more than {max_items}')
-
-
-def stream_items_for_deletion(query, index_name):
-    """
-    :param index_name: name of the index on which to execute the query
-    :param query: query for the stream
-    :return: the items as they are iterated to be deleted
-    """
-
-    for doc_i in scan(ES, query=query, index=index_name, scroll='1m'):
-        del doc_i['_score']
-        doc_i['_op_type'] = 'delete'
-        yield doc_i

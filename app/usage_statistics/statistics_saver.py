@@ -8,6 +8,7 @@ from app.config import RUN_CONFIG
 from app.config import ImproperlyConfiguredError
 from app import app_logging
 from app.es_monitoring_connection import ES_MONITORING
+from app.usage_statistics.old_monitoring_records_deletion import OldMonitoringRecordsDeletionThread
 
 
 def get_index_usage_record_dict(es_index, es_full_query, es_request_digest, is_cached, request_date, run_env_type,
@@ -146,9 +147,23 @@ def save_record_to_elasticsearch(doc, index_name):
 
     if dry_run:
         app_logging.debug(f'Not actually sending the record to the statistics index {index_name} (dry run): {doc}')
+
     else:
         app_logging.debug(f'Sending the following record to the statistics: {doc} '
                           f'index name: {index_name} es_host: {es_host}:{es_port}')
 
         result = ES_MONITORING.index(index=index_name, body=doc, doc_type='_doc')
         app_logging.debug(f'Result {result}')
+        # trigger_deletion_of_old_monitoring_records() probably enable this in the future.
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Deletion of old records
+# ----------------------------------------------------------------------------------------------------------------------
+def trigger_deletion_of_old_monitoring_records():
+    """
+    Triggers the deletion of old monitoring records
+    """
+    deletion_thread = OldMonitoringRecordsDeletionThread()
+    deletion_thread.start()
