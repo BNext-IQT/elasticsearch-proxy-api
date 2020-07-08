@@ -304,7 +304,7 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/ExpandedURLResponse'
-  /frontend_usage/register_element_usage:
+  /frontend_element_usage/register_element_usage:
     post:
       tags:
         - 'Frontend Element Tracking'

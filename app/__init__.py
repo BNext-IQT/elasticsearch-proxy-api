@@ -13,6 +13,7 @@ from app.blueprints.properties_config.controllers.properties_config_controller i
 from app.blueprints.contexts.controllers.contexts_controller import CONTEXTS_BLUEPRINT
 from app.blueprints.search_parser.controllers.search_parser_controller import SEARCH_PARSER_BLUEPRINT
 from app.blueprints.url_shortening.controllers.url_shortening_controller import URL_SHORTENING_BLUEPRINT
+from app.blueprints.element_usage_blueprint.controllers.element_usage_controller import ELEMENT_USAGE_BLUEPRINT
 
 
 def create_app():
@@ -40,13 +41,13 @@ def create_app():
             CACHE.cache._client.behaviors['retry_timeout'] = 10
             CACHE.cache._client.behaviors['retry_timeout'] = 600
 
-
     flask_app.register_blueprint(SWAGGER_BLUEPRINT, url_prefix=f'{base_path}/swagger')
     flask_app.register_blueprint(ES_PROXY_BLUEPRINT, url_prefix=f'{base_path}/es_data')
     flask_app.register_blueprint(PROPERTIES_CONFIG_BLUEPRINT, url_prefix=f'{base_path}/properties_configuration')
     flask_app.register_blueprint(CONTEXTS_BLUEPRINT, url_prefix=f'{base_path}/contexts')
     flask_app.register_blueprint(SEARCH_PARSER_BLUEPRINT, url_prefix=f'{base_path}/search_parsing')
     flask_app.register_blueprint(URL_SHORTENING_BLUEPRINT, url_prefix=f'{base_path}/url_shortening')
+    flask_app.register_blueprint(ELEMENT_USAGE_BLUEPRINT, url_prefix=f'{base_path}/frontend_element_usage')
 
     return flask_app
 
