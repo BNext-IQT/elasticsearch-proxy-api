@@ -3,6 +3,7 @@ Service to handle requests asking to get visualisation data
 """
 from app.visualisation_data.assay_classification import in_vivo
 from app.visualisation_data.target_classification import go_slim
+from app.visualisation_data.target_classification import organism_taxonomy
 
 
 class VisualisationDataServiceError(Exception):
@@ -24,9 +25,7 @@ def get_organism_taxonomy_target_classification():
     """
     :return: the organism taxonomy target classification tree
     """
-    return {
-        'msg': 'hello'
-    }
+    return organism_taxonomy.get_classification_tree()
 
 
 def get_go_slim_target_classification():
