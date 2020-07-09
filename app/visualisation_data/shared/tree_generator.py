@@ -1,4 +1,4 @@
-# pylint: disable=dangerous-default-value
+# pylint: disable=dangerous-default-value, too-many-instance-attributes
 """
 Common functions for processing tree structures
 """
@@ -142,6 +142,7 @@ def get_node_and_descendancy(node):
         return [node]
 
     node_and_descendancy += [node]
+    # pylint: disable=unused-variable
     for child_key, child in children.items():
         node_and_descendancy += get_node_and_descendancy(child)
 
@@ -303,6 +304,7 @@ class GoSlimTreeGenerator(TargetHierarchyTreeGenerator):
     """
     This generates a tree directly by reading the nodes, not by using aggregations
     """
+    # pylint: disable=super-init-not-called
 
     def __init__(self):
         self.index_name = 'chembl_go_slim'
