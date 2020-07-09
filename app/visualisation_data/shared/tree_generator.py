@@ -1,3 +1,4 @@
+# pylint: disable=dangerous-default-value
 """
 Common functions for processing tree structures
 """
@@ -139,10 +140,10 @@ def get_node_and_descendancy(node):
     children = node.get('children')
     if children is None:
         return [node]
-    else:
-        node_and_descendancy += [node]
-        for child_key, child in children.items():
-            node_and_descendancy += get_node_and_descendancy(child)
+
+    node_and_descendancy += [node]
+    for child_key, child in children.items():
+        node_and_descendancy += get_node_and_descendancy(child)
 
     return node_and_descendancy
 
