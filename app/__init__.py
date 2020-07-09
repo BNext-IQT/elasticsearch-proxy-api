@@ -14,6 +14,7 @@ from app.blueprints.contexts.controllers.contexts_controller import CONTEXTS_BLU
 from app.blueprints.search_parser.controllers.search_parser_controller import SEARCH_PARSER_BLUEPRINT
 from app.blueprints.url_shortening.controllers.url_shortening_controller import URL_SHORTENING_BLUEPRINT
 from app.blueprints.element_usage_blueprint.controllers.element_usage_controller import ELEMENT_USAGE_BLUEPRINT
+from app.blueprints.visualisation_data.controllers.visualisation_data_controller import VISUALISATION_DATA_BLUEPRINT
 
 
 def create_app():
@@ -48,6 +49,7 @@ def create_app():
     flask_app.register_blueprint(SEARCH_PARSER_BLUEPRINT, url_prefix=f'{base_path}/search_parsing')
     flask_app.register_blueprint(URL_SHORTENING_BLUEPRINT, url_prefix=f'{base_path}/url_shortening')
     flask_app.register_blueprint(ELEMENT_USAGE_BLUEPRINT, url_prefix=f'{base_path}/frontend_element_usage')
+    flask_app.register_blueprint(VISUALISATION_DATA_BLUEPRINT, url_prefix=f'{base_path}/visualisations')
 
     return flask_app
 
