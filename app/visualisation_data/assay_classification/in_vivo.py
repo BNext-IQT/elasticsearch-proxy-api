@@ -11,8 +11,8 @@ def get_classification_tree():
     :return: the in vivo classificacion tree.
     """
     cache_key = 'assay_classifications_in_vivo'
-    cache_response = cache.fail_proof_get(key=cache_key)
     app_logging.debug(f'cache_key: {cache_key}')
+    cache_response = cache.fail_proof_get(key=cache_key)
 
     if cache_response is not None:
         app_logging.debug('results are in cache')

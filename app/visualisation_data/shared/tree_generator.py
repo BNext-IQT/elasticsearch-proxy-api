@@ -285,9 +285,7 @@ class TargetHierarchyTreeGenerator:
         i = 0
         for response in responses:
             class_name = target_classes[i]
-
             self.count_queries[class_name]['count'] = response['hits']['total']['value']
-
             i = i + 1
 
     def add_counts_to_tree(self):

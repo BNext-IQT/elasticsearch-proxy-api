@@ -2,6 +2,7 @@
 Service to handle requests asking to get visualisation data
 """
 from app.visualisation_data.assay_classification import in_vivo
+from app.visualisation_data.target_classification import go_slim
 
 
 class VisualisationDataServiceError(Exception):
@@ -32,9 +33,7 @@ def get_go_slim_target_classification():
     """
     :return: the go slim target classification tree
     """
-    return {
-        'msg': 'hello'
-    }
+    return go_slim.get_classification_tree()
 
 
 def get_in_vivo_assay_classification():
