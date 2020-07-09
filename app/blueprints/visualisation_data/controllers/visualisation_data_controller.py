@@ -1,7 +1,7 @@
 """
 Blueprint to handle requests asking to get visualisation data
 """
-from flask import Blueprint, jsonify, abort, request
+from flask import Blueprint, abort
 
 from app.blueprints.visualisation_data.services import visualisation_data_service
 from app.http_cache import http_cache_utils
