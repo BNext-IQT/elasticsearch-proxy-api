@@ -7,7 +7,9 @@ import argparse
 
 from specific_tests import fun_test_simple_query, fun_test_query_with_context, fun_test_property_config, \
     fun_test_group_config, fun_test_facets_group_config, fun_test_get_document, fun_test_id_properties, \
-    fun_test_get_context_data, fun_test_search_parsing, fun_test_url_shortening, fun_test_element_usage
+    fun_test_get_context_data, fun_test_search_parsing, fun_test_url_shortening, fun_test_element_usage, \
+    fun_test_go_slim_target_classification, fun_test_in_vivo_assay_classification, \
+    fun_test_organism_taxonomy_target_classification, fun_test_protein_target_classification
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument('server_base_path', help='server base path to run the tests against',
@@ -26,7 +28,9 @@ def run():
     for test_module in [fun_test_simple_query, fun_test_query_with_context, fun_test_property_config,
                         fun_test_group_config, fun_test_facets_group_config, fun_test_get_document,
                         fun_test_id_properties, fun_test_get_context_data, fun_test_search_parsing,
-                        fun_test_url_shortening, fun_test_element_usage]:
+                        fun_test_url_shortening, fun_test_element_usage, fun_test_go_slim_target_classification,
+                        fun_test_in_vivo_assay_classification, fun_test_organism_taxonomy_target_classification,
+                        fun_test_protein_target_classification]:
         test_module.run_test(ARGS.server_base_path, ARGS.delayed_jobs_server_base_path)
 
 
