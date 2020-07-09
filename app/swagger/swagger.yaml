@@ -24,6 +24,8 @@ tags:
   description: 'Endpoints related to the shortening of urls'
 - name: 'Frontend Element Tracking'
   description: 'Endpoints related to the tracking of elements in the frontend'
+- name: 'Visualisations'
+  description: 'Endpoints to obtain data for visualisations'
 schemes:
 - "https"
 - "http"
@@ -337,6 +339,62 @@ paths:
           description: "successful operation"
           schema:
             $ref: '#/definitions/UsageRegisteredResult'
+  /visualisations/target_classifications/protein_classification:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the Protein Target classification tree'
+      description: 'Returns the Protein Target classification tree'
+      operationId: 'get_protein_target_classification'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/ProteinTargetClassificationResponse'
+  /visualisations/target_classifications/organism_taxonomy:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the Target Organism Taxonomy tree'
+      description: 'Returns the Target Organism Taxonomy tree'
+      operationId: 'get_organism_taxonomy_target_classifications'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/OrganismTaxonomyTargetClassificationResponse'
+  /visualisations/target_classifications/go_slim:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the Target GO Slim tree'
+      description: 'Returns the Target GO Slim tree'
+      operationId: 'get_go_slim_target_classifications'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/GOSlimTargetClassificationResponse'
+  /visualisations/assay_classifications/in_vivo:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the In Vivo Assay classification tree'
+      description: 'Returns the In Vivo Assay classification tree'
+      operationId: 'get_in_vivo_assay_classifications'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/InvivoAssayClassificationResponse'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -421,4 +479,11 @@ definitions:
     properties:
       operation_result:
         type: 'string'
-
+  ProteinTargetClassificationResponse:
+    type: "object"
+  OrganismTaxonomyTargetClassificationResponse:
+    type: "object"
+  GOSlimTargetClassificationResponse:
+    type: "object"
+  InvivoAssayClassificationResponse:
+    type: "object"
