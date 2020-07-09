@@ -1,6 +1,7 @@
 """
 Service to handle requests asking to get visualisation data
 """
+from app.visualisation_data.assay_classification import in_vivo
 
 
 class VisualisationDataServiceError(Exception):
@@ -40,6 +41,4 @@ def get_in_vivo_assay_classification():
     """
     :return: the in vivo assay classification tree
     """
-    return {
-        'msg': 'hello'
-    }
+    return in_vivo.get_classification_tree()

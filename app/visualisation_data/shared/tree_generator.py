@@ -211,6 +211,7 @@ class TargetHierarchyTreeGenerator:
     """
     Class that generates hierarchies for targets
     """
+
     def __init__(self, index_name, es_query, query_generator, count_index):
 
         self.index_name = index_name
@@ -266,23 +267,27 @@ class TargetHierarchyTreeGenerator:
         for target_class in target_classes:
             current_query_string = self.count_queries[target_class]['query']
             query = {
+                "_source": False,
                 "query": {
                     "query_string": {
                         "_name": current_query_string,
                         "query": current_query_string,
                     }
-                }
+                },
+                "track_total_hits": True
             }
 
             m_search_array.append({'index': self.count_index})
             m_search_array.append(query)
 
-        responses = es_data.do_multisearch(body=m_search_array)
+        responses = es_data.do_multisearch(body=m_search_array)['responses']
 
         i = 0
         for response in responses:
             class_name = target_classes[i]
-            self.count_queries[class_name]['count'] = response.hits.total.value
+
+            self.count_queries[class_name]['count'] = response['hits']['total']['value']
+
             i = i + 1
 
     def add_counts_to_tree(self):

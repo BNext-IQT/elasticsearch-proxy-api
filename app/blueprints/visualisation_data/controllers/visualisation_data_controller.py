@@ -51,6 +51,7 @@ def get_in_vivo_assay_classification():
     :return: the json response with the in vivo assay classification
     """
     try:
+        print('IN VIVO')
         json_data = visualisation_data_service.get_in_vivo_assay_classification()
         return http_cache_utils.get_json_response_with_http_cache_headers(json_data)
     except visualisation_data_service.VisualisationDataServiceError as error:
