@@ -117,8 +117,36 @@ def covid_entities_records():
     """
     :return: the database_summary
     """
+
+    covid_compounds_query = {
+        "query_string": {
+            "query": "_metadata.compound_records.src_id:52",
+        }
+    }
+
+    covid_assays_query = {
+        "query_string": {
+            "query": "_metadata.source.src_id:52",
+        }
+    }
+
+    covid_documents_query = {
+        "query_string": {
+            "query": "_metadata.source.src_id:52 AND NOT document_chembl_id:CHEMBL4303081",
+        }
+    }
+
+    covid_activities_query = {
+        "query_string": {
+            "query": "_metadata.source.src_id:52",
+        }
+    }
+
     return {
-        'msg': 'hola'
+        'Compounds': get_entity_total_count('chembl_molecule', query=covid_compounds_query),
+        'Assays': get_entity_total_count('chembl_assay', query=covid_assays_query),
+        'Documents': get_entity_total_count('chembl_document', query=covid_documents_query),
+        'Activities': get_entity_total_count('chembl_activity', query=covid_activities_query),
     }
 
 
