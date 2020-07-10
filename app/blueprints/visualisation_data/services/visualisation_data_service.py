@@ -39,3 +39,30 @@ def get_in_vivo_assay_classification():
     :return: the in vivo assay classification tree
     """
     return in_vivo.get_classification_tree()
+
+
+def get_database_summary():
+    """
+    :return: the database_summary
+    """
+    return {
+        'msg': 'hola'
+    }
+
+
+def entities_records():
+    """
+    :return: the database_summary
+    """
+    return {
+        'msg': 'hola'
+    }
+
+
+def covid_entities_records():
+    """
+    :return: the database_summary
+    """
+    return {
+        'msg': 'hola'
+    }

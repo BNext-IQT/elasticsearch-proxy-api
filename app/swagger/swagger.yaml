@@ -395,6 +395,48 @@ paths:
           description: "success"
           schema:
             $ref: '#/definitions/InvivoAssayClassificationResponse'
+  /visualisations/database_summary:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the summary of the counts of the entities in the database'
+      description: 'Returns the summary of the counts of the entities in the database'
+      operationId: 'get_database_summary'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/DatabaseSummaryResponse'
+  /visualisations/entities_records:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the summary of the counts of the entities in the database'
+      description: 'Returns the summary of the counts of the entities in the database'
+      operationId: 'get_entities_records'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/EntitiesRecordsResponse'
+  /visualisations/covid_entities_records:
+    get:
+      tags:
+        - 'Visualisations'
+      summary: 'Get the summary of the counts of the entities in the database related to the COVID-19'
+      description: 'Returns the summary of the counts of the entities in the database related to the COVID-19'
+      operationId: 'get_covid_entities_records'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/COVIDEntitiesRecordsResponse'
 definitions:
   ESProxyResponse:
     type: 'object'
@@ -486,4 +528,10 @@ definitions:
   GOSlimTargetClassificationResponse:
     type: "object"
   InvivoAssayClassificationResponse:
+    type: "object"
+  DatabaseSummaryResponse:
+    type: "object"
+  EntitiesRecordsResponse:
+    type: "object"
+  COVIDEntitiesRecordsResponse:
     type: "object"
