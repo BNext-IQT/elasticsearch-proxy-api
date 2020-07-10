@@ -91,8 +91,24 @@ def entities_records():
     """
     :return: the database_summary
     """
+    drugs_query = {
+
+        "term": {
+            "_metadata.drug.is_drug": True
+        }
+
+    }
+
     return {
-        'msg': 'hola'
+        'Compounds': get_entity_total_count('chembl_molecule'),
+        'Drugs': get_entity_total_count('chembl_molecule', drugs_query),
+        'Assays': get_entity_total_count('chembl_assay'),
+        'Documents': get_entity_total_count('chembl_document'),
+        'Targets': get_entity_total_count('chembl_target'),
+        'Cells': get_entity_total_count('chembl_cell_line'),
+        'Tissues': get_entity_total_count('chembl_tissue'),
+        'Indications': get_entity_total_count('chembl_drug_indication_by_parent'),
+        'Mechanisms': get_entity_total_count('chembl_mechanism_by_parent_target')
     }
 
 
@@ -104,3 +120,23 @@ def covid_entities_records():
     return {
         'msg': 'hola'
     }
+
+
+def get_entity_total_count(index_name, query=None):
+    """
+    :param index_name: index to query
+    :param query: query to apply
+    :return: the total count of items of the given entity
+    """
+
+    total_count_query = {
+        "_source": False,
+        "track_total_hits": True,
+    }
+    if query is not None:
+        total_count_query['query'] = query
+
+    es_response = es_data.get_es_response(index_name, total_count_query)
+
+    num_items = es_response['hits']['total']['value']
+    return num_items
