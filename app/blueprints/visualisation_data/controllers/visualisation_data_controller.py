@@ -51,8 +51,43 @@ def get_in_vivo_assay_classification():
     :return: the json response with the in vivo assay classification
     """
     try:
-        print('IN VIVO')
         json_data = visualisation_data_service.get_in_vivo_assay_classification()
+        return http_cache_utils.get_json_response_with_http_cache_headers(json_data)
+    except visualisation_data_service.VisualisationDataServiceError as error:
+        abort(500, msg=f'Internal server error: {str(error)}')
+
+
+@VISUALISATION_DATA_BLUEPRINT.route('/database_summary', methods=['GET'])
+def get_database_summary():
+    """
+    :return: the json response with the database summary
+    """
+    try:
+        json_data = visualisation_data_service.get_database_summary()
+        return http_cache_utils.get_json_response_with_http_cache_headers(json_data)
+    except visualisation_data_service.VisualisationDataServiceError as error:
+        abort(500, msg=f'Internal server error: {str(error)}')
+
+
+@VISUALISATION_DATA_BLUEPRINT.route('/entities_records', methods=['GET'])
+def get_entities_records():
+    """
+    :return: the json response with the entities records
+    """
+    try:
+        json_data = visualisation_data_service.entities_records()
+        return http_cache_utils.get_json_response_with_http_cache_headers(json_data)
+    except visualisation_data_service.VisualisationDataServiceError as error:
+        abort(500, msg=f'Internal server error: {str(error)}')
+
+
+@VISUALISATION_DATA_BLUEPRINT.route('/covid_entities_records', methods=['GET'])
+def covid_entities_records():
+    """
+    :return: the json response with the covid entities records
+    """
+    try:
+        json_data = visualisation_data_service.covid_entities_records()
         return http_cache_utils.get_json_response_with_http_cache_headers(json_data)
     except visualisation_data_service.VisualisationDataServiceError as error:
         abort(500, msg=f'Internal server error: {str(error)}')
