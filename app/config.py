@@ -144,3 +144,12 @@ RUN_CONFIG['lazy_old_record_deletion'] = {
     **DEFAULT_LAZY_OLD_RECORD_DELETION_CONFIG,
     **LAZY_OLD_RECORD_DELETION_CONFIG
 }
+
+CHEMBL_API_CONFIG = RUN_CONFIG.get('chembl_api', {})
+DEFAULT_CHEMBL_API_CONFIG = {
+    'ws_url': 'https://www.ebi.ac.uk/chembl/api/data'
+}
+RUN_CONFIG['chembl_api'] = {
+    **CHEMBL_API_CONFIG,
+    **DEFAULT_CHEMBL_API_CONFIG,
+}

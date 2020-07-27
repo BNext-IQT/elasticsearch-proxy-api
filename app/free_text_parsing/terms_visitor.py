@@ -11,6 +11,7 @@ import requests
 from urllib.parse import urlparse
 
 from app.free_text_parsing.grammar import inchi
+from app.config import RUN_CONFIG
 
 WS_URL = 'https://www.ebi.ac.uk/chembl/api/data'
 WS_PARSED_URL = urlparse(WS_URL)
@@ -193,11 +194,12 @@ def get_chembl_id_list_dict(chembl_ids, cross_references=[], include_in_query=Tr
     ]
 
 def check_smiles(term_dict: dict):
-    global WS_BASE_PATH
+
+    ws_base_path = RUN_CONFIG.get('chembl_api').get('ws_url')
     try:
         chembl_ids = []
         next_url_path = '{ws_path}/molecule.json?molecule_structures__canonical_smiles__flexmatch={smiles}'\
-                        .format(ws_path=WS_BASE_PATH, smiles=urllib.parse.quote(term_dict['term']))
+                        .format(ws_path=ws_base_path, smiles=urllib.parse.quote(term_dict['term']))
         while next_url_path:
             response = requests.get(
                 WS_DOMAIN + next_url_path,
