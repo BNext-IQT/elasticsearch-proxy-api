@@ -23,12 +23,25 @@ spec:
           requests:
             cpu: <CPU_REQUESTED>
         volumeMounts:
-        - name: run-config
-          mountPath: '/etc/run_config/'
-          readOnly: true
-        - name: gunicorn-config
-          mountPath: '/etc/gunicorn_config/'
-          readOnly: true
+          - name: run-config
+            mountPath: '/etc/run_config/'
+            readOnly: true
+          - name: gunicorn-config
+            mountPath: '/etc/gunicorn_config/'
+            readOnly: true
+        env:
+          - name: HTTP_PROXY
+            value: "<HTTP_PROXY>"
+          - name: http_proxy
+            value: "<HTTP_PROXY>"
+          - name: HTTPS_PROXY
+            value: "<HTTPS_PROXY>"
+          - name: https_proxy
+            value: "<HTTPS_PROXY>"
+          - name: NO_PROXY
+            value: "<NO_PROXY>"
+          - name: no_proxy
+            value: "<NO_PROXY>"
       volumes:
         - name: run-config
           secret:
