@@ -10,7 +10,7 @@ from specific_tests import fun_test_simple_query, fun_test_query_with_context, f
     fun_test_get_context_data, fun_test_search_parsing, fun_test_url_shortening, fun_test_element_usage, \
     fun_test_go_slim_target_classification, fun_test_in_vivo_assay_classification, \
     fun_test_organism_taxonomy_target_classification, fun_test_protein_target_classification, \
-    fun_test_covid_entities_records, fun_test_database_summary, fun_test_entities_records
+    fun_test_covid_entities_records, fun_test_database_summary, fun_test_entities_records, fun_test_get_all_properties
 
 PARSER = argparse.ArgumentParser()
 PARSER.add_argument('server_base_path', help='server base path to run the tests against',
@@ -32,7 +32,7 @@ def run():
                         fun_test_url_shortening, fun_test_element_usage, fun_test_go_slim_target_classification,
                         fun_test_in_vivo_assay_classification, fun_test_organism_taxonomy_target_classification,
                         fun_test_protein_target_classification, fun_test_covid_entities_records,
-                        fun_test_database_summary, fun_test_entities_records]:
+                        fun_test_database_summary, fun_test_entities_records, fun_test_get_all_properties]:
         test_module.run_test(ARGS.server_base_path, ARGS.delayed_jobs_server_base_path)
 
 
