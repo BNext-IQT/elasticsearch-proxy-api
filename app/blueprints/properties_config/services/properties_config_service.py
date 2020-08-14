@@ -86,13 +86,16 @@ def get_index_properties_of_index(index_name):
 
         raise PropertiesConfigServiceError(repr(error))
 
-def get_index_all_properties_properties_configuration(index_name):
+def get_all_configured_properties_for_index(index_name):
     """
     :param index_name: name of the index to get the all the properties configuration
     :return: a dict with the configurations
     """
 
     try:
+
+
+        print('get all')
 
         # get all configs and merge them!
         return {
