@@ -87,3 +87,17 @@ class FacetsGroupsConfigurationManagerTester(unittest.TestCase):
 
                     self.assertEqual(agg_config_got, agg_config_must_be,
                                      msg='The agg config was not generated properly!')
+
+    def test_gets_all_configured_properties(self):
+        """
+        Tests that it returns all the configured properties for an index
+        """
+        facets_groups_configuration_manager = get_facets_groups_configuration_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}molecule'
+
+        id_properties_must_be = ['molecule_type', 'max_phase', 'molecule_properties.hbd']
+        id_properties_got = facets_groups_configuration_manager.get_list_of_configured_properties(index_name)
+
+        self.assertEqual(sorted(id_properties_got), sorted(id_properties_must_be), msg='The properties list is not correct!')

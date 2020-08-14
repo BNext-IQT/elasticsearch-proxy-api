@@ -94,8 +94,11 @@ def get_all_configured_properties_for_index(index_name):
 
     try:
 
-
         print('get all')
+        group_configuration_manager = groups_configuration_manager.get_groups_configuration_instance()
+
+        props_list_from_groups = group_configuration_manager.get_list_of_configured_properties(index_name)
+        print('props_list_from_groups: ', props_list_from_groups)
 
         # get all configs and merge them!
         return {

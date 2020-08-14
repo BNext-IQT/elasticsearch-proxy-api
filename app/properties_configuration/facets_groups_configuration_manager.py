@@ -71,7 +71,7 @@ class FacetsGroupsConfiguration:
             }
         }
 
-        seconds_valid = RUN_CONFIG.get('es_proxy_cache_seconds')
+        seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')
         cache.fail_proof_set(key=cache_key, value=config, timeout=seconds_valid)
         return config
 
@@ -94,6 +94,38 @@ class FacetsGroupsConfiguration:
             description.append(facet_config)
 
         return description
+
+    def get_list_of_configured_properties(self, index_name):
+        """
+        :param index_name: the index to check
+        :return: a list of all the configured properties among all the groups
+        """
+
+        cache_key = f'facets_configured_properties_for_{index_name}'
+        app_logging.debug(f'cache_key: {cache_key}')
+
+        cache_response = cache.fail_proof_get(key=cache_key)
+        if cache_response is not None:
+            app_logging.debug(f'results were cached')
+            return cache_response
+
+        app_logging.debug(f'results were not cached')
+
+        with open(self.facets_groups_file_path, 'rt') as groups_file:
+
+            groups_config = yaml.load(groups_file, Loader=yaml.FullLoader)
+            index_groups = groups_config.get(index_name)
+            if index_groups is None:
+                raise self.GroupsConfigurationManagerError(
+                    f'The index {index_name} does not have a configuration set up!')
+            properties_identified = set()
+            for group_key, subgroups in index_groups.items():
+                for properties_list in subgroups.values():
+                    properties_identified.update(properties_list)
+
+        seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')
+        cache.fail_proof_set(key=cache_key, value=properties_identified, timeout=seconds_valid)
+        return list(properties_identified)
 
 
 def get_facets_groups_configuration_instance():

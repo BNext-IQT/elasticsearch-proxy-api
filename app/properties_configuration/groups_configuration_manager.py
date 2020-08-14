@@ -117,9 +117,15 @@ class GroupConfiguration:
 
             properties_identified = set()
             index_groups = groups_config.get(index_name, {})
+            if index_groups is None:
+                raise self.GroupsConfigurationManagerError(
+                    f'The index {index_name} does not have a configuration set up!')
             for group_key, subgroups in index_groups.items():
                 for properties_list in subgroups.values():
                     properties_identified.update(properties_list)
+
+        seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')
+        cache.fail_proof_set(key=cache_key, value=properties_identified, timeout=seconds_valid)
 
         return list(properties_identified)
 
