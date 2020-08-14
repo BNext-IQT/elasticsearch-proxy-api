@@ -86,6 +86,7 @@ def get_index_properties_of_index(index_name):
 
         raise PropertiesConfigServiceError(repr(error))
 
+
 def get_all_configured_properties_for_index(index_name):
     """
     :param index_name: name of the index to get the all the properties configuration
@@ -97,8 +98,10 @@ def get_all_configured_properties_for_index(index_name):
         group_configuration_manager = groups_configuration_manager.get_groups_configuration_instance()
         props_list_from_groups = group_configuration_manager.get_list_of_configured_properties(index_name)
 
-        facets_group_configuration_manager = facets_groups_configuration_manager.get_facets_groups_configuration_instance()
-        props_list_from_facets_groups = facets_group_configuration_manager.get_list_of_configured_properties(index_name)
+        facets_group_configuration_manager = \
+            facets_groups_configuration_manager.get_facets_groups_configuration_instance()
+        props_list_from_facets_groups = \
+            facets_group_configuration_manager.get_list_of_configured_properties(index_name)
 
         all_props = list(set(props_list_from_groups).union(set(props_list_from_facets_groups)))
 

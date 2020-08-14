@@ -116,11 +116,11 @@ class FacetsGroupsConfiguration:
             groups_config = yaml.load(groups_file, Loader=yaml.FullLoader)
             index_groups = groups_config.get(index_name)
             if index_groups is None:
-                raise self.GroupsConfigurationManagerError(
+                raise self.FacetsGroupsConfigurationManagerError(
                     f'The index {index_name} does not have a configuration set up!')
             properties_identified = set()
-            for group_key, subgroups in index_groups.items():
-                for properties_list in subgroups.values():
+            for subgroup in index_groups.values():
+                for properties_list in subgroup.values():
                     properties_identified.update(properties_list)
 
         seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')

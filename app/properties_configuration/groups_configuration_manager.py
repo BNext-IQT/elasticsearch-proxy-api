@@ -120,8 +120,8 @@ class GroupConfiguration:
             if index_groups is None:
                 raise self.GroupsConfigurationManagerError(
                     f'The index {index_name} does not have a configuration set up!')
-            for group_key, subgroups in index_groups.items():
-                for properties_list in subgroups.values():
+            for subgroup in index_groups.values():
+                for properties_list in subgroup.values():
                     properties_identified.update(properties_list)
 
         seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')

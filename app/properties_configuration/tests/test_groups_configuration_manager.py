@@ -178,4 +178,5 @@ class GroupsConfigurationManagerTester(unittest.TestCase):
 
         props_list_got = groups_configuration_manager.get_list_of_configured_properties(index_name)
 
-        self.assertEqual(sorted(props_list_got), sorted(props_list_must_be), msg='The properties list is not correct!')
+        self.assertEqual(sorted(props_list_got), sorted(props_list_must_be),
+                         msg='The properties list is not correct!')
