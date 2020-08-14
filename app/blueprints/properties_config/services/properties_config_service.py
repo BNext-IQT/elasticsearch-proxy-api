@@ -85,3 +85,20 @@ def get_index_properties_of_index(index_name):
     except es_mappings.EsMappingsError as error:
 
         raise PropertiesConfigServiceError(repr(error))
+
+def get_index_all_properties_properties_configuration(index_name):
+    """
+    :param index_name: name of the index to get the all the properties configuration
+    :return: a dict with the configurations
+    """
+
+    try:
+
+        # get all configs and merge them!
+        return {
+            'all_properties': []
+        }
+
+    except es_mappings.EsMappingsError as error:
+
+        raise PropertiesConfigServiceError(repr(error))

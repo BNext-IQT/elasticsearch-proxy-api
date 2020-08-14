@@ -70,6 +70,7 @@ def get_facet_group_config(index_name, group_name):
 
         abort(500, repr(error))
 
+
 @PROPERTIES_CONFIG_BLUEPRINT.route('/id_properties/<index_name>', methods=['GET'])
 @validate_url_params_with(marshmallow_schemas.IDPropertiesRequest)
 def get_index_id_properties(index_name):
@@ -81,6 +82,25 @@ def get_index_id_properties(index_name):
 
         id_properties = properties_config_service.get_index_properties_of_index(index_name)
         http_response = jsonify(id_properties)
+        http_cache_utils.add_cache_headers_to_response(http_response)
+        return http_response
+
+    except properties_config_service.PropertiesConfigServiceError as error:
+
+        abort(500, repr(error))
+
+
+@PROPERTIES_CONFIG_BLUEPRINT.route('/all_properties/<index_name>', methods=['GET'])
+@validate_url_params_with(marshmallow_schemas.AllPropertiesRequest)
+def get_index_all_properties_configs(index_name):
+    """
+    :param index_name: name of the index for which to get the all the properties config
+    :return: the json response with the all properties configuration
+    """
+    try:
+
+        all_properties_config = properties_config_service.get_index_properties_of_index(index_name)
+        http_response = jsonify(all_properties_config)
         http_cache_utils.add_cache_headers_to_response(http_response)
         return http_response
 
