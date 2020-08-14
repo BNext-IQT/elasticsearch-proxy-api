@@ -194,6 +194,28 @@ paths:
           description: "success"
           schema:
             $ref: '#/definitions/GroupConfigResponse'
+  /properties_configuration/all_properties/{index_name}:
+    get:
+      tags:
+        - 'Properties Configuration'
+      summary: 'Get all the properties configured for an index'
+      description: 'Returns the configuration of all the properties configuring for an index,
+      including facets and any other group'
+      operationId: 'get_all_properties_configuration'
+      produces:
+        - 'application/json'
+      parameters:
+        - name: "index_name"
+          in: "path"
+          description: "name of the index for which to get the configurations"
+          required: true
+          type: 'string'
+          default: 'chembl_molecule'
+      responses:
+        '200':
+          description: "success"
+          schema:
+            $ref: '#/definitions/AllPropertiesConfigResponse'
   /contexts/get_context_data:
     post:
       tags:
@@ -472,6 +494,8 @@ definitions:
             type: 'object'
           default:
             type: 'object'
+  AllPropertiesConfigResponse:
+    type: 'object'
   FacetsGroupConfigResponse:
     type: 'object'
     properties:
