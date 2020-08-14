@@ -10,6 +10,7 @@ from app.properties_configuration.groups_configuration_manager import GroupConfi
 from app.properties_configuration.properties_configuration_manager import PropertyConfiguration
 from app.config import RUN_CONFIG
 
+
 def get_group_configuration_instance():
     """
     :return: a test instance of the configuration manager
@@ -23,6 +24,7 @@ def get_group_configuration_instance():
     )
 
     return group_configuration_manager
+
 
 class GroupsConfigurationManagerTester(unittest.TestCase):
     """
@@ -130,7 +132,6 @@ class GroupsConfigurationManagerTester(unittest.TestCase):
         configs_got = groups_configuration_manager.get_config_for_group(index_name, group_name)['properties']
 
         with open(groups_configuration_manager.groups_file_path, 'rt') as groups_config_file:
-
             groups_must_be = yaml.load(groups_config_file, Loader=yaml.FullLoader)
             group_must_be = groups_must_be[index_name][group_name]
 
@@ -151,10 +152,31 @@ class GroupsConfigurationManagerTester(unittest.TestCase):
         configs_got = groups_configuration_manager.get_config_for_group(index_name, group_name)['properties']
 
         with open(groups_configuration_manager.groups_file_path, 'rt') as groups_config_file:
-
             groups_must_be = yaml.load(groups_config_file, Loader=yaml.FullLoader)
             group_must_be = groups_must_be[index_name][group_name]
 
             for sub_group, props_list_must_be in group_must_be.items():
                 props_list_got = [conf['prop_id'] for conf in configs_got[sub_group]]
                 self.assertTrue(props_list_got == props_list_must_be)
+
+    def test_gets_all_configured_properties(self):
+        """
+        Tests that it returns all the configured properties for an index
+        """
+
+        groups_configuration_manager = get_group_configuration_instance()
+
+        es_index_prefix = RUN_CONFIG.get('es_index_prefix')
+        index_name = f'{es_index_prefix}activity'
+
+        props_list_must_be = [
+            '_metadata.organism_taxonomy.oc_id', '_metadata.assay_data.assay_subcellular_fraction',
+            '_metadata.activity_generated.short_data_validity_comment',
+            '_metadata.assay_data.assay_cell_type', '_metadata.assay_data.assay_organism',
+            '_metadata.assay_data.assay_tissue'
+        ]
+
+        props_list_got = groups_configuration_manager.get_list_of_configured_properties(index_name)
+
+        self.assertEqual(sorted(props_list_got), sorted(props_list_must_be),
+                         msg='The properties list is not correct!')

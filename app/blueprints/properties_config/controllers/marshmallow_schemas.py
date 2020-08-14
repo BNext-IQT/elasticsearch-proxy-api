@@ -33,3 +33,9 @@ class IDPropertiesRequest(Schema):
     Class with the schema for getting the id properties of an index
     """
     index_name = fields.String(required=True)
+
+class AllPropertiesRequest(Schema):
+    """
+    Class with the schema for getting all the properties config of an index
+    """
+    index_name = fields.String(required=True)
