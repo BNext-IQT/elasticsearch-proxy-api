@@ -122,7 +122,17 @@ class GroupConfiguration:
                     f'The index {index_name} does not have a configuration set up!')
             for subgroup in index_groups.values():
                 for properties_list in subgroup.values():
-                    properties_identified.update(properties_list)
+                    for property_id in properties_list:
+                        property_config = self.property_configuration_manager.get_config_for_prop(
+                            index_name,
+                            property_id
+                        )
+                        is_virtual = property_config.get('is_virtual', False)
+                        # Do not include virtual properties
+                        if is_virtual:
+                            continue
+
+                        properties_identified.add(property_id)
 
         seconds_valid = RUN_CONFIG.get('es_mappings_cache_seconds')
         cache.fail_proof_set(key=cache_key, value=properties_identified, timeout=seconds_valid)
