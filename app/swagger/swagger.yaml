@@ -199,7 +199,8 @@ paths:
       tags:
         - 'Properties Configuration'
       summary: 'Get all the properties configured for an index'
-      description: 'Returns a list of all the properties configured (being used) for an index'
+      description: 'Returns a list of all the properties configured (being used) for an index.
+      IMPORTANT: it does not include virtual properties'
       operationId: 'get_all_configured_properties'
       produces:
         - 'application/json'
