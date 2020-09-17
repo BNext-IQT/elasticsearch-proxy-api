@@ -28,6 +28,7 @@ def get_es_response(index_name, es_query, ignore_cache=False):
     """
 
     cache_key = get_es_query_cache_key(index_name, es_query)
+    cache.delete(cache_key)
     app_logging.debug(f'cache_key: {cache_key}')
 
     start_time = time.time()

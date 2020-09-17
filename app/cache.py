@@ -35,3 +35,12 @@ def fail_proof_set(key, value, timeout):
     # pylint: disable=no-member
     except pylibmc.TooBig as error:
         app_logging.info(f"Error while writing to cache({str(error)}). Continuing. Don't worry")
+
+
+def delete(key):
+    """
+    Deletes the item that corresponds to the key in the cache
+    :param key: key to delete
+    """
+
+    CACHE.delete(key)

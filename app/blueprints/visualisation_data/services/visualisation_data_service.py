@@ -86,7 +86,7 @@ def get_database_summary():
     }
 
 
-@CACHE.memoize(timeout=RUN_CONFIG.get('es_proxy_cache_seconds'))
+# @CACHE.memoize(timeout=RUN_CONFIG.get('es_proxy_cache_seconds'))
 def entities_records():
     """
     :return: the database_summary
@@ -156,7 +156,7 @@ def get_entity_total_count(index_name, query=None):
     :param query: query to apply
     :return: the total count of items of the given entity
     """
-
+    print(f'getting count for index {index_name}')
     total_count_query = {
         "_source": False,
         "track_total_hits": True,
@@ -164,7 +164,14 @@ def get_entity_total_count(index_name, query=None):
     if query is not None:
         total_count_query['query'] = query
 
+    print('total_count_query: ', total_count_query)
+
     es_response = es_data.get_es_response(index_name, total_count_query)
+    print('es_response: ')
+    print(es_response)
 
     num_items = es_response['hits']['total']['value']
+
+    print(f'num_items: {num_items}')
+    print('---')
     return num_items
