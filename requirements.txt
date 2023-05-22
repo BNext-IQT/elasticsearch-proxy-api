@@ -10,5 +10,5 @@ Flask-Caching==1.8.0
 pylibmc==1.6.1
 Flask-Limiter==1.2.1
 pymemcache==3.1.0
-requests==2.23.0
+requests==2.31.0
 Arpeggio==1.9.2
